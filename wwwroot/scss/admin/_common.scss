@@ -1,0 +1,58 @@
+﻿// COLORS
+$primary: #2563eb;
+$bg: #f1f5f9;
+$text: #0f172a;
+$border: #e5e7eb;
+$error: #dc2626;
+
+// SIZE
+$radius: 10px;
+
+// BASE
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: $bg;
+    color: $text;
+}
+
+// FORM
+label {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border-radius: $radius;
+    border: 1px solid $border;
+    font-size: 14px;
+
+    &:focus {
+        outline: none;
+        border-color: $primary;
+    }
+}
+
+// BUTTON
+.btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: $radius;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: $primary;
+    color: white;
+
+    &:hover {
+        opacity: 0.9;
+    }
+}

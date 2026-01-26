@@ -1,4 +1,4 @@
-namespace EnglishCentralManagement
+﻿namespace EnglishCentralManagement
 {
     public class Program
     {
@@ -8,7 +8,6 @@ namespace EnglishCentralManagement
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -24,11 +23,18 @@ namespace EnglishCentralManagement
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
-
+            #region Admin Route
+            app.MapControllerRoute(
+                name: "areas",
+                pattern: "{area:exists}/{controller=Login}/{action=Index}/{id?}"
+            );
+            #endregion
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
             app.Run();
         }
