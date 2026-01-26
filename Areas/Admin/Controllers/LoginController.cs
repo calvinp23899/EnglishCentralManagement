@@ -28,7 +28,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             }
             errorMsg = "Sai tài khoản hoặc mật khẩu";
             ViewBag.Error = errorMsg;
-            return View();
+            return View("Index");
         }
     }
 }
