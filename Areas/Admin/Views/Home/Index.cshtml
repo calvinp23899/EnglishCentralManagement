@@ -1,2 +1,66 @@
-﻿
-<h1>Admin Dashboard</h1>
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/js/admin/admin-home-chart.js"></script>
+}
+
+
+<div class="dashboard">
+
+    <!-- HEADER -->
+    <div class="dashboard__header">
+        <h1>Dashboard</h1>
+    </div>
+
+    <!-- STATS CARDS -->
+    <div class="dashboard__stats">
+
+        <div class="dashboard__stat-card">
+            <div class="icon">👨‍🎓</div>
+            <div class="info">
+                <span class="value">1,250</span>
+                <span class="label">Total Students</span>
+                <span class="compare">Compared to previous month: 0000000000000</span>
+            </div>
+        </div>
+
+        <div class="dashboard__stat-card">
+            <div class="icon">💰</div>
+            <div class="info">
+                <span class="value">$84,500</span>
+                <span class="label">Total Revenue</span>
+                <span class="compare">Compared to previous month:  0000000000000</span>
+            </div>
+        </div>
+
+        <div class="dashboard__stat-card">
+            <div class="icon">👩‍🏫</div>
+            <div class="info">
+                <span class="value">42</span>
+                <span class="label">Total Teachers</span>
+                <span class="compare">Compared to previous month: 0000000000000</span>
+            </div>
+        </div>
+
+        <div class="dashboard__stat-card">
+            <div class="icon">📚</div>
+            <div class="info">
+                <span class="value">36</span>
+                <span class="label">Total Classes</span>
+                <span class="compare">Compared to previous month: 0000000000000</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- CHART -->
+    <div class="dashboard__chart card">
+        <h3>Revenue by Month (Current Year)</h3>
+        <canvas id="revenueChart"></canvas>
+    </div>
+
+</div>
+
+
