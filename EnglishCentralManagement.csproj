@@ -15,4 +15,8 @@
     <Folder Include="Areas\Admin\Models\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\Assets\avatar-default.png" />
+  </ItemGroup>
+
 </Project>
