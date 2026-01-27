@@ -8,7 +8,7 @@
     <title>Admin | @ViewData["Title"]</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="~/css/admin/admin.css" />
-    <script src="~/js/admin/admin-layout.js"></script>
+
     @RenderSection("css", required: false)
 </head>
 <body>
@@ -107,6 +107,8 @@
     </div>
     <!-- SCRIPT SECTION: -->
     @RenderSection("Scripts", required: false)
+    <script src="~/js/admin/admin-layout.js"></script>
+
 </body>
 </html>
 
