@@ -1,5 +1,7 @@
 ﻿// COLORS
 $primary: #2563eb;
+$secondary: #00a8cc;
+$danger: #DC3545;
 $bg: #f1f5f9;
 $text: #0f172a;
 $border: #e5e7eb;
@@ -38,21 +40,6 @@ input {
     }
 }
 
-// BUTTON
-.btn {
-    width: 100%;
-    padding: 12px;
-    border-radius: $radius;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-}
 
-.btn-primary {
-    background: $primary;
-    color: white;
 
-    &:hover {
-        opacity: 0.9;
-    }
-}
+

@@ -192,7 +192,7 @@ body {
     cursor: pointer;
 }
 
-/* ===== USER ===== */
+/* ===== HEADER - USER ===== */
 .user-dropdown {
     display: flex;
     align-items: center;
@@ -415,10 +415,34 @@ body {
     }
 }
 
+/*============ BASE BUTTON ==============*/
 .btn-primary {
     padding: 10px 16px;
     border-radius: 10px;
     background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    transition: all 0.2s ease;
+
+    &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+    }
+
+    &:active {
+        transform: translateY(0);
+        box-shadow: 0 3px 8px rgba(37, 99, 235, 0.3);
+    }
+}
+
+.btn-secondary {
+    padding: 10px 16px;
+    border-radius: 10px;
+    background: c.$danger;
     color: #fff;
     font-size: 14px;
     font-weight: 500;
