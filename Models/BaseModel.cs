@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel.DataAnnotations;
 
 namespace EnglishCentralManagement.Models
 {
     public abstract class BaseModel
     {
+        [Key]
         public int Id { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
         public string CreatedBy { get; set; }
