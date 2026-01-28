@@ -85,7 +85,7 @@
 
                 <div class="topbar-right">
                     <div class="user-dropdown">
-                        <img src="https://i.pravatar.cc/40" class="avatar" />
+                        <img src="/assets/avatar-default.png" class="avatar" />
                         <span class="username">Admin</span>
 
                         <div class="dropdown-menu">
@@ -104,10 +104,33 @@
             </main>
 
         </div>
+
+        <!-- Pop-Up -->
+        <div id="confirmModal" class="confirm-modal hidden">
+            <div class="confirm-backdrop"></div>
+
+            <div class="confirm-box">
+                <h3 id="confirmTitle">Confirm</h3>
+                <p id="confirmMessage">Are you sure?</p>
+
+                <div class="confirm-actions">
+                    <button id="confirmCancel" class="btn btn-cancel">Cancel</button>
+                    <button id="confirmOk" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast-Success -->
+        <div id="toast"
+             class="toast hidden">
+            <span id="toastMessage"></span>
+        </div>
     </div>
     <!-- SCRIPT SECTION: -->
     @RenderSection("Scripts", required: false)
     <script src="~/js/admin/admin-layout.js"></script>
+    <script src="~/js/admin/toast-modal.js"></script>
+    <script src="~/js/admin/confirm-modal.js"></script>
 
 </body>
 </html>

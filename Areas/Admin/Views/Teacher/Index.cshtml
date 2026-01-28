@@ -34,7 +34,10 @@
                     <td class="actions">
                         <a class="view" href="@Url.Action("GetDetailId", "Teacher", new { area = "Admin" })">View</a>
                         <a class="edit" href="@Url.Action("Edit", "Teacher", new { area = "Admin" })">Edit</a>
-                        <a class="delete">Delete</a>
+                        <a class="delete" data-id="5"
+                           data-form="deleteTeacherForm"
+                           data-message="Bạn có chắc muốn xoá teacher này?"
+                           onclick="confirmDeleteTeacher(5)">Delete</a>
                     </td>
 
                 </tr>
@@ -144,9 +147,21 @@
     </div>
 
     <!-- PAGINATION -->
-    <div class="admin-page__pagination">
-        <button class="active">1</button>
-        <button>2</button>
+    <div class="admin-page__pagination-wrapper">
+        <div class="admin-page__pagination-info">
+            Showing <strong>1–10</strong> of <strong>52</strong> records
+        </div>
+
+        <div class="admin-page__pagination">
+            <button class="btn-prev" disabled>‹ Prev</button>
+
+            <button class="active">1</button>
+            <button>2</button>
+            <button>3</button>
+
+            <button class="btn-next">Next ›</button>
+        </div>
     </div>
+
 
 </div>
