@@ -1,0 +1,167 @@
+﻿<div class="admin-page admin-teacher">
+    <!-- HEADER -->
+    <div class="admin-page__header">     
+        <h1>Teacher Management</h1>
+        <a class="btn-primary" href="@Url.Action("Create", "Teacher", new { area = "Admin" })">
+            + New Teacher
+        </a>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="admin-page__toolbar">
+        <input type="text" placeholder="Search teacher..." />
+        <button class="btn-search">Search</button>
+    </div>
+
+    <!-- TABLE -->
+    <div class="admin-page__table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Salary</th>
+                    <th width="120">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>John Doe</td>
+                    <td>john@email.com</td>
+                    <td>0123456789</td>
+                    <td>$1200</td>
+                    <td class="actions">
+                        <a class="view" href="@Url.Action("GetDetailId", "Teacher", new { area = "Admin" })">View</a>
+                        <a class="edit" href="@Url.Action("Edit", "Teacher", new { area = "Admin" })">Edit</a>
+                        <a class="delete" data-id="5"
+                           data-form="deleteTeacherForm"
+                           data-message="Bạn có chắc muốn xoá teacher này?"
+                           onclick="confirmDeleteTeacher(5)">Delete</a>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>Jane Smith</td>
+                    <td>jane@email.com</td>
+                    <td>0987654321</td>
+                    <td>$1100</td>
+                    <td class="actions">
+                        <a class="view">View</a>
+                        <a class="edit">Edit</a>
+                        <a class="delete">Delete</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Michael Lee</td>
+                    <td>michael@email.com</td>
+                    <td>0911222333</td>
+                    <td>$1300</td>
+                    <td class="actions">
+                        <a class="view">View</a>
+                        <a class="edit">Edit</a>
+                        <a class="delete">Delete</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Michael Lee</td>
+                    <td>michael@email.com</td>
+                    <td>0911222333</td>
+                    <td>$1300</td>
+                    <td class="actions">
+                        <a class="view">View</a>
+                        <a class="edit">Edit</a>
+                        <a class="delete">Delete</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Michael Lee</td>
+                    <td>michael@email.com</td>
+                    <td>0911222333</td>
+                    <td>$1300</td>
+                    <td class="actions">
+                        <a class="view">View</a>
+                        <a class="edit">Edit</a>
+                        <a class="delete">Delete</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Michael Lee</td>
+                    <td>michael@email.com</td>
+                    <td>0911222333</td>
+                    <td>$1300</td>
+                    <td class="actions">
+                        <a class="view">View</a>
+                        <a class="edit">Edit</a>
+                        <a class="delete">Delete</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Michael Lee</td>
+                    <td>michael@email.com</td>
+                    <td>0911222333</td>
+                    <td>$1300</td>
+                    <td class="actions">
+                        <a class="view">View</a>
+                        <a class="edit">Edit</a>
+                        <a class="delete">Delete</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Michael Lee</td>
+                    <td>michael@email.com</td>
+                    <td>0911222333</td>
+                    <td>$1300</td>
+                    <td class="actions">
+                        <a class="view">View</a>
+                        <a class="edit">Edit</a>
+                        <a class="delete">Delete</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Michael Lee</td>
+                    <td>michael@email.com</td>
+                    <td>0911222333</td>
+                    <td>$1300</td>
+                    <td class="actions">
+                        <a class="view">View</a>
+                        <a class="edit">Edit</a>
+                        <a class="delete">Delete</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Michael Lee</td>
+                    <td>michael@email.com</td>
+                    <td>0911222333</td>
+                    <td>$1300</td>
+                    <td class="actions">
+                        <a class="view">View</a>
+                        <a class="edit">Edit</a>
+                        <a class="delete">Delete</a>
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="admin-page__pagination-wrapper">
+        <div class="admin-page__pagination-info">
+            Showing <strong>1–10</strong> of <strong>52</strong> records
+        </div>
+
+        <div class="admin-page__pagination">
+            <button class="btn-prev" disabled>‹ Prev</button>
+
+            <button class="active">1</button>
+            <button>2</button>
+            <button>3</button>
+
+            <button class="btn-next">Next ›</button>
+        </div>
+    </div>
+
+
+</div>

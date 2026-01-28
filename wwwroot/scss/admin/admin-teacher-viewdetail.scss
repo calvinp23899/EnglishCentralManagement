@@ -1,0 +1,39 @@
+﻿.view-only {
+    .form-value {
+        padding: 10px 12px;
+        background: #f8fafc;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        font-size: 14px;
+        color: #1f2937;
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 500;
+
+        &.active {
+            background: #e6f4ea;
+            color: #15803d;
+        }
+
+        &.inactive {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+    }
+
+    .avatar {
+        width: 96px;
+        height: 96px;
+        border-radius: 12px;
+        object-fit: cover;
+        border: 1px solid #e5e7eb;
+    }
+}

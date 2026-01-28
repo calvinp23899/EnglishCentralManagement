@@ -1,0 +1,137 @@
+﻿@{
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Admin | @ViewData["Title"]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="~/css/admin/admin.css" />
+
+    @RenderSection("css", required: false)
+</head>
+<body>
+
+    <div class="admin-wrapper">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                English Centre
+            </div>
+
+            <ul class="menu">
+                <li class="menu-item @(controller == "Home" ? "active" : "")">
+                    <a href="@Url.Action("Index", "Home", new { area = "Admin" })">
+                        <div class="left">
+                            <span class="icon">🏠</span>
+                            <span class="text">Home</span>
+                        </div>
+                    </a>
+                </li>
+
+
+                <li class="menu-item has-sub @(controller == "Teacher" || controller == "Student" ? "open active" : "")">
+                    <div class="menu-link">
+                        <div class="left">
+                            <span class="icon">👥</span>
+                            <span class="text">User</span>
+                        </div>
+                        <span class="arrow"></span>
+                    </div>
+
+                    <ul class="submenu">
+                        <li>
+                            <a href="@Url.Action("Index", "Teacher", new { area = "Admin" })" class="@(controller == "Teacher" ? "active" : "")">
+                                Teacher
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Index", "Student", new { area = "Admin" })" class="@(controller == "Student" ? "active" : "")">
+                                Student
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="menu-item">
+                    <a href="#">
+                        <div class="left">
+                            <span class="icon">📚</span>
+                            <span class="text">Class</span>
+                        </div>
+                    </a>
+                </li>
+
+                <li class="menu-item">
+                    <a href="#">
+                        <div class="left">
+                            <span class="icon">⚙️</span>
+                            <span class="text">Setting</span>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- MAIN -->
+        <div class="main">
+
+            <!-- HEADER -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="toggle-btn">☰</button>
+                </div>
+
+                <div class="topbar-right">
+                    <div class="user-dropdown">
+                        <img src="/assets/avatar-default.png" class="avatar" />
+                        <span class="username">Admin</span>
+
+                        <div class="dropdown-menu">
+                            <a href="@Url.Action("Index", "Profile", new { area = "Admin" })">Profile</a>
+                            <a href="#">Change Password</a>
+                            <hr />
+                            <a href="#">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- CONTENT -->
+            <main class="content">
+                @RenderBody()
+            </main>
+
+        </div>
+
+        <!-- Pop-Up -->
+        <div id="confirmModal" class="confirm-modal hidden">
+            <div class="confirm-backdrop"></div>
+
+            <div class="confirm-box">
+                <h3 id="confirmTitle">Confirm</h3>
+                <p id="confirmMessage">Are you sure?</p>
+
+                <div class="confirm-actions">
+                    <button id="confirmCancel" class="btn btn-cancel">Cancel</button>
+                    <button id="confirmOk" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast-Success -->
+        <div id="toast"
+             class="toast hidden">
+            <span id="toastMessage"></span>
+        </div>
+    </div>
+    <!-- SCRIPT SECTION: -->
+    @RenderSection("Scripts", required: false)
+    <script src="~/js/admin/admin-layout.js"></script>
+    <script src="~/js/admin/toast-modal.js"></script>
+    <script src="~/js/admin/confirm-modal.js"></script>
+
+</body>
+</html>
+

@@ -1,0 +1,45 @@
+﻿// COLORS
+$primary: #2563eb;
+$secondary: #00a8cc;
+$danger: #DC3545;
+$bg: #f1f5f9;
+$text: #0f172a;
+$border: #e5e7eb;
+$error: #dc2626;
+
+// SIZE
+$radius: 10px;
+
+// BASE
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: $bg;
+    color: $text;
+}
+
+// FORM
+label {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border-radius: $radius;
+    border: 1px solid $border;
+    font-size: 14px;
+
+    &:focus {
+        outline: none;
+        border-color: $primary;
+    }
+}
+
+
+
+

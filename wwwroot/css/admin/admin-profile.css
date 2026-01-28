@@ -1,0 +1,96 @@
+.admin-profile-page {
+  background: #f5f6fa;
+}
+
+.profile__header h1 {
+  font-size: 28px;
+  margin: 0;
+  color: #0f172a;
+}
+
+.profile-grid {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+/* COMMON CARD */
+.profile-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+/* LEFT PANEL */
+.profile-sidebar {
+  width: 280px;
+  text-align: center;
+}
+.profile-sidebar .avatar {
+  margin-bottom: 16px;
+}
+.profile-sidebar .avatar img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.profile-sidebar .name {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.profile-sidebar .role {
+  color: #777;
+  font-size: 14px;
+}
+.profile-sidebar .location {
+  font-size: 13px;
+  color: #999;
+  margin-bottom: 20px;
+}
+.profile-sidebar .social-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.profile-sidebar .social-links a {
+  text-decoration: none;
+  color: #444;
+  font-size: 14px;
+}
+.profile-sidebar .social-links a:hover {
+  color: #007bff;
+}
+
+/* RIGHT PANEL (RED AREA YOU MARKED) */
+.profile-details {
+  flex: 1;
+  min-height: 100%;
+}
+.profile-details .detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid #eee;
+}
+.profile-details .detail-row .label {
+  font-weight: 500;
+  color: #333;
+}
+.profile-details .detail-row .value {
+  color: #666;
+}
+
+/* RESPONSIVE */
+@media (max-width: 992px) {
+  .profile-grid {
+    flex-direction: column;
+  }
+  .profile-sidebar {
+    width: 100%;
+  }
+}
+
+/*# sourceMappingURL=admin-profile.css.map */
