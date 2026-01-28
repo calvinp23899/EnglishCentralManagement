@@ -268,6 +268,7 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  pointer-events: auto;
 }
 .admin-page__header h1 {
   font-size: 24px;
@@ -400,8 +401,10 @@ body {
   font-weight: 500;
   border: none;
   cursor: pointer;
+  pointer-events: auto;
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
   transition: all 0.2s ease;
+  text-decoration: none;
 }
 .btn-primary:hover {
   transform: translateY(-1px);

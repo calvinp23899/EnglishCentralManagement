@@ -9,5 +9,35 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(string username)
+        {
+            return null;
+        }
+
+        [HttpGet]
+        public IActionResult Edit()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Edit(string username)
+        {
+            return null;
+        }
+
+        [HttpGet]
+        public IActionResult GetDetailId()
+        {
+            return View();
+        }
     }
 }
