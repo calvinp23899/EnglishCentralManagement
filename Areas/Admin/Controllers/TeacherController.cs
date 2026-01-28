@@ -4,6 +4,10 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
 {
     public class TeacherController : AdminBaseController
     {
+        public TeacherController()
+        {
+        }
+
         [HttpGet]
         public IActionResult Index()
         {
@@ -38,6 +42,12 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         public IActionResult GetDetailId()
         {
             return View();
+        }
+
+        [HttpDelete]
+        public IActionResult Delete(int id)
+        {
+            return null;
         }
     }
 }
