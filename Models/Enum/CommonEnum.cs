@@ -20,4 +20,34 @@
         Online = 2,
         Hybrid = 3
     }
+
+    public enum StudentStatus { 
+        Active, 
+        Inactive 
+    }
+    public enum EnrollmentStatus { 
+        Active, 
+        Completed, 
+        Cancelled 
+    }
+    public enum PaymentScheduleStatus { 
+        Pending, 
+        Paid, 
+        Overdue, 
+        Cancelled 
+    }
+    public enum PaymentMethod { 
+        Cash, 
+        BankTransfer,
+    }
+    public enum RoleType
+    {
+        User, //0
+        Admin, //1
+        HR, //2
+        Manager, //3
+        Accountant, //4
+        Teacher, // 5
+        Coordinator // 6
+    }
 }
