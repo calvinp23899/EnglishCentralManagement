@@ -3,6 +3,7 @@ using EnglishCentralManagement.Data;
 using EnglishCentralManagement.Helpers;
 using EnglishCentralManagement.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace EnglishCentralManagement.Areas.Admin.Services
@@ -18,6 +19,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services
         public  Account? Login(string username, string password)
         {
             var account = _context.Accounts
+                .Include(x=> x.Role)
             .FirstOrDefault(x => x.Username == username);
 
             if (account == null)

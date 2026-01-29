@@ -3,6 +3,8 @@ using EnglishCentralManagement.Areas.Admin.Services;
 using EnglishCentralManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using EnglishCentralManagement.Extensions;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using EnglishCentralManagement.Models.Enum;
 
 namespace EnglishCentralManagement
 {
@@ -16,12 +18,30 @@ namespace EnglishCentralManagement
             builder.Services.AddScoped<IAuthService, AuthService>();
             #endregion
 
+            //Authentication + Authorization
+            builder.Services
+            .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/Admin/Login/Index";           // URL login
+                options.AccessDeniedPath = "/Admin/Login/AccessDenied";
+                options.ExpireTimeSpan = TimeSpan.FromHours(2);
+            });
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("NotUser", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireAssertion(context =>
+                    !context.User.IsInRole(RoleType.User.ToString()));
+                });
+            });
+
             // Session
             builder.Services.AddDistributedMemoryCache();
-
             builder.Services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromHours(4);
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
@@ -32,8 +52,6 @@ namespace EnglishCentralManagement
             builder.Services.AddDbContext<EnglishCentreDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
             var app = builder.Build();
-
-
             using (var scope = app.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<EnglishCentreDbContext>();
