@@ -48,6 +48,8 @@ namespace EnglishCentralManagement.Models
         [MaxLength(20)]
         public string? Title { get; set; }
 
+        public bool? Gender { get; set; }
+
         public ICollection<Class> Classes { get; set; } = new List<Class>();
     }
 }

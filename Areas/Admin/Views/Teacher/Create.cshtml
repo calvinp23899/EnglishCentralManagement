@@ -1,12 +1,15 @@
-﻿<div class="teacher-form">
+﻿@model CreatedStaffDto
+
+<div class="teacher-form">
     <div class="teacher-form__header">
         <h2>Create Teacher</h2>
     </div>
 
-    <form>
-        @Html.Partial("_TeacherFormLayout")
+    <form action="Create" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        @Html.Partial("_TeacherFormLayout", Model)
         <div class="teacher-form__actions">
-            <button class="btn primary">Create Teacher</button>
+            <button class="btn primary" type="submit">Create Teacher</button>
             <button class="btn outline">Cancel</button>
         </div>
     </form>

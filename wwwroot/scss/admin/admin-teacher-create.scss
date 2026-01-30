@@ -86,3 +86,22 @@
         color: #2563eb;
     }
 }
+
+.form-section {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 20px;
+    background: #fafafa;
+
+    .section-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 16px;
+    }
+}
+
+.account-section {
+    grid-column: 1 / -1;
+    background: #f9fafb;
+}

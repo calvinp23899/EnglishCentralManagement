@@ -1,17 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
+using EnglishCentralManagement.Dtos;
+using EnglishCentralManagement.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EnglishCentralManagement.Areas.Admin.Controllers
 {
     public class TeacherController : AdminBaseController
     {
-        public TeacherController()
+        private readonly IStaffService _staffService;
+
+        public TeacherController(IStaffService staffService)
         {
+            _staffService = staffService;
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
         {
-            return View();
+
+            var result = await _staffService.GetAllAsync(page, pageSize) ?? null;
+
+            return View(result);            
         }
 
         [HttpGet]
@@ -21,9 +31,29 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(string username)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(CreatedStaffDto newStaff)
         {
-            return null;
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    TempData["ToastMessage"] = "Invalid Input Form. Please Try Again";
+                    TempData["ToastType"] = "error";
+                    return View(newStaff);
+                }
+                
+                await _staffService.CreateAsync(newStaff);
+                TempData["ToastMessage"] = "Create teacher successfully!";
+                TempData["ToastType"] = "success";
+            }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+                return View(newStaff);
+            }
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -39,9 +69,10 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetDetailId()
+        public async Task<IActionResult> GetDetailId(long id)
         {
-            return View();
+            var data = await _staffService.GetByIdAsync(id);
+            return View(data);
         }
 
         [HttpDelete]

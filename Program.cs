@@ -16,6 +16,7 @@ namespace EnglishCentralManagement
             #region DI
             //builder.Services.AddScoped<SessionAuthorizeFilter>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IStaffService, StaffService>();
             #endregion
 
             //Authentication + Authorization
