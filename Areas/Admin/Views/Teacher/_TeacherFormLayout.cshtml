@@ -1,4 +1,10 @@
-﻿<div class="teacher-form__grid">
+﻿@{
+    var genders = Enum.GetValues(typeof(GenderEnum)).Cast<GenderEnum>();
+    var workingTypes = Enum.GetValues(typeof(WorkingType)).Cast<WorkingType>();
+    var ContractTypes = Enum.GetValues(typeof(ContractType)).Cast<ContractType>();
+    var roleTypes = Enum.GetValues(typeof(RoleType)).Cast<RoleType>();
+}
+<div class="teacher-form__grid">
     <!-- First Name -->
     <div class="form-group">
         <label>First Name</label>
@@ -14,7 +20,7 @@
     <!-- Date of Birth -->
     <div class="form-group">
         <label>Date of Birth</label>
-        <input type="date" name="DateOfBirth" value="@Model?.DateOfBirth" required />
+        <input type="date" name="DateOfBirth" value="@(Model?.DateOfBirth?.ToString("yyyy-MM-dd"))" required />
     </div>
 
     <!-- Phone Number -->
@@ -32,16 +38,48 @@
     <!-- Contract Type -->
     <div class="form-group">
         <label>Contract Type</label>
-        <select name="ContractType" value="@Model?.ContractType" asp-items="Html.GetEnumSelectList<ContractType>()">
+        <select name="ContractType">
             <option value="">-- Select Contract Type --</option>
+
+            @foreach (var item in ContractTypes)
+            {
+                if (Model?.ContractType == item)
+                {
+                    <option value="@( (int)item )" selected="selected">
+                        @item
+                    </option>
+                }
+                else
+                {
+                    <option value="@( (int)item )">
+                        @item
+                    </option>
+                }
+            }
         </select>
     </div>
 
     <!-- Working Type -->
     <div class="form-group">
         <label>Working Type</label>
-        <select name="WorkingType" value="@Model?.WorkingType" asp-items="Html.GetEnumSelectList<WorkingType>()">
+        <select name="WorkingType" >
             <option value="">-- Select Working Type --</option>
+
+            @foreach (var item in workingTypes)
+            {
+                if (Model?.WorkingType == item)
+                {
+                    <option value="@( (int)item )" selected="selected">
+                        @item
+                    </option>
+                }
+                else
+                {
+                    <option value="@( (int)item )">
+                        @item
+                    </option>
+                }
+            }
         </select>
     </div>
 
@@ -66,14 +104,30 @@
     <!-- Onboarding Date -->
     <div class="form-group">
         <label>Onboarding Date</label>
-        <input type="date" name="OnboardingDate" value="@Model?.OnboardingDate" />
+        <input type="date" name="OnboardingDate" value="@(Model?.OnboardingDate?.ToString("yyyy-MM-dd"))" />
     </div>
 
     <!-- Gender -->
     <div class="form-group">
         <label>Gender</label>
-        <select name="Gender" value="@Model?.Gender" asp-items="Html.GetEnumSelectList<GenderEnum>()" required>
+        <select name="Gender" required>
             <option value="">-- Select Gender --</option>
+
+            @foreach (var gender in genders)
+            {
+                if (Model?.Gender == gender)
+                {
+                    <option value="@( (int)gender )" selected="selected">
+                        @gender
+                    </option>
+                }
+                else
+                {
+                    <option value="@( (int)gender )">
+                        @gender
+                    </option>
+                }
+            }
         </select>
     </div>
 
@@ -107,14 +161,30 @@
         <!-- Username -->
         <div class="form-group">
             <label>Password</label>
-            <input placeholder="" name="Password" value="@Model?.Password" required></input>
+            <input type="password" placeholder="••••••••" name="Password" value="@Model?.Password" required></input>
         </div>
 
         <!-- Role -->
         <div class="form-group">
             <label>Role</label>
-            <select name="Role" value="@Model?.Role" asp-items="Html.GetEnumSelectList<RoleType>()" required>
+            <select name="Role">
                 <option value="">-- Select Role --</option>
+
+                @foreach (var item in roleTypes)
+                {
+                    if (Model?.Role == item)
+                    {
+                        <option value="@( (int)item )" selected="selected">
+                            @item
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="@( (int)item )">
+                            @item
+                        </option>
+                    }
+                }
             </select>
         </div>
     </div>

@@ -48,5 +48,6 @@ namespace EnglishCentralManagement.Dtos
         public RoleType? Role { get; set; }
 
         public IFormFile? Avatar { get; set; }
+        public long? StaffId { get; set; }
     }
 }

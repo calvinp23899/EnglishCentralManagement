@@ -21,12 +21,24 @@ document.getElementById('confirmOk').onclick = function () {
 };
 
 function submitDeleteTeacher(id) {
-    //document.getElementById('deleteTeacherId').value = id;
-    //document.getElementById('deleteTeacherForm').submit();
-    // giả lập logic delete
-    console.log('Deleting teacher id:', id);
-
     showToast('Xoá teacher thành công');
+    console.log("id: ", id);
+    $.ajax({
+        url: '/Admin/Teacher/Delete',
+        type: 'POST',
+        data: {
+            id: id,
+            __RequestVerificationToken: $('#antiForgeryForm input[name="__RequestVerificationToken"]').val()
+        },
+        success: function () {
+            showToast('Xoá teacher thành công');
+            $('#teacher-row-' + id).remove();
+        },
+        error: function (xhr) {
+            console.error(xhr.responseText);
+            showToast('Xoá teacher thất bại', 'error');
+        }
+    });
 }
 //=========== Hàm Run
 function confirmDeleteTeacher(id) {

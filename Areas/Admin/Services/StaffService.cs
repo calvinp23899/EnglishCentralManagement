@@ -113,10 +113,10 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Staff updateStaff)
+        public async Task<CreatedStaffDto> UpdateAsync(CreatedStaffDto updateStaff)
         {
             var model = await _context.Staffs
-                .FirstOrDefaultAsync(x => x.Id == updateStaff.Id && !x.IsDeleted);
+                .FirstOrDefaultAsync(x => x.Id == updateStaff.StaffId && !x.IsDeleted);
 
             if (model == null)
                 throw new Exception("Teacher not found");
@@ -127,18 +127,19 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             model.PhoneNumber = updateStaff.PhoneNumber;
             model.Email = updateStaff.Email;
             model.Address = updateStaff.Address;
-            model.AvatarUrl = updateStaff.AvatarUrl;
-            model.Status = updateStaff.Status;
+            //model.AvatarUrl = updateStaff.Avatar;
             model.YearsOfExperience = updateStaff.YearsOfExperience;
             model.ContractType = updateStaff.ContractType;
             model.WorkingType = updateStaff.WorkingType;
             model.HourlyRate = updateStaff.HourlyRate;
             model.MonthlySalary = updateStaff.MonthlySalary;
-            model.OnboardingDate = updateStaff.OnboardingDate;
+            model.OnboardingDate = updateStaff.OnboardingDate.Value.ToUniversalTime();
             model.Title = updateStaff.Title;
             model.UpdatedDate = DateTimeOffset.UtcNow;
+            model.UpdatedBy = "Admin";
 
             await _context.SaveChangesAsync();
+            return updateStaff;
         }
 
         public async Task SoftDeleteAsync(long id)

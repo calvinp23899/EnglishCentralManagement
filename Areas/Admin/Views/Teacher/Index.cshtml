@@ -39,7 +39,7 @@
                 }else{
                     @foreach (var staff in Model.Items)
                     {
-                        <tr>
+                        <tr id="teacher-row-@staff.Id">
                             <td>@staff.FullName</td>
                             <td>@staff.Email</td>
                             <td>@staff.PhoneNumber</td>
@@ -47,7 +47,7 @@
                             <td>@staff.Status</td>
                             <td class="actions">
                                 <a class="view"
-                                   href="/admin/teacher/GetDetailId/@staff.Id">
+                                   href="@Url.Action("GetDetailId", "Teacher", new { area = "Admin", id = staff.Id })">
                                     View
                                 </a>
 
@@ -58,7 +58,6 @@
 
                                 <a class="delete"
                                    data-id="@staff.Id"
-                                   data-message="Bạn có chắc muốn xoá teacher này?"
                                    onclick="confirmDeleteTeacher(@staff.Id)">
                                     Delete
                                 </a>
@@ -149,5 +148,7 @@
         </div>
     </div>
 
-
+    <form id="antiForgeryForm" style="display:none;">
+        @Html.AntiForgeryToken()
+    </form>
 </div>

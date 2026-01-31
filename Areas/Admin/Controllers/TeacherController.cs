@@ -9,10 +9,12 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
     public class TeacherController : AdminBaseController
     {
         private readonly IStaffService _staffService;
+        private readonly IAccountService _accountService;
 
-        public TeacherController(IStaffService staffService)
+        public TeacherController(IStaffService staffService, IAccountService accountService)
         {
             _staffService = staffService;
+            _accountService = accountService;
         }
 
         [HttpGet]
@@ -57,28 +59,60 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit()
+        public async Task<IActionResult> Edit(long id)
         {
-            return View();
+            try
+            {
+                var data = await _accountService.GetByStaffIdAsync(id);
+                return View(data);
+
+            }catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+                return RedirectToAction("Index");
+            }
+
         }
 
         [HttpPost]
-        public IActionResult Edit(string username)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(CreatedStaffDto updatedStaff)
         {
-            return null;
+            try
+            {
+                var data = await _staffService.UpdateAsync(updatedStaff);
+            }catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+                return View(updatedStaff);
+            }
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
         public async Task<IActionResult> GetDetailId(long id)
         {
-            var data = await _staffService.GetByIdAsync(id);
-            return View(data);
+            try
+            {
+                var data = await _staffService.GetByIdAsync(id);
+                return View(data);
+            }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+                return RedirectToAction("Index");
+            }
         }
 
-        [HttpDelete]
-        public IActionResult Delete(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(long id)
         {
-            return null;
+            await _staffService.SoftDeleteAsync(id);
+            return Json(new { success = true });
         }
     }
 }

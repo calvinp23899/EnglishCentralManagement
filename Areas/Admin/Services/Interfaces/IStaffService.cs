@@ -9,7 +9,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services.Interfaces
         Task<PagedResult<StaffDto>> GetAllAsync(int pageIndex, int pageSize);
         Task<StaffDetailDto?> GetByIdAsync(long id);
         Task CreateAsync(CreatedStaffDto staff);
-        Task UpdateAsync(Staff staff);
+        Task<CreatedStaffDto> UpdateAsync(CreatedStaffDto staff);
         Task SoftDeleteAsync(long id);
     }
 }
