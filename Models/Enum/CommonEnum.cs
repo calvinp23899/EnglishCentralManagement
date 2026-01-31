@@ -1,9 +1,14 @@
-﻿namespace EnglishCentralManagement.Models.Enum
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace EnglishCentralManagement.Models.Enum
 {
     public enum TeacherStatus
     {
+        [Display(Name = "Active")]
         Active = 1,
+        [Display(Name = "Inactive")]
         Inactive = 2,
+        [Display(Name = "OnLeave")]
         OnLeave = 3
     }
 
@@ -49,5 +54,11 @@
         Accountant, //4
         Teacher, // 5
         Coordinator // 6
+    }
+
+    public enum GenderEnum
+    {
+        Female = 0,
+        Male = 1,        
     }
 }

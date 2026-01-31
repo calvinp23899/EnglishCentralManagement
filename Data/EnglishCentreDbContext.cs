@@ -26,7 +26,11 @@ namespace EnglishCentralManagement.Data
             modelBuilder.Entity<Class>().HasQueryFilter(x => !x.IsDeleted);
             modelBuilder.Entity<Enrollment>().HasQueryFilter(x => !x.IsDeleted);
             modelBuilder.Entity<Role>().HasQueryFilter(x => !x.IsDeleted);
-
+            modelBuilder.Entity<Staff>(entity =>
+            {
+                entity.Property(x => x.DateOfBirth)
+                      .HasColumnType("timestamp without time zone");
+            });
             base.OnModelCreating(modelBuilder);
         }
     }

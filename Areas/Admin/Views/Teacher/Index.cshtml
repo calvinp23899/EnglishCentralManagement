@@ -1,4 +1,6 @@
-﻿<div class="admin-page admin-teacher">
+﻿@model PagedResult<StaffDto>
+
+<div class="admin-page admin-teacher">
     <!-- HEADER -->
     <div class="admin-page__header">     
         <h1>Teacher Management</h1>
@@ -18,129 +20,52 @@
         <table>
             <thead>
                 <tr>
-                    <th>Name</th>
+                    <th>Full Name</th>
                     <th>Email</th>
                     <th>Phone</th>
-                    <th>Salary</th>
+                    <th>Gender</th>
+                    <th>Status</th>
                     <th width="120">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>John Doe</td>
-                    <td>john@email.com</td>
-                    <td>0123456789</td>
-                    <td>$1200</td>
-                    <td class="actions">
-                        <a class="view" href="@Url.Action("GetDetailId", "Teacher", new { area = "Admin" })">View</a>
-                        <a class="edit" href="@Url.Action("Edit", "Teacher", new { area = "Admin" })">Edit</a>
-                        <a class="delete" data-id="5"
-                           data-form="deleteTeacherForm"
-                           data-message="Bạn có chắc muốn xoá teacher này?"
-                           onclick="confirmDeleteTeacher(5)">Delete</a>
-                    </td>
+                @if (Model == null || !Model.Items.Any())
+                {
+                    <tr>
+                        <td colspan="5" style="text-align:center;">
+                            No teachers found
+                        </td>
+                    </tr>
+                }else{
+                    @foreach (var staff in Model.Items)
+                    {
+                        <tr id="teacher-row-@staff.Id">
+                            <td>@staff.FullName</td>
+                            <td>@staff.Email</td>
+                            <td>@staff.PhoneNumber</td>
+                            <td>@staff.Gender</td>
+                            <td>@staff.Status</td>
+                            <td class="actions">
+                                <a class="view"
+                                   href="@Url.Action("GetDetailId", "Teacher", new { area = "Admin", id = staff.Id })">
+                                    View
+                                </a>
 
-                </tr>
-                <tr>
-                    <td>Jane Smith</td>
-                    <td>jane@email.com</td>
-                    <td>0987654321</td>
-                    <td>$1100</td>
-                    <td class="actions">
-                        <a class="view">View</a>
-                        <a class="edit">Edit</a>
-                        <a class="delete">Delete</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Michael Lee</td>
-                    <td>michael@email.com</td>
-                    <td>0911222333</td>
-                    <td>$1300</td>
-                    <td class="actions">
-                        <a class="view">View</a>
-                        <a class="edit">Edit</a>
-                        <a class="delete">Delete</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Michael Lee</td>
-                    <td>michael@email.com</td>
-                    <td>0911222333</td>
-                    <td>$1300</td>
-                    <td class="actions">
-                        <a class="view">View</a>
-                        <a class="edit">Edit</a>
-                        <a class="delete">Delete</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Michael Lee</td>
-                    <td>michael@email.com</td>
-                    <td>0911222333</td>
-                    <td>$1300</td>
-                    <td class="actions">
-                        <a class="view">View</a>
-                        <a class="edit">Edit</a>
-                        <a class="delete">Delete</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Michael Lee</td>
-                    <td>michael@email.com</td>
-                    <td>0911222333</td>
-                    <td>$1300</td>
-                    <td class="actions">
-                        <a class="view">View</a>
-                        <a class="edit">Edit</a>
-                        <a class="delete">Delete</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Michael Lee</td>
-                    <td>michael@email.com</td>
-                    <td>0911222333</td>
-                    <td>$1300</td>
-                    <td class="actions">
-                        <a class="view">View</a>
-                        <a class="edit">Edit</a>
-                        <a class="delete">Delete</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Michael Lee</td>
-                    <td>michael@email.com</td>
-                    <td>0911222333</td>
-                    <td>$1300</td>
-                    <td class="actions">
-                        <a class="view">View</a>
-                        <a class="edit">Edit</a>
-                        <a class="delete">Delete</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Michael Lee</td>
-                    <td>michael@email.com</td>
-                    <td>0911222333</td>
-                    <td>$1300</td>
-                    <td class="actions">
-                        <a class="view">View</a>
-                        <a class="edit">Edit</a>
-                        <a class="delete">Delete</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Michael Lee</td>
-                    <td>michael@email.com</td>
-                    <td>0911222333</td>
-                    <td>$1300</td>
-                    <td class="actions">
-                        <a class="view">View</a>
-                        <a class="edit">Edit</a>
-                        <a class="delete">Delete</a>
-                    </td>
-                </tr>
+                                <a class="edit"
+                                   href="@Url.Action("Edit", "Teacher", new { area = "Admin", id = staff.Id })">
+                                    Edit
+                                </a>
 
+                                <a class="delete"
+                                   data-id="@staff.Id"
+                                   onclick="confirmDeleteTeacher(@staff.Id)">
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                
             </tbody>
 
         </table>
@@ -149,19 +74,81 @@
     <!-- PAGINATION -->
     <div class="admin-page__pagination-wrapper">
         <div class="admin-page__pagination-info">
-            Showing <strong>1–10</strong> of <strong>52</strong> records
+            Showing <strong>
+                @((Model.PageIndex - 1) * Model.PageSize + 1)
+                –
+                @(Math.Min(Model.PageIndex * Model.PageSize, Model.TotalRecords))
+            </strong>
+            of
+            <strong>@Model.TotalRecords</strong>
+            records
         </div>
 
         <div class="admin-page__pagination">
-            <button class="btn-prev" disabled>‹ Prev</button>
+            <!-- Prev -->
+            <button class="btn-prev"
+                    onclick="location.href='@Url.Action("Index", new { page = Model.PageIndex - 1 })'"
+            @(Model.HasPrevious ? "" : "disabled")>
+                ‹ Prev
+            </button>
 
-            <button class="active">1</button>
-            <button>2</button>
-            <button>3</button>
+            <!-- Page 1 -->
+            <button class="@(Model.PageIndex == 1 ? "active" : "")"
+                    onclick="location.href='@Url.Action("Index", new { page = 1 })'">
+                1
+            </button>
 
-            <button class="btn-next">Next ›</button>
+            @{
+                int start = Math.Max(2, Model.PageIndex - 2);
+                int end = Math.Min(Model.TotalPages - 1, Model.PageIndex + 2);
+            }
+
+            <!-- ... trước -->
+            @if (start > 2)
+            {
+                <span class="pagination-dots">...</span>
+            }
+
+            <!-- Pages giữa -->
+            @for (int i = start; i <= end; i++)
+            {
+                if (i == Model.PageIndex)
+                {
+                    <button class="active">@i</button>
+                }
+                else
+                {
+                    <button onclick="location.href='@Url.Action("Index", new { page = i })'">
+                        @i
+                    </button>
+                }
+            }
+
+            <!-- ... sau -->
+            @if (end < Model.TotalPages - 1)
+            {
+                <span class="pagination-dots">...</span>
+            }
+
+            <!-- Page cuối -->
+            @if (Model.TotalPages > 1)
+            {
+                <button class="@(Model.PageIndex == Model.TotalPages ? "active" : "")"
+                        onclick="location.href='@Url.Action("Index", new { page = Model.TotalPages })'">
+                    @Model.TotalPages
+                </button>
+            }
+
+            <!-- Next -->
+            <button class="btn-next"
+                    onclick="location.href='@Url.Action("Index", new { page = Model.PageIndex + 1 })'"
+            @(Model.HasNext ? "" : "disabled")>
+                Next ›
+            </button>
         </div>
     </div>
 
-
+    <form id="antiForgeryForm" style="display:none;">
+        @Html.AntiForgeryToken()
+    </form>
 </div>

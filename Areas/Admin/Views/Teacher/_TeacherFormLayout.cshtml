@@ -1,96 +1,193 @@
-﻿<div class="teacher-form__grid">
+﻿@{
+    var genders = Enum.GetValues(typeof(GenderEnum)).Cast<GenderEnum>();
+    var workingTypes = Enum.GetValues(typeof(WorkingType)).Cast<WorkingType>();
+    var ContractTypes = Enum.GetValues(typeof(ContractType)).Cast<ContractType>();
+    var roleTypes = Enum.GetValues(typeof(RoleType)).Cast<RoleType>();
+}
+<div class="teacher-form__grid">
     <!-- First Name -->
     <div class="form-group">
         <label>First Name</label>
-        <input type="text" placeholder="John" />
+        <input type="text" placeholder="John" name="FirstName" value="@Model?.FirstName" required/>
     </div>
 
     <!-- Last Name -->
     <div class="form-group">
         <label>Last Name</label>
-        <input type="text" placeholder="Doe" />
+        <input type="text" placeholder="Doe" name="LastName" value="@Model?.LastName" required />
     </div>
 
     <!-- Date of Birth -->
     <div class="form-group">
         <label>Date of Birth</label>
-        <input type="date" />
+        <input type="date" name="DateOfBirth" value="@(Model?.DateOfBirth?.ToString("yyyy-MM-dd"))" required />
     </div>
 
     <!-- Phone Number -->
     <div class="form-group">
         <label>Phone Number</label>
-        <input type="text" placeholder="0123456789" />
+        <input type="text" placeholder="0123456789" name="PhoneNumber" value="@Model?.PhoneNumber" required />
     </div>
 
     <!-- Email -->
     <div class="form-group">
         <label>Email</label>
-        <input type="email" placeholder="teacher@email.com" />
-    </div>
-
-    <!-- Status -->
-    <div class="form-group">
-        <label>Status</label>
-        <select>
-            <option>Active</option>
-            <option>Inactive</option>
-            <option>Suspended</option>
-        </select>
+        <input type="email" placeholder="teacher@email.com" name="Email" value="@Model?.Email" required />
     </div>
 
     <!-- Contract Type -->
     <div class="form-group">
         <label>Contract Type</label>
-        <select>
-            <option>Full-time</option>
-            <option>Part-time</option>
+        <select name="ContractType">
+            <option value="">-- Select Contract Type --</option>
+
+            @foreach (var item in ContractTypes)
+            {
+                if (Model?.ContractType == item)
+                {
+                    <option value="@( (int)item )" selected="selected">
+                        @item
+                    </option>
+                }
+                else
+                {
+                    <option value="@( (int)item )">
+                        @item
+                    </option>
+                }
+            }
         </select>
     </div>
 
     <!-- Working Type -->
     <div class="form-group">
         <label>Working Type</label>
-        <select>
-            <option>On-site</option>
-            <option>Online</option>
-            <option>Hybrid</option>
+        <select name="WorkingType" >
+            <option value="">-- Select Working Type --</option>
+
+            @foreach (var item in workingTypes)
+            {
+                if (Model?.WorkingType == item)
+                {
+                    <option value="@( (int)item )" selected="selected">
+                        @item
+                    </option>
+                }
+                else
+                {
+                    <option value="@( (int)item )">
+                        @item
+                    </option>
+                }
+            }
         </select>
     </div>
 
     <!-- Years of Experience -->
     <div class="form-group">
         <label>Years of Experience</label>
-        <input type="number" min="0" />
+        <input type="number" min="0" name="YearsOfExperience" value="@Model?.YearsOfExperience" />
     </div>
 
     <!-- Hourly Rate -->
     <div class="form-group">
         <label>Hourly Rate</label>
-        <input type="number" placeholder="$ / hour" />
+        <input type="number" placeholder="$ / hour" name="HourlyRate" value="@Model?.HourlyRate" />
     </div>
 
     <!-- Salary -->
     <div class="form-group">
         <label>Salary</label>
-        <input type="number" placeholder="$ / month" />
+        <input type="number" placeholder="$ / month" name="MonthlySalary" value="@Model?.MonthlySalary" />
     </div>
 
     <!-- Onboarding Date -->
     <div class="form-group">
         <label>Onboarding Date</label>
-        <input type="date" />
+        <input type="date" name="OnboardingDate" value="@(Model?.OnboardingDate?.ToString("yyyy-MM-dd"))" />
+    </div>
+
+    <!-- Gender -->
+    <div class="form-group">
+        <label>Gender</label>
+        <select name="Gender" required>
+            <option value="">-- Select Gender --</option>
+
+            @foreach (var gender in genders)
+            {
+                if (Model?.Gender == gender)
+                {
+                    <option value="@( (int)gender )" selected="selected">
+                        @gender
+                    </option>
+                }
+                else
+                {
+                    <option value="@( (int)gender )">
+                        @gender
+                    </option>
+                }
+            }
+        </select>
+    </div>
+
+    <!-- Address -->
+    <div class="form-group">
+        <label>Address</label>
+        <input placeholder="1A Street..." name="Address" value="@Model?.Address" required></input>
+    </div>
+
+    <!-- Title -->
+    <div class="form-group">
+        <label>Title</label>
+        <input placeholder="Junior Teacher..." name="Title" value="@Model?.Title" required></input>
     </div>
 
     <!-- Avatar -->
     <div class="form-group full">
         <label>Avatar</label>
-        <input type="file" />
+        <input type="file" name="Avatar" value="@Model?.Avatar" />
     </div>
 
-    <!-- Address -->
-    <div class="form-group full">
-        <label>Address</label>
-        <textarea rows="3" placeholder="Teacher address..."></textarea>
+    <div class="form-section account-section">
+        <div class="section-title">Account Information</div>
+
+        <!-- Username -->
+        <div class="form-group">
+            <label>Username</label>
+            <input placeholder="" name="Username" value="@Model?.Username" required></input>
+        </div>
+
+        <!-- Username -->
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" placeholder="••••••••" name="Password" value="@Model?.Password" required></input>
+        </div>
+
+        <!-- Role -->
+        <div class="form-group">
+            <label>Role</label>
+            <select name="Role">
+                <option value="">-- Select Role --</option>
+
+                @foreach (var item in roleTypes)
+                {
+                    if (Model?.Role == item)
+                    {
+                        <option value="@( (int)item )" selected="selected">
+                            @item
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="@( (int)item )">
+                            @item
+                        </option>
+                    }
+                }
+            </select>
+        </div>
     </div>
+    
+
 </div>

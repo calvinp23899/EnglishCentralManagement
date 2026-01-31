@@ -85,7 +85,7 @@
 
                 <div class="topbar-right">
                     <div class="user-dropdown">
-                        <img src="/assets/avatar-default.png" class="avatar" />
+                        <img src="/assets/img/avatar-default.png" class="avatar" />
                         <span class="username">Admin</span>
 
                         <div class="dropdown-menu">
@@ -126,8 +126,22 @@
             <span id="toastMessage"></span>
         </div>
     </div>
+
+    @if (TempData["ToastMessage"] != null)
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showToast(
+                    '@TempData["ToastMessage"]',
+                    '@TempData["ToastType"]'
+                );
+            });
+        </script>
+    }
+
     <!-- SCRIPT SECTION: -->
     @RenderSection("Scripts", required: false)
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="~/js/admin/admin-layout.js"></script>
     <script src="~/js/admin/toast-modal.js"></script>
     <script src="~/js/admin/confirm-modal.js"></script>

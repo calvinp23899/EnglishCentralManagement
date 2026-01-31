@@ -3,6 +3,7 @@ using System;
 using EnglishCentralManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EnglishCentralManagement.Migrations
 {
     [DbContext(typeof(EnglishCentreDbContext))]
-    partial class EnglishCentreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260130061836_UpdateDateOfBirthStaff")]
+    partial class UpdateDateOfBirthStaff
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
