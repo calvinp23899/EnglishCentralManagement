@@ -40,6 +40,27 @@ function submitDeleteTeacher(id) {
         }
     });
 }
+
+function submitDeleteStudent(id) {
+    showToast('Xoá student thành công');
+    console.log("id: ", id);
+    $.ajax({
+        url: '/Admin/Student/Delete',
+        type: 'POST',
+        data: {
+            id: id,
+            __RequestVerificationToken: $('#antiForgeryForm input[name="__RequestVerificationToken"]').val()
+        },
+        success: function () {
+            showToast('Xoá student thành công');
+            $('#student-row-' + id).remove();
+        },
+        error: function (xhr) {
+            console.error(xhr.responseText);
+            showToast('Xoá student thất bại', 'error');
+        }
+    });
+}
 //=========== Hàm Run
 function confirmDeleteTeacher(id) {
     openConfirmModal(
@@ -48,6 +69,16 @@ function confirmDeleteTeacher(id) {
             submitDeleteTeacher(id);
         },
         'Delete Teacher'
+    );
+}
+
+function confirmDeleteStudent(id) {
+    openConfirmModal(
+        'Bạn có chắc muốn xoá student này?',
+        function () {
+            submitDeleteStudent(id);
+        },
+        'Delete Student'
     );
 }
 

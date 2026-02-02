@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EnglishCentralManagement.Dtos
 {
-    public class CreatedStaffDto
+    public class CreatedStudentDto
     {
         [Required, MaxLength(50)]
         public string? FirstName { get; set; }
@@ -15,28 +15,18 @@ namespace EnglishCentralManagement.Dtos
         [DataType(DataType.Date)]
         public DateTime? DateOfBirth { get; set; }
 
+        [Required]
+        public GenderEnum? Gender { get; set; }
+
         [Required, MaxLength(20)]
         public string? PhoneNumber { get; set; }
 
         [Required, EmailAddress]
         public string? Email { get; set; }
 
-        public ContractType? ContractType { get; set; }
-        public WorkingType? WorkingType { get; set; }
-
-        [Range(0, 50)]
-        public int? YearsOfExperience { get; set; }
-
-        public decimal? HourlyRate { get; set; }
-        public decimal? MonthlySalary { get; set; }
-
-        [DataType(DataType.Date)]
-        public DateTimeOffset? OnboardingDate { get; set; }
         [Required]
         public string? Address { get; set; }
-        [Required]
-        public GenderEnum? Gender { get; set; }
-        public string? Title { get; set; }
+        public StudentStatus? Status { get; set; }
 
         [Required, MaxLength(50)]
         public string? Username { get; set; }
@@ -47,7 +37,9 @@ namespace EnglishCentralManagement.Dtos
         [Required]
         public RoleType? Role { get; set; }
 
-        public IFormFile? Avatar { get; set; }
-        public long? StaffId { get; set; }
+        public long? StudentId { get; set; }
+
+        public List<StudentClassDto>? StudentClasses { get; set; } = new List<StudentClassDto>();
+
     }
 }

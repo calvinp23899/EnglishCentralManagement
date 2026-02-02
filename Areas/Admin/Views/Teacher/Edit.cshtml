@@ -2,13 +2,13 @@
 
 <div class="teacher-form">
     <div class="teacher-form__header">
-        <h2>Edit Teacher</h2>
+        <h2>Edit Staff</h2>
     </div>
 
     <form action="Edit" method="post" enctype="multipart/form-data">
         <input type="hidden" name="StaffId" value="@Model.StaffId" />
         @Html.AntiForgeryToken()
-        @Html.Partial("_TeacherFormLayout")
+        @Html.Partial("_TeacherFormLayout",Model)
         <div class="teacher-form__actions">
             <button class="btn primary" type="submit">Edit</button>
             <button class="btn outline">Cancel</button>

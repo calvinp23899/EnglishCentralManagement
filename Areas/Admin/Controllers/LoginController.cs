@@ -27,14 +27,14 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginDto model)
         {
-            var account = _authService.Login(model.Username, model.Password);
+            var account = await _authService.Login(model.Username, model.Password);
 
             if (account == null)
             {
                 ViewBag.Error = "Sai tài khoản hoặc mật khẩu";
                 return View("Index");
             }
-            string roleName = ((RoleType)account.Role?.Name).ToString();
+            string roleName = account.Role?.Name;
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, account.StaffId.ToString()),

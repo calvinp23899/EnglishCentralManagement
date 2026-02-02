@@ -68,7 +68,12 @@ namespace EnglishCentralManagement.Data
                     WorkingType = WorkingType.Onsite,
                     ContractType = ContractType.FullTime,
                     YearsOfExperience = 5,
-                    MonthlySalary = 20000000
+                    MonthlySalary = 20000000,
+                    CreatedBy = "System",
+                    DateOfBirth = DateTime.Now,
+                    OnboardingDate = DateTimeOffset.UtcNow,
+                    Gender = true,
+                    CreatedDate = DateTimeOffset.UtcNow,
                 },
                 new Staff
                 {
@@ -80,7 +85,12 @@ namespace EnglishCentralManagement.Data
                     Status = TeacherStatus.Active,
                     WorkingType = WorkingType.Hybrid,
                     ContractType = ContractType.PartTime,
-                    HourlyRate = 350000
+                    HourlyRate = 350000,
+                    CreatedBy = "System",
+                    DateOfBirth = DateTime.Now,
+                    OnboardingDate = DateTimeOffset.UtcNow,
+                    Gender = false,                   
+                    CreatedDate = DateTimeOffset.UtcNow,
                 }
             );
 
@@ -113,22 +123,18 @@ namespace EnglishCentralManagement.Data
         {
             if (context.Students.Any()) return;
 
-            context.Students.AddRange(
+            context.Students.Add(
                 new Student
                 {
                     FirstName = "Nguyen",
                     LastName = "An",
                     Email = "an@student.com",
                     PhoneNumber = "0911000001",
-                    Status = StudentStatus.Active
-                },
-                new Student
-                {
-                    FirstName = "Tran",
-                    LastName = "Binh",
-                    Email = "binh@student.com",
-                    PhoneNumber = "0911000002",
-                    Status = StudentStatus.Active
+                    Status = StudentStatus.Active,
+                    DateOfBirth = DateTime.Now,
+                    Gender = false,
+                    CreatedBy = "System",
+                    CreatedDate = DateTimeOffset.UtcNow,
                 }
             );
 
@@ -161,13 +167,33 @@ namespace EnglishCentralManagement.Data
         {
             if (context.Accounts.Any()) return;
 
-            context.Accounts.Add(new Account
-            {
-                Username = "admin",
-                PasswordHash = EncryptHelper.Hash("123456"), 
-                RoleId = (int)RoleType.Admin,
-                CreatedBy = "System"
-            });
+            context.Accounts.AddRange(
+                new Account{
+                    Username = "admin",
+                    PasswordHash = EncryptHelper.Hash("123456"), 
+                    RoleId = (int)RoleType.Admin,
+                    CreatedBy = "System",
+                    CreatedDate = DateTimeOffset.UtcNow,
+                    StaffId = 2
+                },
+                new Account
+                {
+                    Username = "student1",
+                    PasswordHash = EncryptHelper.Hash("123456"),
+                    RoleId = (int)RoleType.User,
+                    CreatedBy = "System",
+                    CreatedDate = DateTimeOffset.UtcNow,
+                    StudentId = 1
+                },
+                new Account
+                {
+                    Username = "teacher1",
+                    PasswordHash = EncryptHelper.Hash("123456"),
+                    RoleId = (int)RoleType.Teacher,
+                    CreatedBy = "System",
+                    CreatedDate = DateTimeOffset.UtcNow,
+                    StaffId = 1
+                });
 
             await context.SaveChangesAsync();
         }
@@ -178,33 +204,39 @@ namespace EnglishCentralManagement.Data
             context.Roles.AddRange(
             new Role
             {
-                Name = RoleType.User,
-                CreatedBy = "System"
+                Name = RoleType.User.GetDisplayEnumName(),
+                CreatedBy = "System",
+                CreatedDate = DateTimeOffset.UtcNow,
             },
             new Role
             {
-                Name = RoleType.Admin,
-                CreatedBy = "System"
+                Name = RoleType.Admin.GetDisplayEnumName(),
+                CreatedBy = "System",
+                CreatedDate = DateTimeOffset.UtcNow,
             },
             new Role
             {
-                Name = RoleType.Teacher,
-                CreatedBy = "System"
+                Name = RoleType.Teacher.GetDisplayEnumName(),
+                CreatedBy = "System",
+                CreatedDate = DateTimeOffset.UtcNow,
             },
             new Role
             {
-                Name = RoleType.Manager,
-                CreatedBy = "System"
+                Name = RoleType.Manager.GetDisplayEnumName(),
+                CreatedBy = "System",
+                CreatedDate = DateTimeOffset.UtcNow,
             },
             new Role
             {
-                Name = RoleType.HR,
-                CreatedBy = "System"
+                Name = RoleType.HR.GetDisplayEnumName(),
+                CreatedBy = "System",
+                CreatedDate = DateTimeOffset.UtcNow,
             },
             new Role
             {
-                Name = RoleType.Coordinator,
-                CreatedBy = "System"
+                Name = RoleType.Coordinator.GetDisplayEnumName(),
+                CreatedBy = "System",
+                CreatedDate = DateTimeOffset.UtcNow,
             });
 
             await context.SaveChangesAsync();
