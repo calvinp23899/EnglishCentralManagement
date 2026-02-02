@@ -26,9 +26,11 @@ namespace EnglishCentralManagement.Models.Enum
         Hybrid = 3
     }
 
-    public enum StudentStatus { 
-        Active, 
-        Inactive 
+    public enum StudentStatus {
+        [Display(Name = "Active")]
+        Active = 1,
+        [Display(Name = "Inactive")]
+        Inactive = 0
     }
     public enum EnrollmentStatus { 
         Active, 
@@ -47,13 +49,20 @@ namespace EnglishCentralManagement.Models.Enum
     }
     public enum RoleType
     {
-        User, //0
-        Admin, //1
-        HR, //2
-        Manager, //3
-        Accountant, //4
-        Teacher, // 5
-        Coordinator // 6
+        [Display(Name = "User")]
+        User = 1,
+        [Display(Name = "Admin")]
+        Admin = 2,
+        [Display(Name = "HR")]
+        HR = 3,
+        [Display(Name = "Manager")]
+        Manager = 4,
+        [Display(Name = "Accountant")]
+        Accountant = 5,
+        [Display(Name = "Teacher")]
+        Teacher = 6,
+        [Display(Name = "Coordinator")]
+        Coordinator = 7 
     }
 
     public enum GenderEnum

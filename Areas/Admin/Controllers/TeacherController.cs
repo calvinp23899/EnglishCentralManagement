@@ -46,7 +46,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
                 }
                 
                 await _staffService.CreateAsync(newStaff);
-                TempData["ToastMessage"] = "Create teacher successfully!";
+                TempData["ToastMessage"] = "Create staff successfully!";
                 TempData["ToastType"] = "success";
             }
             catch (Exception ex)
@@ -81,8 +81,19 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    TempData["ToastMessage"] = "Invalid Input Form. Please Try Again";
+                    TempData["ToastType"] = "error";
+                    return View(updatedStaff);
+                }
                 var data = await _staffService.UpdateAsync(updatedStaff);
-            }catch (Exception ex)
+                //TODO: Update Account
+
+                TempData["ToastMessage"] = "Update staff successfully!";
+                TempData["ToastType"] = "success";
+            }
+            catch (Exception ex)
             {
                 TempData["ToastMessage"] = ex.Message;
                 TempData["ToastType"] = "error";
@@ -111,7 +122,16 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(long id)
         {
-            await _staffService.SoftDeleteAsync(id);
+            try
+            {
+                await _staffService.SoftDeleteAsync(id);
+            }
+            catch(Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+                return RedirectToAction("Index");
+            }
             return Json(new { success = true });
         }
     }

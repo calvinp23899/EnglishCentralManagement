@@ -31,6 +31,11 @@ namespace EnglishCentralManagement.Data
                 entity.Property(x => x.DateOfBirth)
                       .HasColumnType("timestamp without time zone");
             });
+            modelBuilder.Entity<Student>(entity =>
+            {
+                entity.Property(x => x.DateOfBirth)
+                      .HasColumnType("timestamp without time zone");
+            });
             base.OnModelCreating(modelBuilder);
         }
     }

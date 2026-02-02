@@ -23,6 +23,8 @@ namespace EnglishCentralManagement.Models
         [MaxLength(200)]
         public string? Address { get; set; }
 
+        public bool? Gender { get; set; }
+
         public StudentStatus Status { get; set; } = StudentStatus.Active;
 
         public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();

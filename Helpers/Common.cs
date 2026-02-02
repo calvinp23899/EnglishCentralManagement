@@ -5,7 +5,7 @@ namespace EnglishCentralManagement.Helpers
 {
     public static class Common
     {
-        public static string GetDisplayEnumRoleName(this Enum value)
+        public static string GetDisplayEnumName(this Enum value)
         {
             var field = value.GetType().GetField(value.ToString());
 

@@ -1,6 +1,8 @@
 ﻿using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
 using EnglishCentralManagement.Data;
 using EnglishCentralManagement.Dtos;
+using EnglishCentralManagement.Helpers;
+using EnglishCentralManagement.Models;
 using EnglishCentralManagement.Models.Enum;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +15,23 @@ namespace EnglishCentralManagement.Areas.Admin.Services
         public AccountService(EnglishCentreDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<CreatedAccountDto?> CreateAccount(CreatedAccountDto model)
+        {
+            var account = new Account
+            {
+                Username = model.Username,
+                PasswordHash = EncryptHelper.Hash(model.Password),
+                RoleId = (long?)model.RoleId,
+                CreatedBy = "Admin",
+                CreatedDate = DateTimeOffset.UtcNow,
+                StaffId = model.StaffId ?? null,
+                StudentId = model.StudentId ?? null,
+            };
+            _context.Accounts.Add(account);
+            await _context.SaveChangesAsync();
+            return model;
         }
 
         public async Task<CreatedStaffDto?> GetByStaffIdAsync(long id)
@@ -41,6 +60,20 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                 Role = (RoleType?)model.RoleId,
             };
             return data;
+        }
+
+        public async Task UpdatedAccount(UpdatedAccountDto model)
+        {
+            var data = await _context.Accounts
+                .FirstOrDefaultAsync(x => x.Id == model.AccountId && !x.IsDeleted);
+            if (data == null)
+            {
+                return;
+            }
+            data.Username = model.Username;
+            data.PasswordHash = EncryptHelper.Hash(model.Password);
+            data.RoleId = (long)model.RoleType;
+            await _context.SaveChangesAsync();
         }
     }
 }

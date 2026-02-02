@@ -92,13 +92,13 @@
     <!-- Hourly Rate -->
     <div class="form-group">
         <label>Hourly Rate</label>
-        <input type="number" placeholder="$ / hour" name="HourlyRate" value="@Model?.HourlyRate" />
+        <input type="number" placeholder="$ / hour" name="HourlyRate" value="@(Model?.HourlyRate?.ToString(System.Globalization.CultureInfo.InvariantCulture))" />
     </div>
 
     <!-- Salary -->
     <div class="form-group">
         <label>Salary</label>
-        <input type="number" placeholder="$ / month" name="MonthlySalary" value="@Model?.MonthlySalary" />
+        <input type="number" placeholder="$ / month" name="MonthlySalary" value="@(Model?.MonthlySalary?.ToString(System.Globalization.CultureInfo.InvariantCulture))" />
     </div>
 
     <!-- Onboarding Date -->

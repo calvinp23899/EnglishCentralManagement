@@ -5,6 +5,9 @@ namespace EnglishCentralManagement.Models
 {
     public class Enrollment : BaseModel
     {
+        /*
+         * Table Phụ giữa relationship Student và Class
+         */
         [Required]
         public long StudentId { get; set; }
 
@@ -14,6 +17,8 @@ namespace EnglishCentralManagement.Models
         public DateTimeOffset EnrolledAt { get; set; }
         public DateTimeOffset StartDate { get; set; }
         public DateTimeOffset EndDate { get; set; }
+
+        public int? LessonAttended { get; set; }
 
         public EnrollmentStatus Status { get; set; } = EnrollmentStatus.Active;
 

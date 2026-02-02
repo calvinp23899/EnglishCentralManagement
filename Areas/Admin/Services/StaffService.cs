@@ -37,7 +37,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                     Email = x.Email,
                     PhoneNumber = x.PhoneNumber,
                     Gender = (bool)x.Gender ? "Male" : "Female",
-                    Status = Common.GetDisplayEnumRoleName(x.Status)
+                    Status = Common.GetDisplayEnumName(x.Status)
                 })
                 .ToListAsync();
             return new PagedResult<StaffDto>
@@ -119,7 +119,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                 .FirstOrDefaultAsync(x => x.Id == updateStaff.StaffId && !x.IsDeleted);
 
             if (model == null)
-                throw new Exception("Teacher not found");
+                throw new Exception("Student not found");
 
             model.FirstName = updateStaff.FirstName;
             model.LastName = updateStaff.LastName;
