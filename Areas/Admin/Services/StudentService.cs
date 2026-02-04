@@ -38,7 +38,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             {
                 Username = newStudent.Username,
                 PasswordHash = EncryptHelper.Hash(newStudent.Password),
-                RoleId = (long)newStudent.Role,
+                RoleId = (long?)RoleType.User,
                 CreatedBy = "Admin",
                 CreatedDate = DateTimeOffset.UtcNow,
                 Student = data,

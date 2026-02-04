@@ -7,5 +7,8 @@ namespace EnglishCentralManagement.Areas.Admin.Services.Interfaces
         Task<CreatedStaffDto?> GetByStaffIdAsync(long id);
         Task<CreatedAccountDto?> CreateAccount(CreatedAccountDto model);
         Task UpdatedAccount(UpdatedAccountDto model);
+
+        Task<List<TeacherSelectDto>> GetListTeacherSelectedAsync();
+
     }
 }

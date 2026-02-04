@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EnglishCentralManagement.Models.Enum;
+using System.ComponentModel.DataAnnotations;
 
 namespace EnglishCentralManagement.Models
 {
@@ -18,7 +19,11 @@ namespace EnglishCentralManagement.Models
         public DateTimeOffset EndDate { get; set; }
 
         [Range(1, 100)]
-        public int MaxStudents { get; set; }
+        public int? MaxStudents { get; set; }
+
+        public ClassStatusEnum? Status { get; set; }
+
+        public string? Note { get; set; }
 
         public Course Course { get; set; } = null!;
         public Staff Staff { get; set; } = null!;

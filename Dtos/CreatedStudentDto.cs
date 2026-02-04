@@ -34,7 +34,6 @@ namespace EnglishCentralManagement.Dtos
         [Required, MaxLength(50)]
         public string? Password { get; set; }
 
-        [Required]
         public RoleType? Role { get; set; }
 
         public long? StudentId { get; set; }

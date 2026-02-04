@@ -70,4 +70,14 @@ namespace EnglishCentralManagement.Models.Enum
         Female = 0,
         Male = 1,        
     }
+
+    public enum ClassStatusEnum
+    {
+        [Display(Name = "Active")]
+        Active = 1,
+        [Display(Name = "Completed")]
+        Completed = 2,
+        [Display(Name = "Cancelled")]
+        Cancelled = 3,
+    }
 }

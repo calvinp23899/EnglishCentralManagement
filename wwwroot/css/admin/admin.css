@@ -891,4 +891,62 @@ body {
   border: 1px solid #e5e7eb;
 }
 
+.teacher-select {
+  position: relative;
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.select-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #fff;
+}
+
+.select-input:focus {
+  border-color: #2684ff;
+  outline: none;
+}
+
+.select-dropdown {
+  position: absolute;
+  width: 100%;
+  background: #fff;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  margin-top: 4px;
+  display: none;
+  z-index: 999;
+}
+
+.select-search {
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-bottom: 1px solid #eee;
+  outline: none;
+}
+
+.select-dropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.select-dropdown li {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.select-dropdown li:hover {
+  background-color: #f1f5f9;
+}
+
 /*# sourceMappingURL=admin.css.map */

@@ -1,5 +1,6 @@
 ﻿@{
     var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    var action = ViewContext.RouteData.Values["action"]?.ToString();
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -54,13 +55,27 @@
                     </ul>
                 </li>
 
-                <li class="menu-item">
-                    <a href="#">
+                <li class="menu-item has-sub @(controller == "Class" || controller == "My Class" ? "open active" : "")">
+                    <div class="menu-link">
                         <div class="left">
                             <span class="icon">📚</span>
                             <span class="text">Class</span>
                         </div>
-                    </a>
+                        <span class="arrow"></span>
+                    </div>
+
+                    <ul class="submenu">
+                        <li>
+                            <a href="@Url.Action("Index", "Class", new { area = "Admin" })" class="@(controller == "Class" && action == "Index" ? "active" : "")">
+                                Class Management
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("MyClass", "Class", new { area = "Admin" })" class="@(controller == "Class" && action == "MyClass" ? "active" : "")">
+                                My Class
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="menu-item">
@@ -145,6 +160,7 @@
     <script src="~/js/admin/admin-layout.js"></script>
     <script src="~/js/admin/toast-modal.js"></script>
     <script src="~/js/admin/confirm-modal.js"></script>
+    <script src="~/js/admin/toggle-dropdown.js"></script>
 
 </body>
 </html>
