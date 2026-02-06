@@ -48,10 +48,19 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             return View();
         }
 
-        public IActionResult MyClass()
+        public async Task<IActionResult> MyClass(int page = 1, int pageSize = 10)
         {
-            var userId = CurrentUserId();
-            //TODO: Get Class By UserId Loggin
+            try
+            {
+                var userId = CurrentUserId();
+                var data = await _classService.GetAllMyClassAsync(page, pageSize, userId);
+                return View(data);
+            }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+            }
             return View();
         }
 
@@ -190,6 +199,24 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
             return Json(new { success = true });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MyClassDetail(long id)
+        {
+            try
+            {
+                var listStdInClass = await _enrollmentService.GetStudentInClassAsync(1, 10, id);
+                var data = await _classService.GetDetailById(id);
+                data.StudentsInClass = listStdInClass;
+                return View(data);
+            }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+            }
+            return RedirectToAction("Index");
         }
     }
 }

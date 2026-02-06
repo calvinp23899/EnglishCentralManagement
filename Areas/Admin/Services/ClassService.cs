@@ -74,9 +74,36 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             };
         }
 
-        public Task<PagedResult<ClassDto>> GetAllMyClassAsync(int pageIndex, int pageSize)
+        public async Task<PagedResult<ClassDto>> GetAllMyClassAsync(int pageIndex, int pageSize, long teacherId)
         {
-            throw new NotImplementedException();
+            var query = _context.Classes
+               .Include(x => x.Course)
+               .Where(x => !x.IsDeleted && x.StaffId == teacherId);
+
+            var totalRecords = await query.CountAsync();
+
+            var items = await query
+                .OrderByDescending(x => x.Id)
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .Select(x => new ClassDto
+                {
+                    ClassId = x.Id,
+                    ClassCourse = x.Course.Name,
+                    ClassCode = x.Code,
+                    StartDate = x.StartDate.ToVnTime(),
+                    EndDate = x.EndDate.ToVnTime(),
+                    StudentCount = x.MaxStudents,
+                    Status = x.Status != null ? Common.GetDisplayEnumName(x.Status) : null
+                })
+                .ToListAsync();
+            return new PagedResult<ClassDto>
+            {
+                Items = items,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalRecords = totalRecords
+            };
         }
 
         public async Task<CreatedClassDto> GetClassInfoForEdit(long classId, List<TeacherSelectDto> listTeacherSelect, List<CourseSelectDto> listCourseSelect)

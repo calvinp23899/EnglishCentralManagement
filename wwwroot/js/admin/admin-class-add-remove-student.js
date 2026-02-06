@@ -1,16 +1,14 @@
-﻿let modalAction = null;
-let modalStudentId = null;
+﻿let modalStudentId = null;
 let modalClassId = null;
 
 function openAddModal(studentId, classId) {
-    modalAction = "add";
     modalStudentId = studentId;
     modalClassId = classId;
 
     document.getElementById("modalText").innerText =
         "Do you want to add this student to class?";
 
-    document.getElementById("addStudentModal").style.display = "flex";
+    document.getElementById("StudentModal").style.display = "flex";
 }
 
 function closeModal() {
