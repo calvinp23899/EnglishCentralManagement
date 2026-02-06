@@ -19,11 +19,11 @@ function selectTeacher(name, id) {
     document.getElementById("teacherDropdown").style.display = "none";
 }
 
-document.addEventListener("click", function (e) {
-    if (!e.target.closest(".teacher-select")) {
-        document.getElementById("teacherDropdown").style.display = "none";
-    }
-});
+//document.addEventListener("click", function (e) {
+//    if (!e.target.closest(".teacher-select")) {
+//        document.getElementById("teacherDropdown").style.display = "none";
+//    }
+//});
 
 
 
@@ -50,7 +50,17 @@ function selectCourse(name, id) {
 }
 
 document.addEventListener("click", function (e) {
-    if (!e.target.closest(".course-select")) {
-        document.getElementById("courseDropdown").style.display = "none";
+    const teacherBox = document.querySelector(".teacher-select");
+    const teacherDropdown = document.getElementById("teacherDropdown");
+
+    if (teacherDropdown && teacherBox && !teacherBox.contains(e.target)) {
+        teacherDropdown.style.display = "none";
+    }
+
+    const courseBox = document.querySelector(".course-select");
+    const courseDropdown = document.getElementById("courseDropdown");
+
+    if (courseDropdown && courseBox && !courseBox.contains(e.target)) {
+        courseDropdown.style.display = "none";
     }
 });

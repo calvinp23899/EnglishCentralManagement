@@ -16,7 +16,11 @@ namespace EnglishCentralManagement.Dtos
         public ClassStatusEnum? Status { get; set; }
 
         public string? Note { get; set; }
-        public PagedResult<StudentListDto>? Students { get; set; } = new PagedResult<StudentListDto>();
+        public long? ClassId { get; set; }
+        public long? TeacherId { get; set; }
+        public long? CourseId { get; set; }
+        public PagedResult<StudentListDto>? StudentsInClass { get; set; } = new PagedResult<StudentListDto>();
+        public PagedResult<StudentListDto>? StudentsAddToClass { get; set; } = new PagedResult<StudentListDto>();
 
     }
 
@@ -27,5 +31,8 @@ namespace EnglishCentralManagement.Dtos
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public string Status { get; set; }
+        public long? EnrollmentId { get; set; }
+        public string? EnrollmentStatus { get; set; }
+
     }
 }

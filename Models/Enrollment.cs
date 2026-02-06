@@ -10,14 +10,15 @@ namespace EnglishCentralManagement.Models
          */
         [Required]
         public long StudentId { get; set; }
+        public Student Student { get; set; }
 
         [Required]
         public long ClassId { get; set; }
+        public Class Class { get; set; }
 
         public DateTimeOffset EnrolledAt { get; set; }
         public DateTimeOffset StartDate { get; set; }
         public DateTimeOffset EndDate { get; set; }
-
         public int? LessonAttended { get; set; }
 
         public EnrollmentStatus Status { get; set; } = EnrollmentStatus.Active;

@@ -100,6 +100,36 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             return data;
         }
 
+        public async Task<PagedResult<StudentListDto>> GetStudentNotInClassAsync(int pageIndex, int pageSize, long classId)
+        {
+            var query = _context.Students
+                    .Where(s => !s.Enrollments.Any(e => e.ClassId == classId));
+
+            var totalRecords = await query.CountAsync();
+
+            var items = await query
+                .OrderByDescending(s => s.Id)
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .Select(s => new StudentListDto
+                {
+                    Id = s.Id,
+                    FullName = string.Join(" ", s.FirstName, s.LastName),
+                    Email = s.Email,
+                    PhoneNumber = s.PhoneNumber,
+                    Status = s.Status.GetDisplayEnumName(),
+                })
+                .ToListAsync();
+
+            return new PagedResult<StudentListDto>
+            {
+                Items = items,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalRecords = totalRecords
+            };
+        }
+
         public async Task SoftDeleteAsync(long id)
         {
             var model = await _context.Students

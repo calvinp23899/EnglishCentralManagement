@@ -1,4 +1,5 @@
-﻿using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
+﻿using EnglishCentralManagement.Areas.Admin.Services;
+using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
 using EnglishCentralManagement.Dtos;
 using EnglishCentralManagement.Dtos.Pagination;
 using EnglishCentralManagement.Models;
@@ -14,12 +15,22 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         private readonly IClassService _classService;
         private readonly IAccountService _accountService;
         private readonly ICourseService _courseService;
+        private readonly IEnrollmentService _enrollmentService;
+        private readonly IStudentService _studentService;
 
-        public ClassController(IClassService classService, IAccountService accountService, ICourseService courseService)
+        public ClassController(
+            IClassService classService,
+            IAccountService accountService,
+            ICourseService courseService,
+            IEnrollmentService enrollmentService,
+            IStudentService studentService
+        )
         {
             _classService = classService;
             _accountService = accountService;
             _courseService = courseService;
+            _enrollmentService = enrollmentService;
+            _studentService = studentService;
         }
 
         public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
@@ -93,53 +104,92 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetDetailId()
+        public async Task<IActionResult> GetDetailId(long id)
         {
-            var listStd = new List<StudentListDto>
+            try
             {
-                new StudentListDto
-                {
-                    Id = 1L,
-                    FullName = "Nguyễn Văn A",
-                    Email = "a.nguyen@gmail.com",
-                    PhoneNumber = "0901234567",
-                    Status = "Active"
-                },
-                new StudentListDto
-                {
-                    Id = 2L,
-                    FullName = "Trần Thị B",
-                    Email = "b.tran@gmail.com",
-                    PhoneNumber = "0912345678",
-                    Status = "Inactive"
-                },
-                new StudentListDto
-                {
-                    Id = 3L,
-                    FullName = "Lê Văn C",
-                    Email = "c.le@gmail.com",
-                    PhoneNumber = "0987654321",
-                    Status = "Active"
-                }
-            };
-            var data = new ClassDetailDto
+                var listStdInClass = await _enrollmentService.GetStudentInClassAsync(1, 10, id);
+                var listStdNotInClass = await _studentService.GetStudentNotInClassAsync(1, 10, id);
+                var data = await _classService.GetDetailById(id);
+                data.StudentsInClass = listStdInClass;
+                data.StudentsAddToClass = listStdNotInClass;
+                return View(data);
+            }
+            catch (Exception ex)
             {
-                ClassCode = "aaa",
-                CourseName = "bbbb",
-                MaxStudents = 3,
-                EndDate = DateTime.Now,
-                StartDate = DateTime.Now,
-                TeacherName = "aasda",
-                Status = ClassStatusEnum.Active,
-                Students = new PagedResult<StudentListDto>
-                {
-                    Items = listStd,
-                    PageIndex = 1,
-                    PageSize = 10,
-                    TotalRecords = 10
-                }
-            };
-            return View(data);
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddStudentToClass(long studentId, long classId)
+        {
+            try
+            {
+                await _enrollmentService.AddStudentInClassAsync(studentId, classId);
+                return Json(new { success = false });
+
+            }
+            catch (Exception ex) {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+            }
+            return Json(new { success = true });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(long id)
+        {
+            try
+            {
+                var listTeacherSelected = await _accountService.GetListTeacherSelectedAsync();
+                var listCourseSelected = await _courseService.GetCourseSelectedAsync();
+                var data = await _classService.GetClassInfoForEdit(id, listTeacherSelected, listCourseSelected);              
+                return View(data);
+            }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(CreatedClassDto updateClass)
+        {
+            try
+            {
+                await _classService.UpdateAsync(updateClass);
+
+                TempData["ToastMessage"] = "Update Class successfully!";
+                TempData["ToastType"] = "success";
+            }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(long id)
+        {
+            try
+            {
+                await _classService.SoftDeleteAsync(id);
+            }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+                return RedirectToAction("Index");
+            }
+            return Json(new { success = true });
         }
     }
 }

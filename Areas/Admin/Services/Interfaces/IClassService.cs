@@ -8,8 +8,9 @@ namespace EnglishCentralManagement.Areas.Admin.Services.Interfaces
         Task<PagedResult<ClassDto>> GetAllAsync(int pageIndex, int pageSize);
         Task<PagedResult<ClassDto>> GetAllMyClassAsync(int pageIndex, int pageSize);
         Task CreateAsync(CreatedClassDto newClass);
-        Task<CreatedClassDto> UpdateAsync(CreatedClassDto updateClass);
+        Task UpdateAsync(CreatedClassDto updateClass);
         Task SoftDeleteAsync(long id);
-
+        Task <ClassDetailDto> GetDetailById(long id);
+        Task <CreatedClassDto> GetClassInfoForEdit(long classId, List<TeacherSelectDto> listTeacherSelect, List<CourseSelectDto> listCourseSelect);
     }
 }

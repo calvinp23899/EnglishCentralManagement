@@ -26,12 +26,6 @@
         <input type="date" name="EndDate" value="@(Model?.EndDate?.ToString("yyyy-MM-dd"))" required />
     </div>
 
-    <!-- Class Size -->
-    <div class="form-group">
-        <label>StudentCount</label>
-        <input type="number" placeholder="1" name="MaxStudents" value="@Model?.MaxStudents" required />
-    </div>
-
     <!-- Status -->
     <div class="form-group">
         <label>Status</label>
@@ -56,12 +50,6 @@
         </select>
     </div>
 
-    <!-- Note -->
-    <div class="form-group">
-        <label>Note</label>
-        <textarea cols="3" type="text" name="Note" >@Model?.Note</textarea>
-    </div>
-
     <!-- TeacherId -->
     <div class="form-group teacher-select">
         <label>Teacher</label>      
@@ -70,10 +58,11 @@
                    id="teacherInput"
                    class="select-input"
                    placeholder="-- Select Teacher --"
+                   value="@Model.TeacherName"
                    readonly
                    onclick="toggleTeacherDropdown()" />
 
-            <input type="hidden" name="TeacherId" id="TeacherId" />
+            <input type="hidden" name="TeacherId" id="TeacherId" value="@Model.TeacherId"/>
 
             <div id="teacherDropdown" class="select-dropdown">
                 <input type="text"
@@ -102,10 +91,11 @@
                    id="courseInput"
                    class="select-input"
                    placeholder="-- Select Course --"
+                   value="@Model.CourseName"
                    readonly
                    onclick="toggleCourseDropdown()" />
 
-            <input type="hidden" name="CourseId" id="CourseId" />
+            <input type="hidden" name="CourseId" id="CourseId" value="@Model.CourseId" />
 
             <div id="courseDropdown" class="select-dropdown">
                 <input type="text"
@@ -124,6 +114,12 @@
                 </ul>
             </div>
         </div>
+    </div>
+
+    <!-- Note -->
+    <div class="form-group">
+        <label>Note</label>
+        <textarea name="Note" cols="3">@Model?.Note</textarea>
     </div>
 
 </div>

@@ -21,6 +21,9 @@ namespace EnglishCentralManagement.Dtos
         public ClassStatusEnum? Status { get; set; }
 
         public string? Note { get; set; }
+        public string? TeacherName { get; set; }
+        public string? CourseName { get; set; }
+        public long? ClassId { get; set; }
 
         public List<TeacherSelectDto>? Teachers { get; set; } = new List<TeacherSelectDto>();
         public List<CourseSelectDto>? Courses { get; set; } = new List<CourseSelectDto>();
