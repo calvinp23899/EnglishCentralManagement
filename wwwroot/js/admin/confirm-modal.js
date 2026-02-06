@@ -21,8 +21,6 @@ document.getElementById('confirmOk').onclick = function () {
 };
 
 function submitDeleteTeacher(id) {
-    showToast('Xoá teacher thành công');
-    console.log("id: ", id);
     $.ajax({
         url: '/Admin/Teacher/Delete',
         type: 'POST',
@@ -31,19 +29,17 @@ function submitDeleteTeacher(id) {
             __RequestVerificationToken: $('#antiForgeryForm input[name="__RequestVerificationToken"]').val()
         },
         success: function () {
-            showToast('Xoá teacher thành công');
+            showToast('Delete Teacher Successfully');
             $('#teacher-row-' + id).remove();
         },
         error: function (xhr) {
             console.error(xhr.responseText);
-            showToast('Xoá teacher thất bại', 'error');
+            showToast('Action Failed', 'error');
         }
     });
 }
 
 function submitDeleteStudent(id) {
-    showToast('Xoá student thành công');
-    console.log("id: ", id);
     $.ajax({
         url: '/Admin/Student/Delete',
         type: 'POST',
@@ -52,19 +48,38 @@ function submitDeleteStudent(id) {
             __RequestVerificationToken: $('#antiForgeryForm input[name="__RequestVerificationToken"]').val()
         },
         success: function () {
-            showToast('Xoá student thành công');
+            showToast('Delete Student Successfully');
             $('#student-row-' + id).remove();
         },
         error: function (xhr) {
             console.error(xhr.responseText);
-            showToast('Xoá student thất bại', 'error');
+            showToast('Action Failed', 'error');
+        }
+    });
+}
+
+function submitDeleteClass(id) {
+    $.ajax({
+        url: '/Admin/Class/Delete',
+        type: 'POST',
+        data: {
+            id: id,
+            __RequestVerificationToken: $('#antiForgeryForm input[name="__RequestVerificationToken"]').val()
+        },
+        success: function () {
+            showToast('Delete Class Successfully');
+            $('#class-row-' + id).remove();
+        },
+        error: function (xhr) {
+            console.error(xhr.responseText);
+            showToast('Action Failed', 'error');
         }
     });
 }
 //=========== Hàm Run
 function confirmDeleteTeacher(id) {
     openConfirmModal(
-        'Bạn có chắc muốn xoá teacher này?',
+        'Do you want to delete this teacher?',
         function () {
             submitDeleteTeacher(id);
         },
@@ -74,11 +89,21 @@ function confirmDeleteTeacher(id) {
 
 function confirmDeleteStudent(id) {
     openConfirmModal(
-        'Bạn có chắc muốn xoá student này?',
+        'Do you want to delete this student?',
         function () {
             submitDeleteStudent(id);
         },
         'Delete Student'
+    );
+}
+
+function confirmDeleteClass(id) {
+    openConfirmModal(
+        'Do you want to delete this class?',
+        function () {
+            submitDeleteClass(id);
+        },
+        'Delete Class'
     );
 }
 

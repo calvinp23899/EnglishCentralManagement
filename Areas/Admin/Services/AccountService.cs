@@ -5,6 +5,7 @@ using EnglishCentralManagement.Helpers;
 using EnglishCentralManagement.Models;
 using EnglishCentralManagement.Models.Enum;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace EnglishCentralManagement.Areas.Admin.Services
 {
@@ -59,6 +60,21 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                 Password = model.PasswordHash,
                 Role = (RoleType?)model.RoleId,
             };
+            return data;
+        }
+
+        public async Task<List<TeacherSelectDto>> GetListTeacherSelectedAsync()
+        {
+            var data = new List<TeacherSelectDto>();
+            data = await _context.Accounts
+                .Include(x => x.Staff)
+                .Where(x => x.RoleId == (long)RoleType.Teacher && !x.IsDeleted)
+                .Select(x=> new TeacherSelectDto
+                {
+                    Id = (long)x.StaffId,
+                    FullName = string.Concat(x.Staff.FirstName + " " + x.Staff.LastName).Trim()
+                })
+                .ToListAsync();
             return data;
         }
 

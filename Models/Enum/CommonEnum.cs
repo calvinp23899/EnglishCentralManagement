@@ -32,10 +32,15 @@ namespace EnglishCentralManagement.Models.Enum
         [Display(Name = "Inactive")]
         Inactive = 0
     }
-    public enum EnrollmentStatus { 
-        Active, 
-        Completed, 
-        Cancelled 
+    public enum EnrollmentStatus {
+        [Display(Name = "Active")]
+        Active = 1,
+        [Display(Name = "InActive")]
+        InActive = 2,
+        [Display(Name = "Completed")]
+        Completed = 3,
+        [Display(Name = "Cancelled")]
+        Cancelled = 4
     }
     public enum PaymentScheduleStatus { 
         Pending, 
@@ -69,5 +74,15 @@ namespace EnglishCentralManagement.Models.Enum
     {
         Female = 0,
         Male = 1,        
+    }
+
+    public enum ClassStatusEnum
+    {
+        [Display(Name = "Active")]
+        Active = 1,
+        [Display(Name = "Completed")]
+        Completed = 2,
+        [Display(Name = "Cancelled")]
+        Cancelled = 3,
     }
 }

@@ -10,5 +10,6 @@ namespace EnglishCentralManagement.Areas.Admin.Services.Interfaces
         Task CreateAsync(CreatedStudentDto newStudent);
         Task<CreatedStudentDto> UpdateAsync(CreatedStudentDto updateStudent);
         Task SoftDeleteAsync(long id);
+        Task<PagedResult<StudentListDto>> GetStudentNotInClassAsync(int pageIndex, int pageSize, long classId);
     }
 }

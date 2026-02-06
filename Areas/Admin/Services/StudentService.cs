@@ -38,7 +38,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             {
                 Username = newStudent.Username,
                 PasswordHash = EncryptHelper.Hash(newStudent.Password),
-                RoleId = (long)newStudent.Role,
+                RoleId = (long?)RoleType.User,
                 CreatedBy = "Admin",
                 CreatedDate = DateTimeOffset.UtcNow,
                 Student = data,
@@ -98,6 +98,36 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                 StudentId =  model.StudentId,
             };
             return data;
+        }
+
+        public async Task<PagedResult<StudentListDto>> GetStudentNotInClassAsync(int pageIndex, int pageSize, long classId)
+        {
+            var query = _context.Students
+                    .Where(s => !s.Enrollments.Any(e => e.ClassId == classId));
+
+            var totalRecords = await query.CountAsync();
+
+            var items = await query
+                .OrderByDescending(s => s.Id)
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .Select(s => new StudentListDto
+                {
+                    Id = s.Id,
+                    FullName = string.Join(" ", s.FirstName, s.LastName),
+                    Email = s.Email,
+                    PhoneNumber = s.PhoneNumber,
+                    Status = s.Status.GetDisplayEnumName(),
+                })
+                .ToListAsync();
+
+            return new PagedResult<StudentListDto>
+            {
+                Items = items,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalRecords = totalRecords
+            };
         }
 
         public async Task SoftDeleteAsync(long id)

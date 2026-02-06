@@ -3,6 +3,7 @@ using System;
 using EnglishCentralManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EnglishCentralManagement.Migrations
 {
     [DbContext(typeof(EnglishCentreDbContext))]
-    partial class EnglishCentreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260204015553_UpdateClassTable")]
+    partial class UpdateClassTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,8 +175,11 @@ namespace EnglishCentralManagement.Migrations
 
             modelBuilder.Entity("EnglishCentralManagement.Models.Enrollment", b =>
                 {
-                    b.Property<long>("StudentId")
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long>("ClassId")
                         .HasColumnType("bigint");
@@ -190,9 +196,6 @@ namespace EnglishCentralManagement.Migrations
                     b.Property<DateTimeOffset>("EnrolledAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
@@ -205,15 +208,20 @@ namespace EnglishCentralManagement.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
+                    b.Property<long>("StudentId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("text");
 
                     b.Property<DateTimeOffset?>("UpdatedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("StudentId", "ClassId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ClassId");
+
+                    b.HasIndex("StudentId");
 
                     b.ToTable("Enrollments");
                 });
@@ -281,13 +289,7 @@ namespace EnglishCentralManagement.Migrations
                     b.Property<DateTimeOffset>("DueDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<long>("EnrollmentClassId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("EnrollmentId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("EnrollmentStudentId")
                         .HasColumnType("bigint");
 
                     b.Property<bool>("IsDeleted")
@@ -304,7 +306,7 @@ namespace EnglishCentralManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnrollmentStudentId", "EnrollmentClassId");
+                    b.HasIndex("EnrollmentId");
 
                     b.ToTable("PaymentSchedules");
                 });
@@ -523,21 +525,17 @@ namespace EnglishCentralManagement.Migrations
 
             modelBuilder.Entity("EnglishCentralManagement.Models.Enrollment", b =>
                 {
-                    b.HasOne("EnglishCentralManagement.Models.Class", "Class")
+                    b.HasOne("EnglishCentralManagement.Models.Class", null)
                         .WithMany("Enrollments")
                         .HasForeignKey("ClassId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EnglishCentralManagement.Models.Student", "Student")
+                    b.HasOne("EnglishCentralManagement.Models.Student", null)
                         .WithMany("Enrollments")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Class");
-
-                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("EnglishCentralManagement.Models.Payment", b =>
@@ -555,7 +553,7 @@ namespace EnglishCentralManagement.Migrations
                 {
                     b.HasOne("EnglishCentralManagement.Models.Enrollment", null)
                         .WithMany("PaymentSchedules")
-                        .HasForeignKey("EnrollmentStudentId", "EnrollmentClassId")
+                        .HasForeignKey("EnrollmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -15,10 +15,15 @@ namespace EnglishCentralManagement
             var builder = WebApplication.CreateBuilder(args);
             #region DI
             //builder.Services.AddScoped<SessionAuthorizeFilter>();
+            builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IStaffService, StaffService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IStudentService, StudentService>();
+            builder.Services.AddScoped<IClassService, ClassService>();
+            builder.Services.AddScoped<ICourseService, CourseService>();
+            builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+            builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
             #endregion
 
             //Authentication + Authorization

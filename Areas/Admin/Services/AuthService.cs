@@ -20,7 +20,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services
         {
             var account =  _context.Accounts
                 .Include(x => x.Role)
-            .FirstOrDefault(x => x.Username == username);
+            .FirstOrDefault(x => x.Username == username && x.IsDeleted == false);
 
             if (account == null)
                 return null;
