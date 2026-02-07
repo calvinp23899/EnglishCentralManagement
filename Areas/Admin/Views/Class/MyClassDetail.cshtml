@@ -1,0 +1,172 @@
+﻿@model ClassDetailDto
+
+<div class="teacher-form view-only">
+    <div class="teacher-form__header">
+        <h2>Class Information</h2>
+    </div>
+
+    <div class="teacher-form__grid">
+
+        <div class="form-group">
+            <label>ClassCode</label>
+            <div class="form-value">@Model?.ClassCode</div>
+        </div>
+
+        <div class="form-group">
+            <label>Course</label>
+            <div class="form-value">@Model?.CourseName</div>
+        </div>
+
+        <div class="form-group">
+            <label>StartDate</label>
+            <div class="form-value">@Model?.StartDate</div>
+        </div>
+
+        <div class="form-group">
+            <label>EndDate</label>
+            <div class="form-value">@Model?.EndDate</div>
+        </div>
+
+        <div class="form-group">
+            <label>CountStudent</label>
+            <div class="form-value">@Model?.MaxStudents</div>
+        </div>
+
+        <div class="form-group">
+            <label>Status</label>
+            <span class="form-value">@Model?.Status</span>
+        </div>
+
+        <div class="form-group full">
+            <label>Homeroom-Teacher</label>
+            <div class="form-value">@Model?.TeacherName</div>
+        </div>
+
+        <div class="form-group full">
+            <label>Note</label>
+            <div class="form-value">@Model?.Note</div>
+        </div>
+
+    </div>
+
+    <br />
+    <div class="teacher-form__header">
+        <h2>Students In Class</h2>
+    </div>
+    <div class="admin-page__table">
+        <div class="table-detail-form__content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>FullName</th>
+                        <th>Email</th>
+                        <th>PhoneNumber</th>
+                        <th>EnrollmentStatus</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model == null || !Model.StudentsInClass.Items.Any())
+                    {
+                        <tr>
+                            <td colspan="5" style="text-align:center;">
+                                No Students found
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var studentItem in Model?.StudentsInClass.Items)
+                        {
+                            <tr>
+                                <td>@studentItem.FullName</td>
+                                <td>@studentItem.Email</td>
+                                <td>@studentItem.PhoneNumber</td>
+                                <td>@studentItem.EnrollmentStatus</td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="admin-page__pagination-wrapper">
+        <div class="admin-page__pagination-info">
+            Showing <strong>
+                @((Model.StudentsInClass.PageIndex - 1) * Model.StudentsInClass.PageSize + 1)
+                –
+                @(Math.Min(Model.StudentsInClass.PageIndex * Model.StudentsInClass.PageSize, Model.StudentsInClass.TotalRecords))
+            </strong>
+            of
+            <strong>@Model.StudentsInClass.TotalRecords</strong>
+            records
+        </div>
+
+        <div class="admin-page__pagination">
+            <!-- Prev -->
+            <button class="btn-prev"
+                    onclick="location.href='@Url.Action("Index", new { page = Model.StudentsInClass.PageIndex - 1 })'"
+            @(Model.StudentsInClass.HasPrevious ? "" : "disabled")>
+                ‹ Prev
+            </button>
+
+            <!-- Page 1 -->
+            <button class="@(Model.StudentsInClass.PageIndex == 1 ? "active" : "")"
+                    onclick="location.href='@Url.Action("Index", new { page = 1 })'">
+                1
+            </button>
+
+            @{
+                int start = Math.Max(2, Model.StudentsInClass.PageIndex - 2);
+                int end = Math.Min(Model.StudentsInClass.TotalPages - 1, Model.StudentsInClass.PageIndex + 2);
+            }
+
+            <!-- ... trước -->
+            @if (start > 2)
+            {
+                <span class="pagination-dots">...</span>
+            }
+
+            <!-- Pages giữa -->
+            @for (int i = start; i <= end; i++)
+            {
+                if (i == Model.StudentsInClass.PageIndex)
+                {
+                    <button class="active">@i</button>
+                }
+                else
+                {
+                    <button onclick="location.href='@Url.Action("Index", new { page = i })'">
+                        @i
+                    </button>
+                }
+            }
+
+            <!-- ... sau -->
+            @if (end < Model.StudentsInClass.TotalPages - 1)
+            {
+                <span class="pagination-dots">...</span>
+            }
+
+            <!-- Page cuối -->
+            @if (Model.StudentsInClass.TotalPages > 1)
+            {
+                <button class="@(Model.StudentsInClass.PageIndex == Model.StudentsInClass.TotalPages ? "active" : "")"
+                        onclick="location.href='@Url.Action("Index", new { page = Model.StudentsInClass.TotalPages })'">
+                    @Model.StudentsInClass.TotalPages
+                </button>
+            }
+
+            <!-- Next -->
+            <button class="btn-next"
+                    onclick="location.href='@Url.Action("Index", new { page = Model.StudentsInClass.PageIndex + 1 })'"
+            @(Model.StudentsInClass.HasNext ? "" : "disabled")>
+                Next ›
+            </button>
+        </div>
+    </div>
+</div>
