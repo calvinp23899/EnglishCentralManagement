@@ -13,7 +13,6 @@ namespace EnglishCentralManagement.Dtos
         public string ClassCode { get; set; }
         [Required]
         public DateTimeOffset? StartDate { get; set; }
-        [Required]
         public DateTimeOffset? EndDate { get; set; }
 
         public int? MaxStudents { get; set; }

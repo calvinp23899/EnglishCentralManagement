@@ -5,8 +5,12 @@ function openAddModal(studentId, classId) {
     modalStudentId = studentId;
     modalClassId = classId;
 
-    document.getElementById("modalText").innerText =
-        "Do you want to add this student to class?";
+    document.getElementById("modalText").innerHTML = `
+    <strong>Do you want to add this student to class?</strong><br>
+    <small class="text-muted">
+        This action includes adding student to class and creating contract
+    </small>
+`;
 
     document.getElementById("StudentModal").style.display = "flex";
 }

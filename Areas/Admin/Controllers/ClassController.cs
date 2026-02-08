@@ -1,12 +1,6 @@
-﻿using EnglishCentralManagement.Areas.Admin.Services;
-using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
+﻿using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
 using EnglishCentralManagement.Dtos;
-using EnglishCentralManagement.Dtos.Pagination;
-using EnglishCentralManagement.Models;
-using EnglishCentralManagement.Models.Enum;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EnglishCentralManagement.Areas.Admin.Controllers
 {
@@ -17,13 +11,15 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         private readonly ICourseService _courseService;
         private readonly IEnrollmentService _enrollmentService;
         private readonly IStudentService _studentService;
+        private readonly IPaymentService _paymentService;
 
         public ClassController(
             IClassService classService,
             IAccountService accountService,
             ICourseService courseService,
             IEnrollmentService enrollmentService,
-            IStudentService studentService
+            IStudentService studentService,
+            IPaymentService paymentService
         )
         {
             _classService = classService;
@@ -31,6 +27,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             _courseService = courseService;
             _enrollmentService = enrollmentService;
             _studentService = studentService;
+            _paymentService = paymentService;
         }
 
         public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
@@ -100,7 +97,8 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
                 else
                 {
                     await _classService.CreateAsync(newClass);
-
+                    TempData["ToastMessage"] = "Create class successfully!";
+                    TempData["ToastType"] = "success";
                 }
             }
             catch (Exception ex)
@@ -137,15 +135,18 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         {
             try
             {
-                await _enrollmentService.AddStudentInClassAsync(studentId, classId);
-                return Json(new { success = false });
+                await _paymentService.AddStudentInClass(studentId, classId);
+                TempData["ToastMessage"] = "Create student to class successfully!";
+                TempData["ToastType"] = "success";
+                return Json(new { success = true });
 
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 TempData["ToastMessage"] = ex.Message;
                 TempData["ToastType"] = "error";
             }
-            return Json(new { success = true });
+            return Json(new { success = false });
         }
 
         [HttpGet]
@@ -155,7 +156,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             {
                 var listTeacherSelected = await _accountService.GetListTeacherSelectedAsync();
                 var listCourseSelected = await _courseService.GetCourseSelectedAsync();
-                var data = await _classService.GetClassInfoForEdit(id, listTeacherSelected, listCourseSelected);              
+                var data = await _classService.GetClassInfoForEdit(id, listTeacherSelected, listCourseSelected);
                 return View(data);
             }
             catch (Exception ex)
@@ -172,7 +173,6 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             try
             {
                 await _classService.UpdateAsync(updateClass);
-
                 TempData["ToastMessage"] = "Update Class successfully!";
                 TempData["ToastType"] = "success";
             }
@@ -191,6 +191,8 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             try
             {
                 await _classService.SoftDeleteAsync(id);
+                TempData["ToastMessage"] = "Delete class successfully!";
+                TempData["ToastType"] = "success";
             }
             catch (Exception ex)
             {

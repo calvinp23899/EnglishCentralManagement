@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EnglishCentralManagement.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,6 +33,24 @@ namespace EnglishCentralManagement.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Roles",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    UpdatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "text", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Staffs",
                 columns: table => new
                 {
@@ -40,7 +58,7 @@ namespace EnglishCentralManagement.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     FirstName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     LastName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    DateOfBirth = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DateOfBirth = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     PhoneNumber = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
                     Email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     Address = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
@@ -52,7 +70,8 @@ namespace EnglishCentralManagement.Migrations
                     HourlyRate = table.Column<decimal>(type: "numeric(18,2)", nullable: true),
                     MonthlySalary = table.Column<decimal>(type: "numeric(18,2)", nullable: true),
                     OnboardingDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    Role = table.Column<string>(type: "text", nullable: true),
+                    Title = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    Gender = table.Column<bool>(type: "boolean", nullable: true),
                     CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     UpdatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
@@ -72,10 +91,11 @@ namespace EnglishCentralManagement.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     FirstName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     LastName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    DateOfBirth = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DateOfBirth = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     PhoneNumber = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
                     Email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     Address = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    Gender = table.Column<bool>(type: "boolean", nullable: true),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
@@ -99,7 +119,9 @@ namespace EnglishCentralManagement.Migrations
                     StaffId = table.Column<long>(type: "bigint", nullable: false),
                     StartDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    MaxStudents = table.Column<int>(type: "integer", nullable: false),
+                    MaxStudents = table.Column<int>(type: "integer", nullable: true),
+                    Status = table.Column<int>(type: "integer", nullable: true),
+                    Note = table.Column<string>(type: "text", nullable: true),
                     CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     UpdatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
@@ -133,6 +155,7 @@ namespace EnglishCentralManagement.Migrations
                     PasswordHash = table.Column<string>(type: "text", nullable: false),
                     StudentId = table.Column<long>(type: "bigint", nullable: true),
                     StaffId = table.Column<long>(type: "bigint", nullable: true),
+                    RoleId = table.Column<long>(type: "bigint", nullable: true),
                     CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     UpdatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
@@ -142,6 +165,11 @@ namespace EnglishCentralManagement.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Accounts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Accounts_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Accounts_Staffs_StaffId",
                         column: x => x.StaffId,
@@ -165,6 +193,7 @@ namespace EnglishCentralManagement.Migrations
                     EnrolledAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     StartDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    LessonAttended = table.Column<int>(type: "integer", nullable: true),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
@@ -213,7 +242,7 @@ namespace EnglishCentralManagement.Migrations
                         column: x => x.EnrollmentId,
                         principalTable: "Enrollments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -244,6 +273,11 @@ namespace EnglishCentralManagement.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Accounts_RoleId",
+                table: "Accounts",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Accounts_StaffId",
                 table: "Accounts",
                 column: "StaffId");
@@ -269,9 +303,10 @@ namespace EnglishCentralManagement.Migrations
                 column: "ClassId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrollments_StudentId",
+                name: "IX_Enrollments_StudentId_ClassId",
                 table: "Enrollments",
-                column: "StudentId");
+                columns: new[] { "StudentId", "ClassId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Payments_PaymentScheduleId",
@@ -293,6 +328,9 @@ namespace EnglishCentralManagement.Migrations
 
             migrationBuilder.DropTable(
                 name: "Payments");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "PaymentSchedules");

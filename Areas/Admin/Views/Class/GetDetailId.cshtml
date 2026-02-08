@@ -33,8 +33,13 @@
                 </div>
 
                 <div class="form-group">
-                    <label>CountStudent</label>
+                    <label>MaxStudents</label>
                     <div class="form-value">@Model?.MaxStudents</div>
+                </div>
+
+                <div class="form-group">
+                    <label>StudentCount</label>
+                    <div class="form-value">@Model?.StudentCount</div>
                 </div>
 
                 <div class="form-group">
@@ -100,7 +105,7 @@
                                         <td>@studentItem.EnrollmentStatus</td>
                                         <td class="actions">
                                             <a class="edit"
-                                               href="#">
+                                               href="@Url.Action("GetDetailById", "Enrollment", new { area = "Admin", id = studentItem.EnrollmentId })">
                                                 View
                                             </a>
                                         </td>
@@ -342,8 +347,8 @@
         <p id="modalText"></p>
 
         <div class="modal-actions">
-            <button type="button" class="btn-primary" onclick="confirmAction()">Yes</button>
-            <button type="button" onclick="closeModal()">Cancel</button>
+            <button type="button" class="btn primary" onclick="confirmAction()">Yes</button>
+            <button type="button" class="btn outline" onclick="closeModal()">Cancel</button>
         </div>
     </div>
 </div>

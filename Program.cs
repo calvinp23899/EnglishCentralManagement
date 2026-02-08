@@ -24,6 +24,7 @@ namespace EnglishCentralManagement
             builder.Services.AddScoped<ICourseService, CourseService>();
             builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
             builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
             #endregion
 
             //Authentication + Authorization

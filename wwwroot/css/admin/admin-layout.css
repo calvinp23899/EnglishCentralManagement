@@ -382,6 +382,11 @@ body {
 .admin-page__table .actions a.delete {
   color: #ef4444;
 }
+.admin-page__table .actions a.disabled {
+  pointer-events: none;
+  opacity: 0.4;
+  cursor: not-allowed;
+}
 .admin-page__pagination-wrapper {
   margin-top: 16px;
   display: flex;

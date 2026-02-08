@@ -7,7 +7,6 @@ using EnglishCentralManagement.Helpers;
 using EnglishCentralManagement.Models;
 using EnglishCentralManagement.Models.Enum;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace EnglishCentralManagement.Areas.Admin.Services
 {
@@ -24,12 +23,16 @@ namespace EnglishCentralManagement.Areas.Admin.Services
 
         public async Task CreateAsync(CreatedClassDto newClass)
         {
+            var courseModel = await _context.Courses
+                .Where(x => x.Id == newClass.CourseId)
+                .FirstOrDefaultAsync();
+            int DurationInMonths = courseModel?.DurationInMonths ?? 0;
             var data = new Class
             {
                 Code = newClass.ClassCode,
                 StartDate = newClass.StartDate.Value.ToUtcDb(),
-                EndDate = newClass.EndDate.Value.ToUtcDb(),
-                MaxStudents = 0,
+                EndDate = newClass.StartDate.Value.AddMonths(DurationInMonths).ToUtcDb(),
+                MaxStudents = newClass.MaxStudents,
                 StaffId = newClass.TeacherId,
                 CourseId = newClass.CourseId,
                 Note = newClass.Note,
@@ -108,20 +111,23 @@ namespace EnglishCentralManagement.Areas.Admin.Services
 
         public async Task<CreatedClassDto> GetClassInfoForEdit(long classId, List<TeacherSelectDto> listTeacherSelect, List<CourseSelectDto> listCourseSelect)
         {
+
             var classInfo = await GetDetailById(classId);
+
             var data = new CreatedClassDto();
             data.Teachers = listTeacherSelect;
             data.Courses = listCourseSelect;
             data.TeacherId = (long)classInfo.TeacherId;
             data.CourseId = (long)classInfo.CourseId;
             data.ClassCode = classInfo.ClassCode;
-            data.StartDate = classInfo.StartDate;
-            data.EndDate = classInfo.EndDate;
+            data.StartDate = classInfo.StartDate; //already VNTime
+            data.EndDate = classInfo.EndDate.Value;
             data.Note = classInfo.Note;
             data.Status = classInfo.Status;
             data.CourseName = classInfo.CourseName;
             data.TeacherName = classInfo.TeacherName;
             data.ClassId = classInfo.ClassId;
+            data.MaxStudents = classInfo.MaxStudents;
             return data;
         }
 
@@ -132,6 +138,8 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                 .Include(x => x.Staff)
                 .Where(x => x.Id == id && !x.IsDeleted)
                 .FirstOrDefaultAsync();
+            var currentStudents = await _context.Enrollments
+                .CountAsync(x => x.ClassId == id && x.Status == EnrollmentStatus.Active);
             var data = new ClassDetailDto
             {
                 ClassCode = model.Code,
@@ -145,11 +153,12 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                 StudentsAddToClass = null,
                 ClassId = model.Id,
                 TeacherId = model.Staff.Id,
-                CourseId = model.CourseId,  
+                CourseId = model.CourseId,
                 Note = model.Note,
+                StudentCount = currentStudents,
             };
             return data;
-        } 
+        }
 
         public async Task SoftDeleteAsync(long id)
         {
@@ -168,16 +177,21 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                 .Where(x => x.Id == updateClass.ClassId && !x.IsDeleted)
                 .FirstOrDefaultAsync();
             if (model == null)
-                throw new Exception("Teacher not found");
+                throw new Exception("Class not found");
+            var courseModel = await _context.Courses
+                .Where(x => x.Id == (long)updateClass.CourseId)
+                .FirstOrDefaultAsync();
+            int DurationInMonths = courseModel?.DurationInMonths ?? 0;
             model.Note = updateClass.Note;
             model.StartDate = updateClass.StartDate.Value.ToUtcDb();
-            model.EndDate = updateClass.EndDate.Value.ToUtcDb();
+            model.EndDate = updateClass.StartDate.Value.AddMonths(DurationInMonths).ToUtcDb();
             model.Status = updateClass.Status;
             model.UpdatedBy = _currentUser.FullName;
             model.UpdatedDate = DateTimeOffset.UtcNow.ToUtcDb();
             model.Code = updateClass.ClassCode;
             model.CourseId = updateClass.CourseId;
             model.StaffId = updateClass.TeacherId;
+            model.MaxStudents = updateClass.MaxStudents;
             await _context.SaveChangesAsync();
 
         }

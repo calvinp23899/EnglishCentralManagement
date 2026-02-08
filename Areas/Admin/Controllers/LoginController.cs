@@ -34,12 +34,11 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
                 ViewBag.Error = "Sai tài khoản hoặc mật khẩu";
                 return View("Index");
             }
-            string roleName = account.Role?.Name;
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, account.StaffId.ToString()),
-                new Claim(ClaimTypes.Name, string.Join(" ",account.Staff?.FirstName,account.Staff?.LastName).Trim()),
-                new Claim(ClaimTypes.Role, roleName), 
+                new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()),
+                new Claim(ClaimTypes.Name, string.Join(" ",account.FirstName,account.LastName).Trim()),
+                new Claim(ClaimTypes.Role, account.Role), 
             };
 
             var identity = new ClaimsIdentity(

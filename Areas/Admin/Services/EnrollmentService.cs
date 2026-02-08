@@ -3,7 +3,6 @@ using EnglishCentralManagement.Data;
 using EnglishCentralManagement.Dtos;
 using EnglishCentralManagement.Dtos.Pagination;
 using EnglishCentralManagement.Helpers;
-using EnglishCentralManagement.Models;
 using EnglishCentralManagement.Models.Enum;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,26 +20,82 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             _currentUser = currentUser;
         }
 
-        public async Task AddStudentInClassAsync(long studentId, long classId)
+        public async Task<PagedResult<EnrollmentDto>> GetAllAsync(int pageIndex, int pageSize)
         {
-            var classModel = await _context.Classes
-                .Where(x => x.Id == classId && !x.IsDeleted).FirstOrDefaultAsync();
-            var data = new Enrollment
+            var query = _context.Enrollments
+                .Include(x => x.Class)
+                .Include(x => x.Student)
+                .Where(e => e.IsDeleted == false && (e.Status != EnrollmentStatus.InActive || e.Status != EnrollmentStatus.Cancelled));
+
+            var totalRecords = await query.CountAsync();
+
+            var items = await query
+                .OrderByDescending(e => e.StudentId)
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .Select(e => new EnrollmentDto
+                {
+                    Id = e.Id,
+                    StudentName = string.Join(" ", e.Student.FirstName, e.Student.LastName),
+                    ClassCode = e.Class.Code,
+                    PhoneNumber = e.Student.PhoneNumber,
+                    Status = e.Status.GetDisplayEnumName()
+                })
+                .ToListAsync();
+
+            return new PagedResult<EnrollmentDto>
             {
-               ClassId = classId,
-               StudentId = studentId,
-               CreatedBy = _currentUser.FullName,
-               EnrolledAt = DateTime.UtcNow.ToUniversalTime(),
-               StartDate = DateTime.UtcNow.ToUniversalTime(),
-               EndDate = classModel.EndDate,
-               LessonAttended = 0,
-               Status = EnrollmentStatus.Active,
-               CreatedDate = DateTimeOffset.UtcNow.ToUniversalTime(),
+                Items = items,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalRecords = totalRecords
             };
-            classModel.MaxStudents++;
-            _context.Enrollments.Add(data);
-            _context.Classes.Update(classModel);
-            await _context.SaveChangesAsync();
+        }
+
+        public async Task<EnrollmentDetailDto> GetDetailById(long id, int pageIndex, int pageSize)
+        {
+            var model = await _context.Enrollments
+                .Include(x => x.Class)
+                    .ThenInclude(c => c.Course)
+                .Include(x => x.Student)
+                .Include(x => x.PaymentSchedules)
+                .Where(e => e.Id == id && e.IsDeleted == false)
+                .FirstOrDefaultAsync();
+            var totalRecords = model.PaymentSchedules.Count();
+
+            var items = model.PaymentSchedules
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .Select(e => new PaymentScheduleDto
+                {
+                    Id = e.Id,
+                    DueDate = e.DueDate,
+                    Amount = e.Amount,
+                    Status = e.Status.GetDisplayEnumName(),
+                })
+                .ToList();
+            var paymentScheduleList = new PagedResult<PaymentScheduleDto>
+            {
+                Items = items,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalRecords = totalRecords
+            };
+            var data = new EnrollmentDetailDto
+            {
+                EnrollmentId = model.Id,
+                CourseName = model.Class.Course.Name,
+                DurationCourse = model.Class.Course.DurationInMonths,
+                StartDateClass = model.Class.StartDate,
+                ClassCode = model.Class.Code,
+                ClassId = model.Class.Id,
+                StudentId = model.Student.Id,
+                StudentName = string.Join(" ", model.Student.FirstName, model.Student.LastName),
+                PhoneNumber = model.Student.PhoneNumber,
+                Status = model.Status.GetDisplayEnumName(),
+                PaymentSchedules = paymentScheduleList
+            };
+            return data;
         }
 
         public async Task<PagedResult<StudentListDto>> GetStudentInClassAsync(int pageIndex, int pageSize, long classId)
