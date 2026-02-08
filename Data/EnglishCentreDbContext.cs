@@ -26,6 +26,13 @@ namespace EnglishCentralManagement.Data
             modelBuilder.Entity<Class>().HasQueryFilter(x => !x.IsDeleted);
             modelBuilder.Entity<Enrollment>().HasQueryFilter(x => !x.IsDeleted);
             modelBuilder.Entity<Role>().HasQueryFilter(x => !x.IsDeleted);
+            modelBuilder.Entity<PaymentSchedule>().HasQueryFilter(x => !x.IsDeleted);
+            modelBuilder.Entity<Payment>().HasQueryFilter(x => !x.IsDeleted);
+            modelBuilder.Entity<PaymentSchedule>()
+                    .HasOne(ps => ps.Enrollment)
+                    .WithMany(e => e.PaymentSchedules)
+                    .HasForeignKey(ps => ps.EnrollmentId)
+                    .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Staff>(entity =>
             {
                 entity.Property(x => x.DateOfBirth)
@@ -36,7 +43,9 @@ namespace EnglishCentralManagement.Data
                 entity.Property(x => x.DateOfBirth)
                       .HasColumnType("timestamp without time zone");
             });
-            modelBuilder.Entity<Enrollment>().HasKey(e => new { e.StudentId, e.ClassId });
+            modelBuilder.Entity<Enrollment>()
+                .HasIndex(e => new { e.StudentId, e.ClassId })
+                .IsUnique();
             base.OnModelCreating(modelBuilder);
         }
     }

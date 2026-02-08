@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EnglishCentralManagement.Migrations
 {
     [DbContext(typeof(EnglishCentreDbContext))]
-    [Migration("20260204015553_UpdateClassTable")]
-    partial class UpdateClassTable
+    [Migration("20260207100427_InitDatabase")]
+    partial class InitDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -221,7 +221,8 @@ namespace EnglishCentralManagement.Migrations
 
                     b.HasIndex("ClassId");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("StudentId", "ClassId")
+                        .IsUnique();
 
                     b.ToTable("Enrollments");
                 });
@@ -525,17 +526,21 @@ namespace EnglishCentralManagement.Migrations
 
             modelBuilder.Entity("EnglishCentralManagement.Models.Enrollment", b =>
                 {
-                    b.HasOne("EnglishCentralManagement.Models.Class", null)
+                    b.HasOne("EnglishCentralManagement.Models.Class", "Class")
                         .WithMany("Enrollments")
                         .HasForeignKey("ClassId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EnglishCentralManagement.Models.Student", null)
+                    b.HasOne("EnglishCentralManagement.Models.Student", "Student")
                         .WithMany("Enrollments")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Class");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("EnglishCentralManagement.Models.Payment", b =>
@@ -551,11 +556,13 @@ namespace EnglishCentralManagement.Migrations
 
             modelBuilder.Entity("EnglishCentralManagement.Models.PaymentSchedule", b =>
                 {
-                    b.HasOne("EnglishCentralManagement.Models.Enrollment", null)
+                    b.HasOne("EnglishCentralManagement.Models.Enrollment", "Enrollment")
                         .WithMany("PaymentSchedules")
                         .HasForeignKey("EnrollmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Enrollment");
                 });
 
             modelBuilder.Entity("EnglishCentralManagement.Models.Class", b =>

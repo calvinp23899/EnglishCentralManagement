@@ -1,0 +1,247 @@
+﻿@model EnrollmentDetailDto
+@{
+    var stt = 1;
+    var paymentEnum = Enum.GetValues(typeof(PaymentMethod)).Cast<PaymentMethod>();
+
+}
+<div class="teacher-form view-only">
+    <div class="class-detail-tabs" data-tab-scope="contract">
+        <button class="tab-btn active" data-tab="contract">Contract Info</button>
+        <button class="tab-btn" data-tab="payment">Payment Schedule</button>
+    </div>
+    <div class="tab-content">
+
+        <!-- TAB: Contract INFO -->
+        <div id="tab-contract" class="tab-pane active">
+            <!-- Giữ nguyên HTML Class Info của bạn -->
+            <div class="teacher-form__grid">
+
+                <div class="form-group">
+                    <label>ContractId</label>
+                    <div class="form-value">@Model?.EnrollmentId</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Course</label>
+                    <div class="form-value">@Model?.CourseName</div>
+                </div>
+
+                <div class="form-group">
+                    <label>CourseDurationInMonths</label>
+                    <div class="form-value">@Model?.DurationCourse</div>
+                </div>
+
+                <div class="form-group">
+                    <label>ClassCode</label>
+                    <div class="form-value">@Model?.ClassCode</div>
+                </div>
+
+                <div class="form-group">
+                    <label>StartDateOfClass</label>
+                    <div class="form-value">@Model?.StartDateClass</div>
+                </div>
+
+                <div class="form-group">
+                    <label>StudentName</label>
+                    <div class="form-value">@Model?.StudentName</div>
+                </div>
+
+                <div class="form-group">
+                    <label>PhoneNumber</label>
+                    <div class="form-value">@Model?.PhoneNumber</div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB: STUDENTS -->
+        <div id="tab-payment" class="tab-pane">
+            <!-- Students content -->
+            <div class="table-detail-form__header">
+                <h2>PaymentSchedule</h2>
+            </div>
+
+            <!-- TOOLBAR -->
+            <div class="admin-page__toolbar">
+                <input type="text" placeholder="Search payment..." />
+                <button class="btn-search">Search</button>
+            </div>
+
+            <div class="admin-page__table">
+                <div class="table-detail-form__content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>DueDate</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model == null || !Model.PaymentSchedules.Items.Any())
+                            {
+                                <tr>
+                                    <td colspan="5" style="text-align:center;">
+                                        No Payments found
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {    
+
+                                @foreach (var item in Model?.PaymentSchedules.Items)
+                                {
+                                    <tr>
+                                        <td>@(stt++)</td>
+                                        <td>@item.DueDate</td>
+                                        <td>@item.Amount</td>
+                                        <td>@item.Status</td>
+                                        <td class="actions">
+                                            <a class="view  @(item.Status?.Trim().Equals("Paid", StringComparison.OrdinalIgnoreCase) == true ? "disabled" : "")"
+                                               data-id="@item.Id"
+                                               onclick="openPaymentModal(@item.Id)">
+                                               Paid
+                                            </a>
+                                            <a class="edit disabled"
+                                               data-id="@item.Id"
+                                               onclick="openPaymentModal(@item.Id)">
+                                                Edit 
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+
+            <!-- PAGINATION -->
+            <div class="admin-page__pagination-wrapper">
+                <div class="admin-page__pagination-info">
+                    Showing <strong>
+                        @((Model.PaymentSchedules.PageIndex - 1) * Model.PaymentSchedules.PageSize + 1)
+                        –
+                        @(Math.Min(Model.PaymentSchedules.PageIndex * Model.PaymentSchedules.PageSize, Model.PaymentSchedules.TotalRecords))
+                    </strong>
+                    of
+                    <strong>@Model.PaymentSchedules.TotalRecords</strong>
+                    records
+                </div>
+
+                <div class="admin-page__pagination">
+                    <!-- Prev -->
+                    <button class="btn-prev"
+                            onclick="location.href='@Url.Action("Index", new { page = Model.PaymentSchedules.PageIndex - 1 })'"
+                    @(Model.PaymentSchedules.HasPrevious ? "" : "disabled")>
+                        ‹ Prev
+                    </button>
+
+                    <!-- Page 1 -->
+                    <button class="@(Model.PaymentSchedules.PageIndex == 1 ? "active" : "")"
+                            onclick="location.href='@Url.Action("Index", new { page = 1 })'">
+                        1
+                    </button>
+
+                    @{
+                        int start = Math.Max(2, Model.PaymentSchedules.PageIndex - 2);
+                        int end = Math.Min(Model.PaymentSchedules.TotalPages - 1, Model.PaymentSchedules.PageIndex + 2);
+                    }
+
+                    <!-- ... trước -->
+                    @if (start > 2)
+                    {
+                        <span class="pagination-dots">...</span>
+                    }
+
+                    <!-- Pages giữa -->
+                    @for (int i = start; i <= end; i++)
+                    {
+                        if (i == Model.PaymentSchedules.PageIndex)
+                        {
+                            <button class="active">@i</button>
+                        }
+                        else
+                        {
+                            <button onclick="location.href='@Url.Action("Index", new { page = i })'">
+                                @i
+                            </button>
+                        }
+                    }
+
+                    <!-- ... sau -->
+                    @if (end < Model.PaymentSchedules.TotalPages - 1)
+                    {
+                        <span class="pagination-dots">...</span>
+                    }
+
+                    <!-- Page cuối -->
+                    @if (Model.PaymentSchedules.TotalPages > 1)
+                    {
+                        <button class="@(Model.PaymentSchedules.PageIndex == Model.PaymentSchedules.TotalPages ? "active" : "")"
+                                onclick="location.href='@Url.Action("Index", new { page = Model.PaymentSchedules.TotalPages })'">
+                            @Model.PaymentSchedules.TotalPages
+                        </button>
+                    }
+
+                    <!-- Next -->
+                    <button class="btn-next"
+                            onclick="location.href='@Url.Action("Index", new { page = Model.PaymentSchedules.PageIndex + 1 })'"
+                    @(Model.PaymentSchedules.HasNext ? "" : "disabled")>
+                        Next ›
+                    </button>
+                </div>
+            </div>          
+        </div>
+
+    </div>
+
+</div>
+
+<div class="modal" id="paymentModal">
+    <div class="modal-overlay" onclick="closePaymentModal()"></div>
+
+    <div class="modal-content">
+        <h3>Edit Payment</h3>
+
+        <form >
+            <div class="form-group">
+                <label>Paid At</label>
+                <input class="form-control" id="PaidAt" name="PaidAt" type="date" required />
+            </div>
+
+            <div class="form-group">
+                <label>Paid Amount</label>
+                <input class="form-control" id="PaidAmount" name="Amount" type="number" required />
+            </div>
+
+            <div class="form-group">
+                <label>Payment Method</label>
+                <select id="PaymentMethod" name="PaymentMethod" required>
+                    <option value="">-- Select Method --</option>
+
+                    @foreach (var item in paymentEnum)
+                    {
+                        <option value="@( (int)item )">
+                            @item
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <br />
+            <div class="modal-actions">
+                <button class="btn outline" type="button" onclick="closePaymentModal()">Cancel</button>
+                <button class="btn primary" type="button" onclick="savePayment()">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+<form id="antiForgeryForm" style="display:none;">
+    @Html.AntiForgeryToken()
+</form>

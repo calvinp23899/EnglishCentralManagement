@@ -1,11 +1,12 @@
-﻿using EnglishCentralManagement.Dtos.Pagination;
-using EnglishCentralManagement.Dtos;
+﻿using EnglishCentralManagement.Dtos;
+using EnglishCentralManagement.Dtos.Pagination;
 
 namespace EnglishCentralManagement.Areas.Admin.Services.Interfaces
 {
     public interface IEnrollmentService
     {
         Task<PagedResult<StudentListDto>> GetStudentInClassAsync(int pageIndex, int pageSize, long classId);
-        Task AddStudentInClassAsync(long studentId, long classId);
+        Task<PagedResult<EnrollmentDto>> GetAllAsync(int pageIndex, int pageSize);
+        Task<EnrollmentDetailDto> GetDetailById(long id, int pageIndex, int pageSize);
     }
 }

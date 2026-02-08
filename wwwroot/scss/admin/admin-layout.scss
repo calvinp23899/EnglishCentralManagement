@@ -403,6 +403,12 @@ body {
         .actions a.delete {
             color: #ef4444;
         }
+
+        .actions a.disabled {
+            pointer-events: none; 
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
     }
 
     &__pagination-wrapper {

@@ -9,7 +9,8 @@
     <title>Admin | @ViewData["Title"]</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="~/css/admin/admin.css" />
-
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     @RenderSection("css", required: false)
 </head>
 <body>
@@ -25,7 +26,7 @@
                 <li class="menu-item @(controller == "Home" ? "active" : "")">
                     <a href="@Url.Action("Index", "Home", new { area = "Admin" })">
                         <div class="left">
-                            <span class="icon">🏠</span>
+                            <span class="fa-solid fa-house"></span>
                             <span class="text">Home</span>
                         </div>
                     </a>
@@ -35,7 +36,7 @@
                 <li class="menu-item has-sub @(controller == "Teacher" || controller == "Student" ? "open active" : "")">
                     <div class="menu-link">
                         <div class="left">
-                            <span class="icon">👥</span>
+                            <span class="fa-solid fa-user"></span>
                             <span class="text">User</span>
                         </div>
                         <span class="arrow"></span>
@@ -58,7 +59,7 @@
                 <li class="menu-item has-sub @(controller == "Class" || controller == "My Class" ? "open active" : "")">
                     <div class="menu-link">
                         <div class="left">
-                            <span class="icon">📚</span>
+                            <span class="fa-solid fa-chalkboard-user"></span>
                             <span class="text">Class</span>
                         </div>
                         <span class="arrow"></span>
@@ -81,8 +82,17 @@
                 <li class="menu-item">
                     <a href="#">
                         <div class="left">
-                            <span class="icon">⚙️</span>
-                            <span class="text">Course Management</span>
+                            <span class="fa-solid fa-book-open"></span>
+                            <span class="text">Course </span>
+                        </div>
+                    </a>
+                </li>
+
+                <li class="menu-item @(controller == "Enrollment" ? "active" : "")">
+                    <a href="@Url.Action("Index", "Enrollment", new { area = "Admin" })">
+                        <div class="left">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <span class="text">Student Contract </span>
                         </div>
                     </a>
                 </li>
@@ -90,8 +100,8 @@
                 <li class="menu-item">
                     <a href="#">
                         <div class="left">
-                            <span class="icon">⚙️</span>
-                            <span class="text">Enrollment Management</span>
+                            <span class="fa-solid fa-money-bill-wave"></span>
+                            <span class="text">Cost </span>
                         </div>
                     </a>
                 </li>
@@ -99,16 +109,7 @@
                 <li class="menu-item">
                     <a href="#">
                         <div class="left">
-                            <span class="icon">⚙️</span>
-                            <span class="text">Cost Management</span>
-                        </div>
-                    </a>
-                </li>
-
-                <li class="menu-item">
-                    <a href="#">
-                        <div class="left">
-                            <span class="icon">⚙️</span>
+                            <span class="fa-solid fa-calendar-days"></span>
                             <span class="text">Calendar</span>
                         </div>
                     </a>
@@ -199,6 +200,7 @@
     <script src="~/js/admin/toggle-dropdown.js"></script>
     <script src="~/js/admin/admin-class-viewdetail-modal.js"></script>
     <script src="~/js/admin/admin-class-add-remove-student.js"></script>
+    <script src="~/js/admin/admin-contract.js"></script>
 
 </body>
 </html>

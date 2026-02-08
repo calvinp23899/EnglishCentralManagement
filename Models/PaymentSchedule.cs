@@ -8,6 +8,7 @@ namespace EnglishCentralManagement.Models
     {
         [Required]
         public long EnrollmentId { get; set; }
+        public Enrollment Enrollment { get; set; } = null!;
 
         public DateTimeOffset DueDate { get; set; }
 

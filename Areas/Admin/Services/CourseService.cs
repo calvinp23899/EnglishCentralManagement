@@ -17,7 +17,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services
         public async Task<List<CourseSelectDto>> GetCourseSelectedAsync()
         {
             var data = await _context.Courses.Where(x => x.IsDeleted == false)
-                .Select(x=> new CourseSelectDto
+                .Select(x => new CourseSelectDto
                 {
                     Id = x.Id,
                     CourseName = x.Name

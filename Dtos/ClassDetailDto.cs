@@ -12,6 +12,7 @@ namespace EnglishCentralManagement.Dtos
         public DateTimeOffset? EndDate { get; set; }
 
         public int? MaxStudents { get; set; }
+        public int? StudentCount { get; set; }
 
         public ClassStatusEnum? Status { get; set; }
 
