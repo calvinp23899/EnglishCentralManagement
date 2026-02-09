@@ -49,12 +49,18 @@
 
         <div class="form-group">
             <label>Hourly Rate</label>
-            <div class="form-value">@Model.HourlyRate</div>
+            <div class="form-value">
+                @Model.HourlyRate?.ToString("c0",
+                         new System.Globalization.CultureInfo("vi-VN"))
+            </div>
         </div>
 
         <div class="form-group">
             <label>Salary</label>
-            <div class="form-value">@Model.MonthlySalary</div>
+            <div class="form-value">
+                @Model.MonthlySalary?.ToString("c0",
+                         new System.Globalization.CultureInfo("vi-VN"))
+            </div>
         </div>
 
         <div class="form-group">

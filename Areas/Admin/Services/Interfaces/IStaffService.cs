@@ -1,6 +1,5 @@
 ﻿using EnglishCentralManagement.Dtos;
 using EnglishCentralManagement.Dtos.Pagination;
-using EnglishCentralManagement.Models;
 
 namespace EnglishCentralManagement.Areas.Admin.Services.Interfaces
 {
@@ -11,5 +10,6 @@ namespace EnglishCentralManagement.Areas.Admin.Services.Interfaces
         Task CreateAsync(CreatedStaffDto staff);
         Task<CreatedStaffDto> UpdateAsync(CreatedStaffDto staff);
         Task SoftDeleteAsync(long id);
+        Task<int> CountAllStaff();
     }
 }

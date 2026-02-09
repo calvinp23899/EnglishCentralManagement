@@ -142,7 +142,7 @@
 
                         <div class="dropdown-menu">
                             <a href="@Url.Action("Index", "Profile", new { area = "Admin" })">Profile</a>
-                            <a href="#">Change Password</a>
+                            <a onclick="openPasswordModal()">Change Password</a>
                             <hr />
                             <a href="@Url.Action("LogOut","Login", new { area = "Admin" })">Logout</a>
                         </div>
@@ -177,6 +177,39 @@
              class="toast hidden">
             <span id="toastMessage"></span>
         </div>
+
+        <!-- Modal Change Password -->
+        <div class="modalpassword" id="passwordModal">
+            <div class="modalpassword-overlay" onclick="closePasswordModal()"></div>
+
+            <div class="modalpassword-content">
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input class="form-control" id="changePass" name="changePass" type="password" required />
+                </div>
+
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input id="newPassConfirm"
+                           name="newPassConfirm"
+                           type="password"
+                           required
+@*                            oninput="validateConfirmPassword()" 
+ *@                    />
+                </div>
+                <div class="show-password">
+                    <input type="checkbox" onclick="showPassword()">
+                    <label for="showPassword">Show password</label>
+                </div>
+                <div class="modalpassword-actions">
+                    <button class="btn outline" type="button" onclick="closePasswordModal()">Cancel</button>
+                    <button class="btn primary" type="button" onclick="savePassword()">Save</button>
+                </div>
+            </div>
+        </div>
+        <form id="antiForgeryForm" style="display:none;">
+            @Html.AntiForgeryToken()
+        </form>
     </div>
 
     @if (TempData["ToastMessage"] != null)
@@ -190,10 +223,9 @@
             });
         </script>
     }
-
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <!-- SCRIPT SECTION: -->
     @RenderSection("Scripts", required: false)
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="~/js/admin/admin-layout.js"></script>
     <script src="~/js/admin/toast-modal.js"></script>
     <script src="~/js/admin/confirm-modal.js"></script>
@@ -201,6 +233,8 @@
     <script src="~/js/admin/admin-class-viewdetail-modal.js"></script>
     <script src="~/js/admin/admin-class-add-remove-student.js"></script>
     <script src="~/js/admin/admin-contract.js"></script>
+    <script src="~/js/admin/currency.js"></script>
+    <script src="~/js/admin/change-password.js"></script>
 
 </body>
 </html>

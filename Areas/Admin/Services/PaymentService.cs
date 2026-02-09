@@ -65,6 +65,29 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task<decimal> CalRevenueThisMonth()
+        {
+            var now = DateTimeOffset.UtcNow;
+
+            var startOfMonth = new DateTimeOffset(
+                now.Year, now.Month, 1,
+                0, 0, 0,
+                TimeSpan.Zero
+            );
+
+            var startOfNextMonth = startOfMonth.AddMonths(1);
+
+            var total = await _context.Payments
+                .Include(x => x.PaymentSchedule)
+                .Where(x =>
+                    x.PaidAt >= startOfMonth &&
+                    x.PaidAt < startOfNextMonth &&
+                    x.PaymentSchedule.Status == PaymentScheduleStatus.Paid
+                )
+                .SumAsync(x => x.PaidAmount);
+            return total;
+        }
+
         public async Task EditPayment(long paymentScheduleId, PaymentEditDto model)
         {
             var data = new Payment
@@ -84,6 +107,34 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                 throw new Exception("PaymentSchedule not found");
             paymentScheduleModel.Status = PaymentScheduleStatus.Paid;
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<RevenueByMonthDto>> GetDataChart()
+        {
+            int year = DateTime.Now.Year;
+
+            // Lấy dữ liệu có trong DB
+            var rawData = await _context.Payments
+                .Include(x => x.PaymentSchedule)
+                .Where(x => x.PaidAt.Year == year
+                && x.PaymentSchedule.Status == PaymentScheduleStatus.Paid)
+                .GroupBy(x => x.PaidAt.Month)
+                .Select(g => new
+                {
+                    Month = g.Key,
+                    Total = g.Sum(x => x.PaidAmount)
+                })
+                .ToListAsync();
+
+            var result = Enumerable.Range(1, 12)
+                .Select(month => new RevenueByMonthDto
+                {
+                    Month = month,
+                    Total = rawData.FirstOrDefault(x => x.Month == month)?.Total ?? 0
+                })
+                .ToList();
+
+            return result;
         }
     }
 }

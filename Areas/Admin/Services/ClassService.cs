@@ -21,6 +21,12 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             _currentUser = currentUser;
         }
 
+        public async Task<int> CountClass()
+        {
+            int countClass = await _context.Classes.CountAsync();
+            return countClass;
+        }
+
         public async Task CreateAsync(CreatedClassDto newClass)
         {
             var courseModel = await _context.Courses

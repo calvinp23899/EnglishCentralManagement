@@ -92,13 +92,35 @@
     <!-- Hourly Rate -->
     <div class="form-group">
         <label>Hourly Rate</label>
-        <input type="number" placeholder="$ / hour" name="HourlyRate" value="@(Model?.HourlyRate?.ToString(System.Globalization.CultureInfo.InvariantCulture))" />
+        <!-- input user -->
+        <input type="text"
+               id="HourlyRateDisplay"
+               placeholder="VND / hour"
+               value="@Model?.HourlyRate"
+               data-target="HourlyRate"
+               oninput="formatNumber(this)" />
+
+        <!-- value send to server -->
+        <input type="hidden"
+               id="HourlyRate"
+               name="HourlyRate" />
     </div>
 
     <!-- Salary -->
     <div class="form-group">
         <label>Salary</label>
-        <input type="number" placeholder="$ / month" name="MonthlySalary" value="@(Model?.MonthlySalary?.ToString(System.Globalization.CultureInfo.InvariantCulture))" />
+        <!-- input user -->
+        <input type="text"
+               id="MonthlySalaryDisplay"
+               placeholder="VND / month"
+               value="@Model?.MonthlySalary"
+               data-target="MonthlySalary"
+               oninput="formatNumber(this)" />
+
+        <!-- value send to server -->
+        <input type="hidden"
+               id="MonthlySalary"
+               name="MonthlySalary" />
     </div>
 
     <!-- Onboarding Date -->
