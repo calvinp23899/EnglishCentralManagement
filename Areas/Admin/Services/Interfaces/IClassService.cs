@@ -1,5 +1,5 @@
-﻿using EnglishCentralManagement.Dtos.Pagination;
-using EnglishCentralManagement.Dtos;
+﻿using EnglishCentralManagement.Dtos;
+using EnglishCentralManagement.Dtos.Pagination;
 
 namespace EnglishCentralManagement.Areas.Admin.Services.Interfaces
 {
@@ -10,7 +10,8 @@ namespace EnglishCentralManagement.Areas.Admin.Services.Interfaces
         Task CreateAsync(CreatedClassDto newClass);
         Task UpdateAsync(CreatedClassDto updateClass);
         Task SoftDeleteAsync(long id);
-        Task <ClassDetailDto> GetDetailById(long id);
-        Task <CreatedClassDto> GetClassInfoForEdit(long classId, List<TeacherSelectDto> listTeacherSelect, List<CourseSelectDto> listCourseSelect);
+        Task<int> CountClass();
+        Task<ClassDetailDto> GetDetailById(long id);
+        Task<CreatedClassDto> GetClassInfoForEdit(long classId, List<TeacherSelectDto> listTeacherSelect, List<CourseSelectDto> listCourseSelect);
     }
 }

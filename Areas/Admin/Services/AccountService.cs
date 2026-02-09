@@ -5,7 +5,6 @@ using EnglishCentralManagement.Helpers;
 using EnglishCentralManagement.Models;
 using EnglishCentralManagement.Models.Enum;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace EnglishCentralManagement.Areas.Admin.Services
 {
@@ -16,6 +15,15 @@ namespace EnglishCentralManagement.Areas.Admin.Services
         public AccountService(EnglishCentreDbContext context)
         {
             _context = context;
+        }
+
+        public async Task ChangePassword(long userId, string newPassword)
+        {
+            var model = await _context.Accounts
+                .Where(x => x.Id == userId)
+                .FirstOrDefaultAsync();
+            model.PasswordHash = EncryptHelper.Hash(newPassword);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<CreatedAccountDto?> CreateAccount(CreatedAccountDto model)
@@ -69,12 +77,33 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             data = await _context.Accounts
                 .Include(x => x.Staff)
                 .Where(x => x.RoleId == (long)RoleType.Teacher && !x.IsDeleted)
-                .Select(x=> new TeacherSelectDto
+                .Select(x => new TeacherSelectDto
                 {
                     Id = (long)x.StaffId,
                     FullName = string.Concat(x.Staff.FirstName + " " + x.Staff.LastName).Trim()
                 })
                 .ToListAsync();
+            return data;
+        }
+
+        public async Task<ProfileDto> GetProfileAsync(long userId)
+        {
+            var data = await _context.Accounts
+                .Include(x => x.Staff)
+                .Where(x => x.Id == userId && !x.IsDeleted)
+                .Select(x => new ProfileDto
+                {
+                    FullName = string.Concat(x.Staff.FirstName + " " + x.Staff.LastName).Trim(),
+                    Address = x.Staff.Address,
+                    PhoneNumber = x.Staff.PhoneNumber,
+                    Email = x.Staff.Email,
+                    Gender = x.Staff.Gender == true ? "Male" : "Female",
+                    DateOfBirth = (DateTimeOffset)x.Staff.DateOfBirth,
+                    Role = Common.GetDisplayEnumName((RoleType)x.RoleId),
+                    Title = x.Staff.Title,
+                    ContractType = x.Staff.ContractType.GetDisplayEnumName(),
+                })
+                .FirstOrDefaultAsync();
             return data;
         }
 
@@ -86,7 +115,6 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             {
                 return;
             }
-            data.Username = model.Username;
             data.PasswordHash = EncryptHelper.Hash(model.Password);
             data.RoleId = (long)model.RoleType;
             await _context.SaveChangesAsync();

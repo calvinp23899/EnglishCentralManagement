@@ -6,7 +6,6 @@ using EnglishCentralManagement.Helpers;
 using EnglishCentralManagement.Models;
 using EnglishCentralManagement.Models.Enum;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Principal;
 
 namespace EnglishCentralManagement.Areas.Admin.Services
 {
@@ -19,17 +18,26 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             _context = context;
         }
 
+        public async Task<int> CountAllStudent()
+
+        {
+            var data = await _context.Students.CountAsync();
+            if (data == null)
+                data = 0;
+            return data;
+        }
+
         public async Task CreateAsync(CreatedStudentDto newStudent)
         {
             var data = new Student
             {
-                FirstName =  newStudent.FirstName,
-                LastName =  newStudent.LastName,
-                DateOfBirth =  newStudent.DateOfBirth,
-                PhoneNumber =  newStudent.PhoneNumber,
-                Email =  newStudent.Email,
-                Address =  newStudent.Address,
-                Gender =  newStudent.Gender > 0 ? true : false,
+                FirstName = newStudent.FirstName,
+                LastName = newStudent.LastName,
+                DateOfBirth = newStudent.DateOfBirth,
+                PhoneNumber = newStudent.PhoneNumber,
+                Email = newStudent.Email,
+                Address = newStudent.Address,
+                Gender = newStudent.Gender > 0 ? true : false,
                 Status = newStudent.Status.Value,
                 CreatedBy = "Admin",
                 CreatedDate = DateTimeOffset.UtcNow,
@@ -81,7 +89,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services
         public async Task<CreatedStudentDto?> GetByIdAsync(long id)
         {
             var model = await _context.Accounts
-                .Include(x=>x.Student)
+                .Include(x => x.Student)
                 .FirstOrDefaultAsync(x => x.StudentId == id && !x.IsDeleted);
             var data = new CreatedStudentDto
             {
@@ -95,7 +103,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                 Username = model.Username,
                 Password = model.PasswordHash,
                 Role = (RoleType)model.RoleId,
-                StudentId =  model.StudentId,
+                StudentId = model.StudentId,
             };
             return data;
         }

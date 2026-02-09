@@ -9,6 +9,8 @@ namespace EnglishCentralManagement.Areas.Admin.Services.Interfaces
         Task UpdatedAccount(UpdatedAccountDto model);
 
         Task<List<TeacherSelectDto>> GetListTeacherSelectedAsync();
+        Task<ProfileDto> GetProfileAsync(long userId);
+        Task ChangePassword(long userId, string newPassword);
 
     }
 }

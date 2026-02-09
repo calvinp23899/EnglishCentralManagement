@@ -6,5 +6,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services.Interfaces
     {
         Task AddStudentInClass(long studentId, long classId);
         Task EditPayment(long paymentScheduleId, PaymentEditDto model);
+        Task<decimal> CalRevenueThisMonth();
+        Task<List<RevenueByMonthDto>> GetDataChart();
     }
 }

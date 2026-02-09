@@ -584,5 +584,55 @@ body {
     transform: translateX(0);
   }
 }
+.modalpassword {
+  position: fixed;
+  inset: 0;
+  display: none;
+  z-index: 999;
+}
+
+.modalpassword.show {
+  display: block;
+}
+
+.modalpassword-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.modalpassword-content {
+  position: relative;
+  width: 420px;
+  margin: 10% auto;
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+}
+
+.modalpassword .form-group {
+  margin-bottom: 16px; /* hoặc 20px cho thoáng hơn */
+}
+
+.show-password {
+  display: flex;
+  align-items: center;
+  gap: 6px; /* sát chữ */
+  margin-top: 4px;
+  margin-bottom: 20px;
+}
+
+.show-password input[type=checkbox] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.show-password label {
+  margin: 0;
+  cursor: pointer;
+  font-size: 14px;
+  color: #344054;
+}
 
 /*# sourceMappingURL=admin-layout.css.map */

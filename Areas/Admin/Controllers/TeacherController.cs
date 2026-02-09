@@ -1,8 +1,6 @@
 ﻿using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
 using EnglishCentralManagement.Dtos;
-using EnglishCentralManagement.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EnglishCentralManagement.Areas.Admin.Controllers
 {
@@ -23,7 +21,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
 
             var result = await _staffService.GetAllAsync(page, pageSize) ?? null;
 
-            return View(result);            
+            return View(result);
         }
 
         [HttpGet]
@@ -44,7 +42,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
                     TempData["ToastType"] = "error";
                     return View(newStaff);
                 }
-                
+
                 await _staffService.CreateAsync(newStaff);
                 TempData["ToastMessage"] = "Create staff successfully!";
                 TempData["ToastType"] = "success";
@@ -66,7 +64,8 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
                 var data = await _accountService.GetByStaffIdAsync(id);
                 return View(data);
 
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 TempData["ToastMessage"] = ex.Message;
                 TempData["ToastType"] = "error";
@@ -125,14 +124,14 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             try
             {
                 await _staffService.SoftDeleteAsync(id);
+                return Json(new { success = true });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 TempData["ToastMessage"] = ex.Message;
                 TempData["ToastType"] = "error";
-                return RedirectToAction("Index");
             }
-            return Json(new { success = true });
+            return BadRequest(new { message = "Confirm password not match" });
         }
     }
 }

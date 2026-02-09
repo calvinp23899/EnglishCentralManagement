@@ -6,7 +6,6 @@ using EnglishCentralManagement.Helpers;
 using EnglishCentralManagement.Models;
 using EnglishCentralManagement.Models.Enum;
 using Microsoft.EntityFrameworkCore;
-using System.Net.WebSockets;
 
 namespace EnglishCentralManagement.Areas.Admin.Services
 {
@@ -57,7 +56,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             {
                 FullName = string.Concat(model.FirstName + " " + model.LastName).Trim(),
                 PhoneNumber = model.PhoneNumber,
-                Email = model.Email, 
+                Email = model.Email,
                 Gender = model.Gender == true ? "Male" : "Female",
                 Address = model.Address,
                 Title = model.Title,
@@ -93,7 +92,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                 Address = newStaff.Address,
                 Gender = newStaff.Gender.Value > 0 ? true : false,
                 CreatedDate = DateTimeOffset.UtcNow,
-                CreatedBy = "Admin",  
+                CreatedBy = "Admin",
                 AvatarUrl = "/assets/img/avatar-default.png",
                 Title = newStaff.Title,
             };
@@ -153,6 +152,12 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             staff.UpdatedDate = DateTimeOffset.UtcNow;
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<int> CountAllStaff()
+        {
+            int data = await _context.Staffs.CountAsync();
+            return data;
         }
     }
 }
