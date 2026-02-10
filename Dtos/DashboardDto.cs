@@ -6,7 +6,14 @@
         public int CountStudent { get; set; }
         public int CountStaff { get; set; }
         public decimal RevenueThisMonth { get; set; }
-        //public List<RevenueByMonthDto> ChartData = new List<RevenueByMonthDto>();
+        public int ThisYear
+        {
+            get
+            {
+                var year = DateTime.Today.Year;
+                return year;
+            }
+        }
     }
     public class RevenueByMonthDto
     {

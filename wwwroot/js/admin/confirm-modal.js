@@ -76,6 +76,25 @@ function submitDeleteClass(id) {
         }
     });
 }
+
+function submitDeleteCourse(id) {
+    $.ajax({
+        url: '/Admin/Course/Delete',
+        type: 'POST',
+        data: {
+            id: id,
+            __RequestVerificationToken: $('#antiForgeryForm input[name="__RequestVerificationToken"]').val()
+        },
+        success: function () {
+            showToast('Delete Course Successfully');
+            $('#course-row-' + id).remove();
+        },
+        error: function (xhr) {
+            console.error(xhr.responseText);
+            showToast('Action Failed', 'error');
+        }
+    });
+}
 //=========== Hàm Run
 function confirmDeleteTeacher(id) {
     openConfirmModal(
@@ -104,6 +123,16 @@ function confirmDeleteClass(id) {
             submitDeleteClass(id);
         },
         'Delete Class'
+    );
+}
+
+function confirmDeleteCourse(id) {
+    openConfirmModal(
+        'Do you want to delete this course?',
+        function () {
+            submitDeleteCourse(id);
+        },
+        'Delete course'
     );
 }
 
