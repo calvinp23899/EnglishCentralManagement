@@ -1,0 +1,158 @@
+﻿@model PagedResult<CourseDto>
+@{
+    int stt = 1;
+}
+<div class="admin-page admin-teacher">
+    <!-- HEADER -->
+    <div class="admin-page__header">
+        <h1>Course Management</h1>
+        <a class="btn-primary" href="@Url.Action("Create", "Course", new { area = "Admin" })">
+            + New Course
+        </a>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="admin-page__toolbar">
+        <input type="text" placeholder="Search course..." />
+        <button class="btn-search">Search</button>
+    </div>
+
+    <!-- TABLE -->
+    <div class="admin-page__table">
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>CourseName</th>
+                    <th>DurationInMonth</th>
+                    <th>CreatedDate</th>
+                    <th>CreatedBy</th>
+                    <th width="120">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model == null || !Model.Items.Any())
+                {
+                    <tr>
+                        <td colspan="5" style="text-align:center;">
+                            No courses found
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr id="course-row-@item.Id">
+                            <td>@(stt++)</td>
+                            <td>@item.CourseName</td>
+                            <td>@item.DurationInMonth</td>
+                            <td>@item.CreatedDate</td>
+                            <td>@item.CreatedBy</td>
+                            <td class="actions">
+                                <a class="view"
+                                   href="@Url.Action("GetDetailById", "Course", new { area = "Admin", id = item.Id })">
+                                    View
+                                </a>
+
+                                <a class="edit"
+                                   href="@Url.Action("Edit", "Course", new { area = "Admin", id = item.Id })">
+                                    Edit
+                                </a>
+
+                                <a class="delete"
+                                   data-id="@item.Id"
+                                   onclick="confirmDeleteCourse(@item.Id)">
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+
+        </table>
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="admin-page__pagination-wrapper">
+        <div class="admin-page__pagination-info">
+            Showing <strong>
+                @((Model.PageIndex - 1) * Model.PageSize + 1)
+                –
+                @(Math.Min(Model.PageIndex * Model.PageSize, Model.TotalRecords))
+            </strong>
+            of
+            <strong>@Model.TotalRecords</strong>
+            records
+        </div>
+
+        <div class="admin-page__pagination">
+            <!-- Prev -->
+            <button class="btn-prev"
+                    onclick="location.href='@Url.Action("Index", new { page = Model.PageIndex - 1 })'"
+            @(Model.HasPrevious ? "" : "disabled")>
+                ‹ Prev
+            </button>
+
+            <!-- Page 1 -->
+            <button class="@(Model.PageIndex == 1 ? "active" : "")"
+                    onclick="location.href='@Url.Action("Index", new { page = 1 })'">
+                1
+            </button>
+
+            @{
+                int start = Math.Max(2, Model.PageIndex - 2);
+                int end = Math.Min(Model.TotalPages - 1, Model.PageIndex + 2);
+            }
+
+            <!-- ... trước -->
+            @if (start > 2)
+            {
+                <span class="pagination-dots">...</span>
+            }
+
+            <!-- Pages giữa -->
+            @for (int i = start; i <= end; i++)
+            {
+                if (i == Model.PageIndex)
+                {
+                    <button class="active">@i</button>
+                }
+                else
+                {
+                    <button onclick="location.href='@Url.Action("Index", new { page = i })'">
+                        @i
+                    </button>
+                }
+            }
+
+            <!-- ... sau -->
+            @if (end < Model.TotalPages - 1)
+            {
+                <span class="pagination-dots">...</span>
+            }
+
+            <!-- Page cuối -->
+            @if (Model.TotalPages > 1)
+            {
+                <button class="@(Model.PageIndex == Model.TotalPages ? "active" : "")"
+                        onclick="location.href='@Url.Action("Index", new { page = Model.TotalPages })'">
+                    @Model.TotalPages
+                </button>
+            }
+
+            <!-- Next -->
+            <button class="btn-next"
+                    onclick="location.href='@Url.Action("Index", new { page = Model.PageIndex + 1 })'"
+            @(Model.HasNext ? "" : "disabled")>
+                Next ›
+            </button>
+        </div>
+    </div>
+
+    <form id="antiForgeryForm" style="display:none;">
+        @Html.AntiForgeryToken()
+    </form>
+</div>

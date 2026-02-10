@@ -1,0 +1,18 @@
+﻿@model CourseDto
+
+<div class="teacher-form">
+    <div class="teacher-form__header">
+        <h2>Create Course</h2>
+    </div>
+
+    <form action="Create" method="post">
+        @Html.AntiForgeryToken()
+        @Html.Partial("_CourseFormLayout", Model)
+        <div class="teacher-form__actions">
+            <button class="btn primary" type="submit">Save</button>
+            <button class="btn outline">Cancel</button>
+        </div>
+    </form>
+
+
+</div>
