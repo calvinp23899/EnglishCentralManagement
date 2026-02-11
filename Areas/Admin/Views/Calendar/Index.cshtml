@@ -1,0 +1,145 @@
+﻿<div class="calendar-wrapper">
+
+    <!-- LEFT PANEL -->
+    <div class="calendar-sidebar">
+
+        <button class="btn-add-event">+ New Event</button>
+
+        <!-- MINI CALENDAR -->
+        <div class="mini-calendar">
+
+            <div class="mini-header">
+                <button class="nav-btn">&lt;</button>
+                <span>February 2026</span>
+                <button class="nav-btn">&gt;</button>
+            </div>
+
+            <div class="mini-grid">
+
+                <!-- Day names -->
+                <div class="day-name">Sun</div>
+                <div class="day-name">Mon</div>
+                <div class="day-name">Tue</div>
+                <div class="day-name">Wed</div>
+                <div class="day-name">Thu</div>
+                <div class="day-name">Fri</div>
+                <div class="day-name">Sat</div>
+
+                <!-- Days -->
+                @for (int i = 1; i <= 28; i++)
+                {
+                    <div class="day @(i == 10 ? "active" : "")">@i</div>
+                }
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- MAIN CALENDAR -->
+    <div class="calendar-day">
+
+        <div class="calendar-header">
+            <h3>Monday, 10 Feb 2026</h3>
+        </div>
+
+        <div class="time-grid">
+
+            @foreach (var hour in Enumerable.Range(8, 14))
+            {
+                <div class="time-row">
+                    <div class="time-label">@hour:00</div>
+                    <div class="time-slot">
+
+                        @* Sample Event *@
+                        @if (hour == 9)
+                        {
+                            <div class="event"
+                                 style="top:0; height:120px;">
+                                English Class (09:00 - 11:00)
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- RIGHT PANEL (ẨN MẶC ĐỊNH) -->
+    <div class="event-detail-panel">
+        <div class="panel-header">
+            <h4>Edit Event</h4>
+            <button class="close-btn">✕</button>
+        </div>
+
+        <div class="panel-body">
+            <label>Event Name</label>
+            <input type="text" />
+
+            <label>Start Date</label>
+            <input type="date" />
+
+            <label>End Date</label>
+            <input type="date" />
+
+            <label>Start Time</label>
+            <input type="time" />
+
+            <label>End Time</label>
+            <input type="time" />
+
+            <div class="repeat-section">
+                <label class="repeat-title">Repeat</label>
+
+                <div class="repeat-grid">
+                    <label class="repeat-item">
+                        <input type="checkbox" />
+                        <span>Mon</span>
+                    </label>
+
+                    <label class="repeat-item">
+                        <input type="checkbox" />
+                        <span>Tue</span>
+                    </label>
+
+                    <label class="repeat-item">
+                        <input type="checkbox" />
+                        <span>Wed</span>
+                    </label>
+
+                    <label class="repeat-item">
+                        <input type="checkbox" />
+                        <span>Thu</span>
+                    </label>
+
+                    <label class="repeat-item">
+                        <input type="checkbox" />
+                        <span>Fri</span>
+                    </label>
+
+                    <label class="repeat-item">
+                        <input type="checkbox" />
+                        <span>Sat</span>
+                    </label>
+
+                    <label class="repeat-item">
+                        <input type="checkbox" />
+                        <span>Sun</span>
+                    </label>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="panel-footer">
+            <button class="btn-delete">Delete</button>
+            <button class="btn-save">Save</button>
+        </div>
+    </div>
+
+</div>

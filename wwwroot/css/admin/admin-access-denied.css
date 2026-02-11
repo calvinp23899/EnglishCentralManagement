@@ -1,0 +1,90 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+body {
+  background: #f4f6f8;
+}
+
+.page-wrapper {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  background: #fff;
+  width: 420px;
+  padding: 50px 40px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  position: relative;
+}
+
+.logo {
+  width: 48px;
+  height: 48px;
+  background: #3b5bfd;
+  color: #fff;
+  border-radius: 12px;
+  font-size: 26px;
+  font-weight: bold;
+  line-height: 48px;
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 6px 20px rgba(59, 91, 253, 0.4);
+}
+
+.error-code {
+  font-size: 96px;
+  font-weight: 800;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  letter-spacing: 6px;
+}
+
+.error-code span {
+  color: #1f2937;
+}
+
+.error-code .zero {
+  color: #ef4444;
+}
+
+h2 {
+  font-size: 22px;
+  color: #1f2937;
+  margin-bottom: 12px;
+}
+
+p {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.btn-home {
+  display: inline-block;
+  padding: 12px 26px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2937;
+  transition: all 0.2s ease;
+}
+
+.btn-home:hover {
+  background: #f3f4f6;
+}
+
+/*# sourceMappingURL=admin-access-denied.css.map */

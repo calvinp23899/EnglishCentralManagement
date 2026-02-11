@@ -106,8 +106,8 @@
                     </a>
                 </li>
 
-                <li class="menu-item">
-                    <a href="#">
+                <li class="menu-item @(controller == "Calendar" ? "active" : "")">
+                    <a href="@Url.Action("Index", "Calendar", new { area = "Admin" })">
                         <div class="left">
                             <span class="fa-solid fa-calendar-days"></span>
                             <span class="text">Calendar</span>
@@ -235,6 +235,7 @@
     <script src="~/js/admin/admin-contract.js"></script>
     <script src="~/js/admin/currency.js"></script>
     <script src="~/js/admin/change-password.js"></script>
+    <script src="~/js/admin/admin-calendar.js"></script>
 
 </body>
 </html>

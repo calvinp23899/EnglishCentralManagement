@@ -1,6 +1,5 @@
 ﻿using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
 using EnglishCentralManagement.Dtos;
-using EnglishCentralManagement.Models.Enum;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -20,7 +19,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Index()
-        {        
+        {
             return View();
         }
 
@@ -38,7 +37,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             {
                 new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()),
                 new Claim(ClaimTypes.Name, string.Join(" ",account.FirstName,account.LastName).Trim()),
-                new Claim(ClaimTypes.Role, account.Role), 
+                new Claim(ClaimTypes.Role, account.Role),
             };
 
             var identity = new ClaimsIdentity(
@@ -69,10 +68,11 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             return View("Index");
         }
 
-        public IActionResult AccessDenied(string? returnUrl = null)     
+        [HttpGet]
+        public IActionResult AccessDenied(string? returnUrl = null)
         {
             ViewBag.Error = "Bạn không có quyền truy cập vào trang này";
-            return View("Index");
+            return View();
         }
     }
 }
