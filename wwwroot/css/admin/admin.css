@@ -1188,17 +1188,19 @@ body {
 .calendar-header {
   padding: 16px 24px;
   border-bottom: 1px solid #e5e7eb;
+  background-color: white;
 }
 
 .time-grid {
   flex: 1;
   overflow-y: auto;
+  background-color: white;
 }
 
 .time-row {
   display: flex;
   min-height: 60px;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid #94a3b8;
 }
 
 .time-label {

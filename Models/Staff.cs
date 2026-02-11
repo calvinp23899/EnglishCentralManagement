@@ -51,5 +51,7 @@ namespace EnglishCentralManagement.Models
         public bool? Gender { get; set; }
 
         public ICollection<Class> Classes { get; set; } = new List<Class>();
+        public ICollection<EventCalendar> Events { get; set; } = new List<EventCalendar>();
+
     }
 }
