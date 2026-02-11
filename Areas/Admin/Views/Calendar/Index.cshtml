@@ -3,20 +3,20 @@
     <!-- LEFT PANEL -->
     <div class="calendar-sidebar">
 
-        <button class="btn-add-event">+ New Event</button>
+        <button class="btn-add-event" onclick="openEventCalendarModal()">+ New Event</button>
 
         <!-- MINI CALENDAR -->
         <div class="mini-calendar">
 
             <div class="mini-header">
-                <button class="nav-btn">&lt;</button>
-                <span>February 2026</span>
-                <button class="nav-btn">&gt;</button>
+                <button class="nav-btn" onclick="changeMonth(-1)">&lt;</button>
+                <span id="miniMonthYear"></span>
+                <button class="nav-btn" onclick="changeMonth(1)">&gt;</button>
             </div>
 
-            <div class="mini-grid">
+            <div class="mini-grid" id="miniGrid">
 
-                <!-- Day names -->
+                @* <!-- Day names -->
                 <div class="day-name">Sun</div>
                 <div class="day-name">Mon</div>
                 <div class="day-name">Tue</div>
@@ -30,7 +30,7 @@
                 {
                     <div class="day @(i == 10 ? "active" : "")">@i</div>
                 }
-
+ *@
             </div>
         </div>
 
@@ -79,6 +79,9 @@
 
         <div class="panel-body">
             <label>Event Name</label>
+            <input type="text" />
+
+            <label>Link Meeting</label>
             <input type="text" />
 
             <label>Start Date</label>
@@ -143,3 +146,93 @@
     </div>
 
 </div>
+
+<div class="modalEvent" id="eventCalendarModal">
+    <div class="modal-overlay" onclick="closeEventModal()"></div>
+
+    <div class="modal-event-content">
+        <h3>Add Event</h3>
+
+        <form>
+            <div class="form-group">
+                <label>Event Name</label>
+                <input class="form-control" id="EventName" name="EventName" type="text" required />
+            </div>
+
+            <div class="form-group">
+                <label>Link Meeting</label>
+                <input class="form-control" id="LinkMeeting" name="LinkMeeting" type="text" required />
+            </div>
+
+            <div class="form-group">
+                <label>StartDate</label>
+                <input class="form-control" id="StartDate" name="StartDate" type="date" required />
+            </div>
+
+            <div class="form-group">
+                <label>EndDate</label>
+                <input class="form-control" id="EndDate" name="EndDate" type="date" required />
+            </div>
+
+            <div class="form-group">
+                <label>StartTime</label>
+                <input class="form-control" id="StartTime" name="StartTime" type="time" required />
+            </div>
+
+            <div class="form-group">
+                <label>EndTime</label>
+                <input class="form-control" id="EndTime" name="EndTime" type="time" required />
+            </div>
+
+            <div class="repeat-section">
+                <label class="repeat-title">Repeat</label>
+
+                <div class="repeat-grid">
+                    <label class="repeat-item">
+                        <input type="checkbox" />
+                        <span>Mon</span>
+                    </label>
+
+                    <label class="repeat-item">
+                        <input type="checkbox" />
+                        <span>Tue</span>
+                    </label>
+
+                    <label class="repeat-item">
+                        <input type="checkbox" />
+                        <span>Wed</span>
+                    </label>
+
+                    <label class="repeat-item">
+                        <input type="checkbox" />
+                        <span>Thu</span>
+                    </label>
+
+                    <label class="repeat-item">
+                        <input type="checkbox" />
+                        <span>Fri</span>
+                    </label>
+
+                    <label class="repeat-item">
+                        <input type="checkbox" />
+                        <span>Sat</span>
+                    </label>
+
+                    <label class="repeat-item">
+                        <input type="checkbox" />
+                        <span>Sun</span>
+                    </label>
+                </div>
+            </div>
+
+            <br />
+            <div class="modal-event-actions">
+                <button class="btn outline" type="button" onclick="closeEventModal()">Cancel</button>
+                <button class="btn primary" type="button" onclick="saveEvent()">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+<form id="antiForgeryForm" style="display:none;">
+    @Html.AntiForgeryToken()
+</form>

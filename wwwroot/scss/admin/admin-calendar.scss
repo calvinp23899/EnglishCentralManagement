@@ -265,3 +265,41 @@
     flex-direction: column;
     gap: 14px;
 }
+
+//========== ADD EVENT MODAL
+.modalEvent {
+    position: fixed;
+    inset: 0;
+    display: none;
+    z-index: 2000;
+}
+
+.modalEvent.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+}
+
+.modal-event-content {
+    position: relative;
+    background: #fff;
+    width: 600px;
+    max-height: none;
+    overflow-y: visible;
+    border-radius: 12px;
+    padding: 28px;
+    z-index: 2;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+.modal-event-actions {
+    display: flex;
+    justify-content: space-between; /* đẩy 2 nút ra 2 đầu */
+    align-items: center;
+    margin-top: 20px;
+}
