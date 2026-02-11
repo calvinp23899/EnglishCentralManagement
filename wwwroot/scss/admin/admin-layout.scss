@@ -686,3 +686,45 @@ body {
     font-size: 14px;
     color: #344054;
 }
+//===========Badge Status ============
+.status {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+/* In Progress – xanh dương */
+.status-in-progress,
+.status-active {
+    background: #eef2ff;
+    color: #3b5bfd;
+}
+
+/* Updating – xanh mint */
+.status-updating {
+    background: #e6fffa;
+    color: #14b8a6;
+}
+
+/* Upcoming – đỏ cam */
+.status-upcoming,
+.status-inactive {
+    background: #fff1f2;
+    color: #f43f5e;
+}
+
+/* Submitted – xanh cyan */
+.status-submitted {
+    background: #ecfeff;
+    color: #22d3ee;
+}
+
+/* Working – cam */
+.status-working {
+    background: #fff7ed;
+    color: #fb923c;
+}

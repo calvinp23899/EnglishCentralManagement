@@ -1,0 +1,283 @@
+﻿@using System.Globalization
+@model CalendarViewModel
+@{
+    var selectedDateOnly = Model.SelectedDate.HasValue
+    ? DateOnly.FromDateTime(Model.SelectedDate.Value)
+    : (DateOnly?)null;
+}
+@section Scripts {
+    <script>
+        var selectedDateFromServer = '@Model.SelectedDate?.ToString("yyyy-MM-dd")';
+    </script>
+
+    <script src="~/js/admin/admin-calendar.js"></script>
+}
+<div class="calendar-wrapper">
+
+    <!-- LEFT PANEL -->
+    <div class="calendar-sidebar">
+
+        <button class="btn-add-event" onclick="openEventCalendarModal()">+ New Event</button>
+
+        <!-- MINI CALENDAR -->
+        <div class="mini-calendar">
+
+            <div class="mini-header">
+                <button class="nav-btn" onclick="changeMonth(-1)">&lt;</button>
+                <span id="miniMonthYear"></span>
+                <button class="nav-btn" onclick="changeMonth(1)">&gt;</button>
+            </div>
+
+            <div class="mini-grid" id="miniGrid">
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- MAIN CALENDAR -->
+    <div class="calendar-day">
+
+        <div class="calendar-header">
+            <h3>
+                @Model.SelectedDate?.ToString("dddd, dd MMM yyyy",CultureInfo.GetCultureInfo("en-US"))
+            </h3>
+        </div>
+
+        <div class="time-grid">
+
+            @foreach (var hour in Enumerable.Range(8, 14))
+            {
+                <div class="time-row">
+                    <div class="time-label">@hour:00</div>
+                    <div class="time-slot">
+
+                        @{
+                            var dayOfWeek = Model.SelectedDate?.DayOfWeek;
+
+                            var eventsToday = Model.Events
+                            .Where(e =>
+                            selectedDateOnly != null &&
+                            selectedDateOnly.Value >= e.StartDate &&
+                            selectedDateOnly.Value <= e.EndDate &&
+                            (
+                            (dayOfWeek == DayOfWeek.Monday && e.IsMonday == true) ||
+                            (dayOfWeek == DayOfWeek.Tuesday && e.IsTuesday == true) ||
+                            (dayOfWeek == DayOfWeek.Wednesday && e.IsWednesday == true) ||
+                            (dayOfWeek == DayOfWeek.Thursday && e.IsThursday == true) ||
+                            (dayOfWeek == DayOfWeek.Friday && e.IsFriday == true) ||
+                            (dayOfWeek == DayOfWeek.Saturday && e.IsSaturday == true) ||
+                            (dayOfWeek == DayOfWeek.Sunday && e.IsSunday == true)
+                            )
+                            && e.StartTime.Hour == hour
+                            )
+                            .ToList();
+                        }
+
+                        @foreach (var ev in eventsToday)
+                        {
+                            var durationMinutes =
+                            (int)(ev.EndTime - ev.StartTime).TotalMinutes;
+
+                            var height = durationMinutes; // 1 phút = 1px (có thể chỉnh)
+                            var top = ev.StartTime.Minute;
+                            <div class="event"
+                                 style="top:@(top)px; height:@(height)px;"
+                                 data-id="@ev.EventId"
+                                 data-name="@ev.EventName"
+                                 data-link="@ev.LinkMeeting"
+                                 data-startdate="@ev.StartDate.ToString("yyyy-MM-dd")"
+                                 data-enddate="@ev.EndDate.ToString("yyyy-MM-dd")"
+                                 data-starttime="@ev.StartTime.ToString("HH:mm")"
+                                 data-endtime="@ev.EndTime.ToString("HH:mm")"
+                                 data-ismon="@ev.IsMonday"
+                                 data-istue = "@ev.IsTuesday"
+                                 data-iswed = "@ev.IsWednesday"
+                                 data-isthu = "@ev.IsThursday"
+                                 data-isfri = "@ev.IsFriday"
+                                 data-issat = "@ev.IsSaturday"
+                                 data-issun = "@ev.IsSunday"
+                                 >
+                                @ev.EventName
+                                (@ev.StartTime.ToString("HH:mm") -
+                                @ev.EndTime.ToString("HH:mm"))
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            }
+
+
+        </div>
+
+    </div>
+
+
+    <!-- RIGHT PANEL (ẨN MẶC ĐỊNH) -->
+    <div class="event-detail-panel">
+        <div class="panel-header">
+            <h4>Edit Event</h4>
+            <button class="close-btn">✕</button>
+        </div>
+
+        <div class="panel-body">
+            <input type="hidden" id="eventId" name="eventId"  />
+            <label>Event Name</label>
+            <input type="text" id="eventName" name="eventName" required/>
+
+            <label>Link Meeting</label>
+            <input type="text" id="linkMeeting" name="linkMeeting"/>
+
+            <label>Start Date</label>
+            <input type="date" id="startDate" name="startDate" required/>
+
+            <label>End Date</label>
+            <input type="date" id="endDate" name="endDate" required/>
+
+            <label>Start Time</label>
+            <input type="time" id="startTime" name="startTime" required/>
+
+            <label>End Time</label>
+            <input type="time" id="endTime" name="endTime" required/>
+
+            <div class="repeat-section">
+                <label class="repeat-title">RepeatWeek</label>
+
+                <div class="repeat-grid">
+                    <label class="repeat-item">
+                        <input type="checkbox" id="isMon" name="isMon" />
+                        <span>Mon</span>
+                    </label>
+
+                    <label class="repeat-item">
+                        <input type="checkbox" id="isTue" name="isTue" />
+                        <span>Tue</span>
+                    </label>
+
+                    <label class="repeat-item">
+                        <input type="checkbox" id="isWed" name="isWed" />
+                        <span>Wed</span>
+                    </label>
+
+                    <label class="repeat-item">
+                        <input type="checkbox" id="isThu" name="isThu" />
+                        <span>Thu</span>
+                    </label>
+
+                    <label class="repeat-item">
+                        <input type="checkbox" id="isFri" name="isFri" />
+                        <span>Fri</span>
+                    </label>
+
+                    <label class="repeat-item">
+                        <input type="checkbox" id="isSat" name="isSat" />
+                        <span>Sat</span>
+                    </label>
+
+                    <label class="repeat-item">
+                        <input type="checkbox" id="isSun" name="isSun" />
+                        <span>Sun</span>
+                    </label>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="panel-footer">
+            <button class="btn-delete" onclick="confirmDeleteEvent()">Delete</button>
+            <button class="btn-save" onclick="EditEvent()">Save</button>
+        </div>
+    </div>
+
+</div>
+
+<div class="modalEvent" id="eventCalendarModal">
+    <div class="modal-overlay" onclick="closeEventModal()"></div>
+
+    <div class="modal-event-content">
+        <h3>Add Event</h3>
+
+        <form>
+            <div class="form-group">
+                <label>Event Name</label>
+                <input class="form-control" id="EventName" name="EventName" type="text" required />
+            </div>
+
+            <div class="form-group">
+                <label>Link Meeting</label>
+                <input class="form-control" id="LinkMeeting" name="LinkMeeting" type="text" required />
+            </div>
+
+            <div class="form-group">
+                <label>StartDate</label>
+                <input class="form-control" id="StartDate" name="StartDate" type="date" required />
+            </div>
+
+            <div class="form-group">
+                <label>EndDate</label>
+                <input class="form-control" id="EndDate" name="EndDate" type="date" required />
+            </div>
+
+            <div class="form-group">
+                <label>StartTime</label>
+                <input class="form-control" id="StartTime" name="StartTime" type="time" required />
+            </div>
+
+            <div class="form-group">
+                <label>EndTime</label>
+                <input class="form-control" id="EndTime" name="EndTime" type="time" required />
+            </div>
+
+            <div class="repeat-section">
+                <label class="repeat-title">Repeat</label>
+
+                <div class="repeat-grid">
+                    <label class="repeat-item">
+                        <input type="checkbox" id="IsMonday" name="IsMonday" />
+                        <span>Mon</span>
+                    </label>
+
+                    <label class="repeat-item">
+                        <input type="checkbox" id="IsTuesday" name="IsTuesday" />
+                        <span>Tue</span>
+                    </label>
+
+                    <label class="repeat-item">
+                        <input type="checkbox" id="IsWednesday" name="IsWednesday" />
+                        <span>Wed</span>
+                    </label>
+
+                    <label class="repeat-item">
+                        <input type="checkbox" id="IsThursday" name="IsThursday" />
+                        <span>Thu</span>
+                    </label>
+
+                    <label class="repeat-item">
+                        <input type="checkbox" id="IsFriday" name="IsFriday" />
+                        <span>Fri</span>
+                    </label>
+
+                    <label class="repeat-item">
+                        <input type="checkbox" id="IsSaturday" name="IsSaturday" />
+                        <span>Sat</span>
+                    </label>
+
+                    <label class="repeat-item">
+                        <input type="checkbox" id="IsSunday" name="IsSunday" />
+                        <span>Sun</span>
+                    </label>
+                </div>
+            </div>
+
+            <br />
+            <div class="modal-event-actions">
+                <button class="btn outline" type="button" onclick="closeEventModal()">Cancel</button>
+                <button class="btn primary" type="button" onclick="saveEvent()">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+<form id="antiForgeryForm" style="display:none;">
+    @Html.AntiForgeryToken()
+</form>

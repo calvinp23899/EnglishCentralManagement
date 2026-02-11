@@ -17,6 +17,7 @@ namespace EnglishCentralManagement.Data
         public DbSet<PaymentSchedule> PaymentSchedules => Set<PaymentSchedule>();
         public DbSet<Payment> Payments => Set<Payment>();
         public DbSet<Role> Roles => Set<Role>();
+        public DbSet<EventCalendar> EventCalendars => Set<EventCalendar>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,6 +29,7 @@ namespace EnglishCentralManagement.Data
             modelBuilder.Entity<Role>().HasQueryFilter(x => !x.IsDeleted);
             modelBuilder.Entity<PaymentSchedule>().HasQueryFilter(x => !x.IsDeleted);
             modelBuilder.Entity<Payment>().HasQueryFilter(x => !x.IsDeleted);
+            modelBuilder.Entity<EventCalendar>().HasQueryFilter(x => !x.IsDeleted);
             modelBuilder.Entity<PaymentSchedule>()
                     .HasOne(ps => ps.Enrollment)
                     .WithMany(e => e.PaymentSchedules)
@@ -46,6 +48,11 @@ namespace EnglishCentralManagement.Data
             modelBuilder.Entity<Enrollment>()
                 .HasIndex(e => new { e.StudentId, e.ClassId })
                 .IsUnique();
+            modelBuilder.Entity<EventCalendar>()
+                .HasOne(e => e.Staff)
+                .WithMany(s => s.Events)
+                .HasForeignKey(e => e.StaffId)
+                .OnDelete(DeleteBehavior.Cascade);
             base.OnModelCreating(modelBuilder);
         }
     }

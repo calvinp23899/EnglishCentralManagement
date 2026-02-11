@@ -27,7 +27,10 @@
 
         <div class="form-group">
             <label>Total</label>
-            <div class="form-value">@Model.Total</div>
+            <div class="form-value">
+                @Model.Total?.ToString("c0",
+                         new System.Globalization.CultureInfo("vi-VN"))
+            </div>
         </div>
 
         <div class="form-group">

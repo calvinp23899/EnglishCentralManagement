@@ -46,7 +46,11 @@
                             <td>@student.Email</td>
                             <td>@student.PhoneNumber</td>
                             <td>@student.Gender</td>
-                            <td>@student.Status</td>
+                            <td>
+                                <span class="status status-@student.Status.ToLower().Replace(" ", "-")">
+                                    @student.Status
+                                </span>
+                            </td>
                             <td class="actions">
                                 <a class="view"
                                    href="@Url.Action("GetDetailId", "Student", new { area = "Admin", id = student.Id })">

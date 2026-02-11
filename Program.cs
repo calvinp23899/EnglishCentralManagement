@@ -1,10 +1,9 @@
-﻿using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
-using EnglishCentralManagement.Areas.Admin.Services;
+﻿using EnglishCentralManagement.Areas.Admin.Services;
+using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
 using EnglishCentralManagement.Data;
-using Microsoft.EntityFrameworkCore;
-using EnglishCentralManagement.Extensions;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using EnglishCentralManagement.Models.Enum;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 
 namespace EnglishCentralManagement
 {
@@ -25,6 +24,7 @@ namespace EnglishCentralManagement
             builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
             builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
+            builder.Services.AddScoped<IEventService, EventService>();
             #endregion
 
             //Authentication + Authorization
