@@ -1,7 +1,9 @@
 ﻿using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
 using EnglishCentralManagement.Data;
 using EnglishCentralManagement.Dtos;
+using EnglishCentralManagement.Dtos.Invoice;
 using EnglishCentralManagement.Dtos.Pagination;
+using EnglishCentralManagement.Extensions;
 using EnglishCentralManagement.Helpers;
 using EnglishCentralManagement.Models.Enum;
 using Microsoft.EntityFrameworkCore;
@@ -69,9 +71,11 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                 .Select(e => new PaymentScheduleDto
                 {
                     Id = e.Id,
-                    DueDate = e.DueDate,
+                    DueDate = e.DueDate.ToVnTime(),
                     Amount = e.Amount,
                     Status = e.Status.GetDisplayEnumName(),
+                    PaymentCode = e.PaymenCode,
+                    Title = e.Title,
                 })
                 .ToList();
             var paymentScheduleList = new PagedResult<PaymentScheduleDto>
@@ -86,15 +90,46 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                 EnrollmentId = model.Id,
                 CourseName = model.Class.Course.Name,
                 DurationCourse = model.Class.Course.DurationInMonths,
-                StartDateClass = model.Class.StartDate,
+                StartDateClass = model.Class.StartDate.ToVnTime(),
                 ClassCode = model.Class.Code,
                 ClassId = model.Class.Id,
                 StudentId = model.Student.Id,
                 StudentName = string.Join(" ", model.Student.FirstName, model.Student.LastName),
                 PhoneNumber = model.Student.PhoneNumber,
                 Status = model.Status.GetDisplayEnumName(),
-                PaymentSchedules = paymentScheduleList
+                PaymentSchedules = paymentScheduleList,
+                EndDateClass = model.Class.EndDate.ToVnTime(),
+                MonthlyFee = model.Class.Course.MonthlyFee
             };
+            return data;
+        }
+
+        public async Task<TuitionReceiptDto> GetDetailInvoice(long paymentScheduleId)
+        {
+            var data = await _context.PaymentSchedules
+                .Include(x => x.Enrollment)
+                    .ThenInclude(x => x.Class)
+                .Include(x => x.Enrollment)
+                    .ThenInclude(e => e.Student)
+                .Include(x => x.Payment)
+                .Where(e => e.Id == paymentScheduleId && !e.IsDeleted)
+                .Select(x => new TuitionReceiptDto
+                {
+                    ReceiptNumber = x.PaymenCode,
+                    Date = x.Payment.PaidAt.DateTime,
+                    StudentName = string.Join(" ", x.Enrollment.Student.FirstName, x.Enrollment.Student.LastName),
+                    ClassName = x.Enrollment.Class.Code,
+                    Phone = x.Enrollment.Student.PhoneNumber,
+                    Address = x.Enrollment.Student.Address,
+                    Items = new List<TuitionReceiptItemDto>
+                    {
+                        new TuitionReceiptItemDto {
+                            Description = x.Title,
+                            Amount = x.Amount
+                        }
+                    }
+                })
+                .FirstOrDefaultAsync();
             return data;
         }
 

@@ -12,6 +12,10 @@ namespace EnglishCentralManagement
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            #region QuestPDF License
+            QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
+            #endregion
+
             #region DI
             //builder.Services.AddScoped<SessionAuthorizeFilter>();
             builder.Services.AddHttpContextAccessor();
@@ -25,6 +29,7 @@ namespace EnglishCentralManagement
             builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<IEventService, EventService>();
+            builder.Services.AddScoped<IReceiptService, ReceiptService>();
             #endregion
 
             //Authentication + Authorization

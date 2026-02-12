@@ -37,8 +37,29 @@
                 </div>
 
                 <div class="form-group">
+                    <label>MonthlyFee</label>
+                    <div class="form-value">
+                        @Model?.MonthlyFee?.ToString("c0",
+                                 new System.Globalization.CultureInfo("vi-VN"))
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>TotalFee</label>
+                    <div class="form-value">
+                        @Model?.TotalFee?.ToString("c0",
+                                 new System.Globalization.CultureInfo("vi-VN"))
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label>StartDateOfClass</label>
-                    <div class="form-value">@Model?.StartDateClass</div>
+                    <div class="form-value">@Model?.StartDateClass?.ToString("dd-MM-yyyy")</div>
+                </div>
+
+                <div class="form-group">
+                    <label>EndDateOfClass</label>
+                    <div class="form-value">@Model?.EndDateClass?.ToString("dd-MM-yyyy")</div>
                 </div>
 
                 <div class="form-group">
@@ -73,6 +94,8 @@
                         <thead>
                             <tr>
                                 <th>No</th>
+                                <th>PaymentCode</th>
+                                <th>Title</th>
                                 <th>DueDate</th>
                                 <th>Amount</th>
                                 <th>Status</th>
@@ -95,8 +118,13 @@
                                 {
                                     <tr>
                                         <td>@(stt++)</td>
-                                        <td>@item.DueDate</td>
-                                        <td>@item.Amount</td>
+                                        <td>@item.PaymentCode</td>
+                                        <td>@item.Title</td>
+                                        <td>@item.DueDate.ToString("dd-MM-yyyy")</td>
+                                        <td>
+                                            @item.Amount.ToString("c0",
+                                                     new System.Globalization.CultureInfo("vi-VN"))
+                                        </td>
                                         <td>@item.Status</td>
                                         <td class="actions">
                                             <a class="view  @(item.Status?.Trim().Equals("Paid", StringComparison.OrdinalIgnoreCase) == true ? "disabled" : "")"
@@ -109,9 +137,8 @@
                                                onclick="openPaymentModal(@item.Id)">
                                                 Edit 
                                             </a>
-                                            <a class="view disabled"
-                                               data-id="@item.Id"
-                                               onclick="">
+                                            <a class="view @(item.Status?.Trim().Equals("Paid", StringComparison.OrdinalIgnoreCase) == true ? "" : "disabled")"
+                                               onclick="DownloadInvoice(@item.Id)">
                                                 Download Invoice
                                             </a>
                                         </td>

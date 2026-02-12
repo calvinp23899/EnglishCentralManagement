@@ -27,6 +27,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                 throw new Exception("Class not found");
             var currentStudents = await _context.Enrollments
                 .CountAsync(x => x.ClassId == classId && x.Status == EnrollmentStatus.Active);
+            var countMaxPayment = await _context.PaymentSchedules.CountAsync();
 
             if (classModel.MaxStudents.HasValue &&
                 currentStudents >= classModel.MaxStudents.Value)
@@ -50,7 +51,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             var paymentSchedules = new List<PaymentSchedule>();
             for (int month = 0; month < classModel.Course.DurationInMonths; month++)
             {
-                var dueDate = data.StartDate.AddMonths(month);
+                var dueDate = data.EnrolledAt.AddMonths(month);
                 paymentSchedules.Add(new PaymentSchedule
                 {
                     Enrollment = data,
@@ -59,6 +60,8 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                     Status = PaymentScheduleStatus.Pending,
                     CreatedBy = _currentUser.FullName,
                     CreatedDate = DateTimeOffset.UtcNow.ToUtcDb(),
+                    PaymenCode = string.Join("-", "TF", data.ClassId, data.StudentId, countMaxPayment),
+                    Title = string.Join(" ", "Thu Phí Lần", month + 1)
                 });
             }
             _context.PaymentSchedules.AddRange(paymentSchedules);
