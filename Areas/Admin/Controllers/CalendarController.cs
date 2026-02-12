@@ -14,7 +14,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(DateTime? date)
+        public async Task<IActionResult> Index(DateTime? date, string view = "day")
         {
             try
             {
@@ -25,7 +25,8 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
                 var model = new CalendarViewModel
                 {
                     SelectedDate = selectedDate,
-                    Events = events
+                    Events = events,
+                    ViewType = view,
                 };
                 return View(model);
             }

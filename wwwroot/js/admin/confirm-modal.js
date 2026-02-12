@@ -1,8 +1,9 @@
 ﻿let confirmCallback = null;
 
-function openConfirmModal(message, onConfirm, title = 'Confirm') {
+function openConfirmModal(message, onConfirm, title = 'Confirm', btnOkTitle = 'Delete') {
     document.getElementById('confirmMessage').innerText = message;
     document.getElementById('confirmTitle').innerText = title;
+    document.getElementById('confirmOk').innerText = btnOkTitle;
 
     confirmCallback = onConfirm;
     document.getElementById('confirmModal').classList.remove('hidden');
