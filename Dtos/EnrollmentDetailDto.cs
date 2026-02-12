@@ -13,7 +13,17 @@ namespace EnglishCentralManagement.Dtos
         public long? StudentId { get; set; }
         public long? ClassId { get; set; }
         public DateTimeOffset? StartDateClass { get; set; }
+        public DateTimeOffset? EndDateClass { get; set; }
         public int? DurationCourse { get; set; }
+        public decimal? MonthlyFee { get; set; }
+        public decimal? TotalFee
+        {
+            get
+            {
+                var total = DurationCourse.Value * MonthlyFee;
+                return total;
+            }
+        }
         public PagedResult<PaymentScheduleDto>? PaymentSchedules { get; set; } = new PagedResult<PaymentScheduleDto>();
 
     }
@@ -24,6 +34,8 @@ namespace EnglishCentralManagement.Dtos
         public DateTimeOffset DueDate { get; set; }
         public decimal Amount { get; set; }
         public string Status { get; set; }
+        public string? PaymentCode { get; set; }
+        public string? Title { get; set; }
     }
 
     public class PaymentEditDto

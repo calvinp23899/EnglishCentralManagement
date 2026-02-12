@@ -95,6 +95,12 @@
   margin-top: 10px;
 }
 
+.mini-calendar.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+}
+
 .mini-header {
   display: flex;
   justify-content: space-between;
@@ -303,6 +309,79 @@
   justify-content: space-between; /* đẩy 2 nút ra 2 đầu */
   align-items: center;
   margin-top: 20px;
+}
+
+.view-switch {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.radio-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.radio-item input {
+  cursor: pointer;
+}
+
+.week-container {
+  height: 550px; /* chỉnh theo layout */
+  display: flex;
+  flex-direction: column;
+}
+
+/* HEADER */
+.week-header-row {
+  display: grid;
+  grid-template-columns: 80px repeat(7, 1fr);
+  border-bottom: 1px solid #ddd;
+}
+
+/* BODY scroll */
+.week-body {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.week-row {
+  display: grid;
+  grid-template-columns: 80px repeat(7, 1fr);
+  min-height: 60px;
+}
+
+/* slot */
+.week-slot {
+  border: 1px solid #ddd;
+  position: relative;
+  height: 60px;
+}
+
+.time-label {
+  border-right: 1px solid #ddd;
+  padding: 5px;
+}
+
+.week-day-header {
+  text-align: center;
+  font-weight: 600;
+  padding: 10px;
+}
+
+.event.week {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  background: #cdd7ff;
+  border-radius: 6px;
+  padding: 4px;
+  font-size: 12px;
+  z-index: 10;
 }
 
 /*# sourceMappingURL=admin-calendar.css.map */

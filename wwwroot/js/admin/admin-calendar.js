@@ -1,6 +1,8 @@
 ﻿var currentDate = selectedDateFromServer
     ? new Date(selectedDateFromServer)
     : new Date();
+var currentView = new URLSearchParams(window.location.search).get("view") || "day";
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const panel = document.querySelector(".event-detail-panel");
@@ -63,6 +65,22 @@ document.addEventListener("DOMContentLoaded", function () {
     if (document.getElementById("miniGrid")) {
         renderMiniCalendar();
     }
+
+    const radios = document.querySelectorAll("input[name='calendarView']");
+
+    radios.forEach(r => {
+        r.addEventListener("change", function () {
+
+            const selectedView = this.value;
+
+            if (selectedView === "day") {
+                window.location.href = "?view=day";
+            }
+            else if (selectedView === "week") {
+                window.location.href = "?view=week";
+            }
+        });
+    });
 
 });
 
@@ -185,7 +203,8 @@ function saveEvent() {
             closeEventModal();
             setTimeout(function () {
                 window.location.href = "/Admin/Calendar/Index?date=" +
-                    $("#StartDate").val();
+                    $("#StartDate").val() +
+                    "&view=" + currentView;
             }, 1500); // delay 1.5s
 
         },
@@ -227,7 +246,8 @@ function EditEvent() {
             closeEventModal();
             setTimeout(function () {
                 window.location.href = "/Admin/Calendar/Index?date=" +
-                    $("#StartDate").val();
+                    $("#StartDate").val() +
+                    "&view=" + currentView;
             }, 1500); // delay 1.5s
 
         },
@@ -247,6 +267,17 @@ function confirmDeleteEvent() {
     );
 }
 
+function confirmEditEvent() {
+    openConfirmModal(
+        'Do you want to update this event?',
+        function () {
+            EditEvent();
+        },
+        'Update Event',
+        'Save changes'
+    );
+}
+
 function DeleteEvent() {
     const url = "/Admin/Calendar/DeleteEvent";
 
@@ -263,7 +294,8 @@ function DeleteEvent() {
             closeEventModal();
             setTimeout(function () {
                 window.location.href = "/Admin/Calendar/Index?date=" +
-                    $("#StartDate").val();
+                    $("#StartDate").val() +
+                    "&view=" + currentView;
             }, 1500); // delay 1.5s
 
         },

@@ -1,10 +1,10 @@
 ﻿@using System.Globalization
 @model CalendarViewModel
-@{
+@* @{
     var selectedDateOnly = Model.SelectedDate.HasValue
     ? DateOnly.FromDateTime(Model.SelectedDate.Value)
     : (DateOnly?)null;
-}
+} *@
 @section Scripts {
     <script>
         var selectedDateFromServer = '@Model.SelectedDate?.ToString("yyyy-MM-dd")';
@@ -20,9 +20,9 @@
         <button class="btn-add-event" onclick="openEventCalendarModal()">+ New Event</button>
 
         <!-- MINI CALENDAR -->
-        <div class="mini-calendar">
+        <div class="mini-calendar @(Model.ViewType == "week" ? "disabled" : "")">
 
-            <div class="mini-header">
+            <div class="mini-header" disabled>
                 <button class="nav-btn" onclick="changeMonth(-1)">&lt;</button>
                 <span id="miniMonthYear"></span>
                 <button class="nav-btn" onclick="changeMonth(1)">&gt;</button>
@@ -31,86 +31,36 @@
             <div class="mini-grid" id="miniGrid">
             </div>
         </div>
+        <div class="view-switch">
+            <label class="radio-item">
+                <input type="radio" name="calendarView" value="day" @(Model.ViewType == "day" ? "checked" : "")>
+                <span>Day</span>
+            </label>
+
+            <label class="radio-item">
+                <input type="radio" name="calendarView" value="week" @(Model.ViewType == "week" ? "checked" : "")>
+                <span>Week</span>
+            </label>
+        </div>
 
     </div>
-
 
     <!-- MAIN CALENDAR -->
     <div class="calendar-day">
 
-        <div class="calendar-header">
+        <div class="calendar-header" @(Model.ViewType == "week" ? "hidden" : "")>
             <h3>
                 @Model.SelectedDate?.ToString("dddd, dd MMM yyyy",CultureInfo.GetCultureInfo("en-US"))
             </h3>
         </div>
-
-        <div class="time-grid">
-
-            @foreach (var hour in Enumerable.Range(8, 14))
-            {
-                <div class="time-row">
-                    <div class="time-label">@hour:00</div>
-                    <div class="time-slot">
-
-                        @{
-                            var dayOfWeek = Model.SelectedDate?.DayOfWeek;
-
-                            var eventsToday = Model.Events
-                            .Where(e =>
-                            selectedDateOnly != null &&
-                            selectedDateOnly.Value >= e.StartDate &&
-                            selectedDateOnly.Value <= e.EndDate &&
-                            (
-                            (dayOfWeek == DayOfWeek.Monday && e.IsMonday == true) ||
-                            (dayOfWeek == DayOfWeek.Tuesday && e.IsTuesday == true) ||
-                            (dayOfWeek == DayOfWeek.Wednesday && e.IsWednesday == true) ||
-                            (dayOfWeek == DayOfWeek.Thursday && e.IsThursday == true) ||
-                            (dayOfWeek == DayOfWeek.Friday && e.IsFriday == true) ||
-                            (dayOfWeek == DayOfWeek.Saturday && e.IsSaturday == true) ||
-                            (dayOfWeek == DayOfWeek.Sunday && e.IsSunday == true)
-                            )
-                            && e.StartTime.Hour == hour
-                            )
-                            .ToList();
-                        }
-
-                        @foreach (var ev in eventsToday)
-                        {
-                            var durationMinutes =
-                            (int)(ev.EndTime - ev.StartTime).TotalMinutes;
-
-                            var height = durationMinutes; // 1 phút = 1px (có thể chỉnh)
-                            var top = ev.StartTime.Minute;
-                            <div class="event"
-                                 style="top:@(top)px; height:@(height)px;"
-                                 data-id="@ev.EventId"
-                                 data-name="@ev.EventName"
-                                 data-link="@ev.LinkMeeting"
-                                 data-startdate="@ev.StartDate.ToString("yyyy-MM-dd")"
-                                 data-enddate="@ev.EndDate.ToString("yyyy-MM-dd")"
-                                 data-starttime="@ev.StartTime.ToString("HH:mm")"
-                                 data-endtime="@ev.EndTime.ToString("HH:mm")"
-                                 data-ismon="@ev.IsMonday"
-                                 data-istue = "@ev.IsTuesday"
-                                 data-iswed = "@ev.IsWednesday"
-                                 data-isthu = "@ev.IsThursday"
-                                 data-isfri = "@ev.IsFriday"
-                                 data-issat = "@ev.IsSaturday"
-                                 data-issun = "@ev.IsSunday"
-                                 >
-                                @ev.EventName
-                                (@ev.StartTime.ToString("HH:mm") -
-                                @ev.EndTime.ToString("HH:mm"))
-                            </div>
-                        }
-
-                    </div>
-                </div>
-            }
-
-
-        </div>
-
+        @if (Model.ViewType == "day")
+        {
+            @Html.Partial("_DayViewLayout", Model)
+        }
+        else if (Model.ViewType == "week")
+        {
+            @Html.Partial("_WeekViewLayout", Model)
+        }
     </div>
 
 
@@ -186,7 +136,7 @@
 
         <div class="panel-footer">
             <button class="btn-delete" onclick="confirmDeleteEvent()">Delete</button>
-            <button class="btn-save" onclick="EditEvent()">Save</button>
+            <button class="btn-save" onclick="confirmEditEvent()">Save</button>
         </div>
     </div>
 

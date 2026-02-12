@@ -36,5 +36,7 @@ namespace EnglishCentralManagement.Dtos
     {
         public DateTime? SelectedDate { get; set; }
         public List<CreatedEventDto> Events { get; set; }
+        public string ViewType { get; set; } = "day";
+
     }
 }

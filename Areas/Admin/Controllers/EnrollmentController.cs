@@ -6,10 +6,12 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
     public class EnrollmentController : AdminBaseController
     {
         private readonly IEnrollmentService _enrollmentService;
+        private readonly IReceiptService _receiptService;
 
-        public EnrollmentController(IEnrollmentService enrollmentService)
+        public EnrollmentController(IEnrollmentService enrollmentService, IReceiptService receiptService)
         {
             _enrollmentService = enrollmentService;
+            _receiptService = receiptService;
         }
 
         [HttpGet]
@@ -43,6 +45,29 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             }
             return View();
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DownloadInvoice(long id)
+        {
+            try
+            {
+                var data = await _enrollmentService.GetDetailInvoice(id);
+                var pdf = _receiptService.GenerateTuitionReceipt(data);
+                string safeName = data.StudentName.Replace(" ", "-");
+                string safeDate = data.Date.ToString("dd/MM/yyyy").Replace("_", "-");
+                return File(
+                    pdf,
+                    "application/pdf",
+                     $"BienLaiHocPhi-{safeName}-{safeDate}.pdf"
+                );
+            }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+                return RedirectToAction("GetDetailById");
+            }
 
+        }
     }
 }

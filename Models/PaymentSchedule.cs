@@ -1,6 +1,6 @@
 ﻿using EnglishCentralManagement.Models.Enum;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EnglishCentralManagement.Models
 {
@@ -19,5 +19,7 @@ namespace EnglishCentralManagement.Models
         public PaymentScheduleStatus Status { get; set; } = PaymentScheduleStatus.Pending;
 
         public Payment? Payment { get; set; }
+        public string? Title { get; set; }
+        public string? PaymenCode { get; set; }
     }
 }
