@@ -1,34 +1,78 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
+using EnglishCentralManagement.Dtos;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace EnglishCentralManagement.Areas.Admin.Controllers
 {
+    [AllowAnonymous]
     public class LoginController : AdminBaseController
     {
+        private readonly IAuthService _authService;
+        public LoginController(IAuthService authService)
+        {
+            _authService = authService;
+        }
+
         [HttpGet]
         public async Task<IActionResult> Index()
-        {        
+        {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(string username, string password)
+        public async Task<IActionResult> Login(LoginDto model)
         {
-            string errorMsg = null;
-            if (username == "admin" && password == "123")
+            var account = await _authService.Login(model.Username, model.Password);
+
+            if (account == null)
             {
+                ViewBag.Error = "Sai tài khoản hoặc mật khẩu";
+                return View("Index");
+            }
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()),
+                new Claim(ClaimTypes.Name, string.Join(" ",account.FirstName,account.LastName).Trim()),
+                new Claim(ClaimTypes.Role, account.Role),
+            };
 
+            var identity = new ClaimsIdentity(
+                claims,
+                CookieAuthenticationDefaults.AuthenticationScheme
+            );
 
-                return RedirectToAction(
+            var principal = new ClaimsPrincipal(identity);
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                principal
+            );
+            return RedirectToAction(
                     "Index",
                     "Home",
                     new { area = "Admin" }
-                );
-            }
-            errorMsg = "Sai tài khoản hoặc mật khẩu";
-            ViewBag.Error = errorMsg;
+            );
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme
+            );
+
+            HttpContext.Session.Clear();
             return View("Index");
+        }
+
+        [HttpGet]
+        public IActionResult AccessDenied(string? returnUrl = null)
+        {
+            ViewBag.Error = "Bạn không có quyền truy cập vào trang này";
+            return View();
         }
     }
 }

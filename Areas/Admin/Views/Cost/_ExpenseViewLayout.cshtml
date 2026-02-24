@@ -1,0 +1,205 @@
+﻿@model ExpenseTabDto
+@{
+    var NoExpense = 1;
+}
+<div class="admin-page admin-teacher">
+    <!-- HEADER -->
+    <div class="admin-page__header">
+        <h1>Expense Management</h1>
+        <a class="btn-primary" onclick="openExpenseModal()">
+            + New Expense
+        </a>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="admin-page__toolbar">
+        <div class="toolbar-left">
+            <select class="filter-select" id="monthFilter">
+                <option value="13">All Months</option>
+                @for (int m = 1; m <= 12; m++)
+                {
+                    if (m == (int)ViewBag.SelectedMonth)
+                    {
+                        <option value="@m" selected>Month @m</option>
+                    }
+                    else
+                    {
+                        <option value="@m">Month @m</option>
+                    }
+                }
+            </select>
+
+            <select class="filter-select" id="yearFilter">
+                @for (int y = DateTime.Now.Year - 2; y <= DateTime.Now.Year + 1; y++)
+                {
+                    if (y == (int)ViewBag.SelectedYear)
+                    {
+                        <option value="@y" selected>@y</option>
+                    }
+                    else
+                    {
+                        <option value="@y">@y</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="admin-page__table">
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Category</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th width="120">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model == null || !Model.Expenses.Items.Any())
+                {
+                    <tr>
+                        <td colspan="5" style="text-align:center;">
+                            No expenses found
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var expense in Model.Expenses.Items)
+                    {
+                        <tr id="expense-row-@expense.Id">
+                            <td>@(NoExpense++)</td>
+                            <td>@expense.Category</td>
+                            <td>@expense.Type</td>
+                            <td>
+                                @expense.Amount.ToString("c0",
+                                         new System.Globalization.CultureInfo("vi-VN"))
+                            </td>
+                            <td>@expense.Date.ToString("dd/MM/yyyy")</td>
+                            <td class="actions">
+                                <a class="edit"
+                                   onclick="editExpense(@expense.Id)">
+                                    Edit
+                                </a>
+
+                                <a class="delete"
+                                   onclick="confirmDeleteExpense(@expense.Id)">
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+
+        </table>
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="admin-page__pagination-wrapper">
+        <div class="admin-page__pagination-info">
+            Showing <strong>
+                @((Model.Expenses.PageIndex - 1) * Model.Expenses.PageSize + 1)
+                –
+                @(Math.Min(Model.Expenses.PageIndex * Model.Expenses.PageSize, Model.Expenses.TotalRecords))
+            </strong>
+            of
+            <strong>@Model.Expenses.TotalRecords</strong>
+            records
+        </div>
+
+        <div class="admin-page__pagination">
+            <!-- Prev -->
+            <button class="btn-prev"
+                    onclick="loadExpense(@(Model.Expenses.PageIndex - 1))"
+                    @(Model.Expenses.HasPrevious ? "" : "disabled")
+            >
+                ‹ Prev
+            </button>
+
+            <!-- Page 1 -->
+            <button class="@(Model.Expenses.PageIndex == 1 ? "active" : "")"
+                    onclick="loadExpense(1)">
+                1
+            </button>
+
+            @{
+                int start = Math.Max(2, Model.Expenses.PageIndex - 2);
+                int end = Math.Min(Model.Expenses.TotalPages - 1, Model.Expenses.PageIndex + 2);
+            }
+
+            <!-- ... trước -->
+            @if (start > 2)
+            {
+                <span class="pagination-dots">...</span>
+            }
+
+            <!-- Pages giữa -->
+            @for (int i = start; i <= end; i++)
+            {
+                if (i == Model.Expenses.PageIndex)
+                {
+                    <button class="active">@i</button>
+                }
+                else
+                {
+                    <button onclick="loadExpense(@i)">
+                        @i
+                    </button>
+                }
+            }
+
+            <!-- ... sau -->
+            @if (end < Model.Expenses.TotalPages - 1)
+            {
+                <span class="pagination-dots">...</span>
+            }
+
+            <!-- Page cuối -->
+            @if (Model.Expenses.TotalPages > 1)
+            {
+                <button class="@(Model.Expenses.PageIndex == Model.Expenses.TotalPages ? "active" : "")"
+                        onclick="loadExpense(@(Model.Expenses.TotalPages))">
+                    @Model.Expenses.TotalPages
+                </button>
+            }
+
+            <!-- Next -->
+            <button class="btn-next"
+                    onclick="loadExpense(@(Model.Expenses.PageIndex + 1))"
+            @(Model.Expenses.HasNext ? "" : "disabled")>
+                Next ›
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<!-- ===== CHART SECTION ===== -->
+<div class="cost-chart-grid">
+
+    <!-- Expense Breakdown -->
+    <div class="chart-card">
+        <h4>Expense Breakdown @((int)ViewBag.SelectedMonth == 13 ? "" : string.Join(" ","-",ViewBag.SelectedMonth)) - @ViewBag.SelectedYear</h4>
+        <div class="chart-wrapper">
+            <canvas id="expensePieChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Expense 12 Months -->
+    <div class="chart-card">
+        <h4>Expense (12 Months) - @ViewBag.SelectedYear</h4>
+        <div class="chart-wrapper">
+            <canvas id="expenseBarChart"></canvas>
+        </div>
+    </div>
+
+</div>
+
+
+

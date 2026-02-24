@@ -1,0 +1,47 @@
+﻿@model CourseDto
+
+<div class="teacher-form view-only">
+    <div class="teacher-form__header">
+        <h2>Course Information</h2>
+    </div>
+
+    <div class="teacher-form__grid">
+
+        <div class="form-group">
+            <label>CourseName</label>
+            <div class="form-value">@Model.CourseName</div>
+        </div>
+
+        <div class="form-group">
+            <label>DurationInMonth</label>
+            <div class="form-value">@Model.DurationInMonth</div>
+        </div>
+
+        <div class="form-group">
+            <label>MonthlyFee</label>
+            <div class="form-value">
+                @Model.MonthlyFee?.ToString("c0",
+                         new System.Globalization.CultureInfo("vi-VN"))
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Total</label>
+            <div class="form-value">
+                @Model.Total?.ToString("c0",
+                         new System.Globalization.CultureInfo("vi-VN"))
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>CreatedBy</label>
+            <span class="form-value">@Model.CreatedBy</span>
+        </div>
+
+        <div class="form-group">
+            <label>CreatedDate</label>
+            <div class="form-value">@Model.CreatedDate?.ToString("yyyy/mm/dd")</div>
+        </div>
+
+    </div>
+</div>

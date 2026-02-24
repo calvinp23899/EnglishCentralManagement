@@ -1,8 +1,9 @@
 ﻿let confirmCallback = null;
 
-function openConfirmModal(message, onConfirm, title = 'Confirm') {
+function openConfirmModal(message, onConfirm, title = 'Confirm', btnOkTitle = 'Delete') {
     document.getElementById('confirmMessage').innerText = message;
     document.getElementById('confirmTitle').innerText = title;
+    document.getElementById('confirmOk').innerText = btnOkTitle;
 
     confirmCallback = onConfirm;
     document.getElementById('confirmModal').classList.remove('hidden');
@@ -21,21 +22,118 @@ document.getElementById('confirmOk').onclick = function () {
 };
 
 function submitDeleteTeacher(id) {
-    //document.getElementById('deleteTeacherId').value = id;
-    //document.getElementById('deleteTeacherForm').submit();
-    // giả lập logic delete
-    console.log('Deleting teacher id:', id);
+    $.ajax({
+        url: '/Admin/Teacher/Delete',
+        type: 'POST',
+        data: {
+            id: id,
+            __RequestVerificationToken: $('#antiForgeryForm input[name="__RequestVerificationToken"]').val()
+        },
+        success: function () {
+            showToast('Delete Teacher Successfully');
+            $('#teacher-row-' + id).remove();
+        },
+        error: function (xhr) {
+            console.error(xhr.responseText);
+            showToast('Action Failed', 'error');
+        }
+    });
+}
 
-    showToast('Xoá teacher thành công');
+function submitDeleteStudent(id) {
+    $.ajax({
+        url: '/Admin/Student/Delete',
+        type: 'POST',
+        data: {
+            id: id,
+            __RequestVerificationToken: $('#antiForgeryForm input[name="__RequestVerificationToken"]').val()
+        },
+        success: function () {
+            showToast('Delete Student Successfully');
+            $('#student-row-' + id).remove();
+        },
+        error: function (xhr) {
+            console.error(xhr.responseText);
+            showToast('Action Failed', 'error');
+        }
+    });
+}
+
+function submitDeleteClass(id) {
+    $.ajax({
+        url: '/Admin/Class/Delete',
+        type: 'POST',
+        data: {
+            id: id,
+            __RequestVerificationToken: $('#antiForgeryForm input[name="__RequestVerificationToken"]').val()
+        },
+        success: function () {
+            showToast('Delete Class Successfully');
+            $('#class-row-' + id).remove();
+        },
+        error: function (xhr) {
+            console.error(xhr.responseText);
+            showToast('Action Failed', 'error');
+        }
+    });
+}
+
+function submitDeleteCourse(id) {
+    $.ajax({
+        url: '/Admin/Course/Delete',
+        type: 'POST',
+        data: {
+            id: id,
+            __RequestVerificationToken: $('#antiForgeryForm input[name="__RequestVerificationToken"]').val()
+        },
+        success: function () {
+            showToast('Delete Course Successfully');
+            $('#course-row-' + id).remove();
+        },
+        error: function (xhr) {
+            console.error(xhr.responseText);
+            showToast('Action Failed', 'error');
+        }
+    });
 }
 //=========== Hàm Run
 function confirmDeleteTeacher(id) {
     openConfirmModal(
-        'Bạn có chắc muốn xoá teacher này?',
+        'Do you want to delete this teacher?',
         function () {
             submitDeleteTeacher(id);
         },
         'Delete Teacher'
+    );
+}
+
+function confirmDeleteStudent(id) {
+    openConfirmModal(
+        'Do you want to delete this student?',
+        function () {
+            submitDeleteStudent(id);
+        },
+        'Delete Student'
+    );
+}
+
+function confirmDeleteClass(id) {
+    openConfirmModal(
+        'Do you want to delete this class?',
+        function () {
+            submitDeleteClass(id);
+        },
+        'Delete Class'
+    );
+}
+
+function confirmDeleteCourse(id) {
+    openConfirmModal(
+        'Do you want to delete this course?',
+        function () {
+            submitDeleteCourse(id);
+        },
+        'Delete course'
     );
 }
 

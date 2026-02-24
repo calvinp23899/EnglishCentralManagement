@@ -1,0 +1,101 @@
+﻿@using System.Globalization
+@model CalendarViewModel
+@{
+    var selected = Model.SelectedDate ?? DateTime.Today;
+
+    int diff = selected.DayOfWeek == DayOfWeek.Sunday
+        ? -6
+        : DayOfWeek.Monday - selected.DayOfWeek;
+
+    var monday = selected.AddDays(diff);
+
+}
+<div class="week-container">
+
+    <!-- HEADER -->
+    <div class="week-header-row">
+        <div class="time-label-header"></div>
+
+        @for (int i = 0; i < 7; i++)
+        {
+            var day = monday.AddDays(i);
+            <div class="week-day-header">
+                @day.ToString("ddd dd",
+                         CultureInfo.GetCultureInfo("en-US"))
+            </div>
+        }
+    </div>
+
+    <!-- BODY -->
+    <div class="week-body">
+        @foreach (var hour in Enumerable.Range(8, 14))
+        {
+            <div class="week-row">
+                <div class="time-label">@hour:00</div>
+
+                @for (int i = 0; i < 7; i++)
+                {
+                    var currentDate = monday.AddDays(i);
+                    var dayOfWeek = currentDate.DayOfWeek;
+                    var selectedDateOnly = DateOnly.FromDateTime(currentDate);
+
+                    var eventsInSlot = Model?.Events
+                    .Where(e =>
+                    selectedDateOnly >= e.StartDate &&
+                    selectedDateOnly <= e.EndDate &&
+                    (
+                        (dayOfWeek == DayOfWeek.Monday && e.IsMonday == true) ||
+                        (dayOfWeek == DayOfWeek.Tuesday && e.IsTuesday == true) ||
+                        (dayOfWeek == DayOfWeek.Wednesday && e.IsWednesday == true) ||
+                        (dayOfWeek == DayOfWeek.Thursday && e.IsThursday == true) ||
+                        (dayOfWeek == DayOfWeek.Friday && e.IsFriday == true) ||
+                        (dayOfWeek == DayOfWeek.Saturday && e.IsSaturday == true) ||
+                        (dayOfWeek == DayOfWeek.Sunday && e.IsSunday == true)
+                    )
+                    )
+                    .ToList();
+
+                    <div class="week-slot">
+
+                        @foreach (var ev in eventsInSlot)
+                        {
+                            @if (ev.StartTime.Hour == hour)
+                            {
+                                var durationMinutes =
+                                (int)(ev.EndTime - ev.StartTime).TotalMinutes;
+
+                                var height = durationMinutes;
+                                var top = ev.StartTime.Minute;
+
+                                <div class="event week"
+                                     style="top:@(top)px; height:@(height)px;"
+                                     data-id="@ev?.EventId"
+                                     data-name="@ev?.EventName"
+                                     data-link="@ev?.LinkMeeting"
+                                     data-startdate="@ev.StartDate.ToString("yyyy-MM-dd")"
+                                     data-enddate="@ev.EndDate.ToString("yyyy-MM-dd")"
+                                     data-starttime="@ev.StartTime.ToString("HH:mm")"
+                                     data-endtime="@ev.EndTime.ToString("HH:mm")"
+                                     data-ismon="@ev.IsMonday"
+                                     data-istue="@ev.IsTuesday"
+                                     data-iswed="@ev.IsWednesday"
+                                     data-isthu="@ev.IsThursday"
+                                     data-isfri="@ev.IsFriday"
+                                     data-issat="@ev.IsSaturday"
+                                     data-issun="@ev.IsSunday">
+                                    @ev.EventName
+                                    (@ev.StartTime.ToString("HH:mm") -
+                                    @ev.EndTime.ToString("HH:mm"))
+                                </div>
+                            }
+                        }
+
+                    </div>
+                }
+            </div>
+        }
+
+    </div>
+
+</div>
+

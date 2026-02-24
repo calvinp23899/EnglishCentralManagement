@@ -1,17 +1,31 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
+using EnglishCentralManagement.Dtos;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EnglishCentralManagement.Areas.Admin.Controllers
 {
     public class TeacherController : AdminBaseController
     {
-        public TeacherController()
+        private readonly IStaffService _staffService;
+        private readonly IAccountService _accountService;
+        private readonly IExcelService _excelService;
+
+        public TeacherController(IStaffService staffService
+            , IAccountService accountService,
+            IExcelService excelService)
         {
+            _staffService = staffService;
+            _accountService = accountService;
+            _excelService = excelService;
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
         {
-            return View();
+
+            var result = await _staffService.GetAllAsync(page, pageSize) ?? null;
+
+            return View(result);
         }
 
         [HttpGet]
@@ -21,33 +35,127 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(string username)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(CreatedStaffDto newStaff)
         {
-            return null;
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    TempData["ToastMessage"] = "Invalid Input Form. Please Try Again";
+                    TempData["ToastType"] = "error";
+                    return View(newStaff);
+                }
+
+                await _staffService.CreateAsync(newStaff);
+                TempData["ToastMessage"] = "Create staff successfully!";
+                TempData["ToastType"] = "success";
+            }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+                return View(newStaff);
+            }
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
-        public IActionResult Edit()
+        public async Task<IActionResult> Edit(long id)
         {
-            return View();
+            try
+            {
+                var data = await _accountService.GetByStaffIdAsync(id);
+                return View(data);
+
+            }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+                return RedirectToAction("Index");
+            }
+
         }
 
         [HttpPost]
-        public IActionResult Edit(string username)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(CreatedStaffDto updatedStaff)
         {
-            return null;
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    TempData["ToastMessage"] = "Invalid Input Form. Please Try Again";
+                    TempData["ToastType"] = "error";
+                    return View(updatedStaff);
+                }
+                var data = await _staffService.UpdateAsync(updatedStaff);
+                //TODO: Update Account
+
+                TempData["ToastMessage"] = "Update staff successfully!";
+                TempData["ToastType"] = "success";
+            }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+                return View(updatedStaff);
+            }
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
-        public IActionResult GetDetailId()
+        public async Task<IActionResult> GetDetailId(long id)
         {
-            return View();
+            try
+            {
+                var data = await _staffService.GetByIdAsync(id);
+                return View(data);
+            }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+                return RedirectToAction("Index");
+            }
         }
 
-        [HttpDelete]
-        public IActionResult Delete(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(long id)
         {
-            return null;
+            try
+            {
+                await _staffService.SoftDeleteAsync(id);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+            }
+            return BadRequest(new { message = "Confirm password not match" });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DownloadStaffExcel()
+        {
+            try
+            {
+                var data = await _staffService.GetStaffForExcel();
+                var fileBytes = _excelService.ExportStaffExcel(data);
+
+                return File(
+                    fileBytes,
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    "Staff_List.xlsx"
+                );
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
     }
 }

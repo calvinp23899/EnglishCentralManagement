@@ -1,0 +1,149 @@
+﻿@model CostDto
+@{
+    var ExpenseCateogries = Enum.GetValues(typeof(ExpenseCategory)).Cast<ExpenseCategory>();
+    var ExpenseTypes = Enum.GetValues(typeof(ExpenseType)).Cast<ExpenseType>();
+}
+<div class="teacher-form view-only">
+    <div class="class-detail-tabs" data-tab-scope="cost">
+        <button class="tab-btn active" data-tab="overview">Overview</button>
+        <button class="tab-btn" data-tab="expense">Expenses</button>
+        <button class="tab-btn" data-tab="profit">Class Profit</button>
+    </div>
+    <div class="tab-content">
+        <!-- TAB: Overview-->
+        <div id="tab-overview" class="tab-pane active">
+            
+            @Html.Partial("_OverviewViewLayout", Model)
+            
+        </div>
+
+        <!-- TAB: Expense-->
+        <div id="tab-expense" class="tab-pane">
+             <div id="expenseContent"></div>
+        </div>
+
+        <!-- TAB: Profit-->
+        <div id="tab-profit" class="tab-pane">
+            <div id="profitContent"></div>
+        </div>
+    </div>
+
+    <!-- Hidden Modal Add Expense -->
+    <div class="modalexpense" id="expenseModal">
+        <div class="modalexpense-overlay" onclick="closeExpenseModal()"></div>
+
+        <div class="modalexpense-content">
+            <h3>Add Expense</h3>
+
+            <div class="form-group">
+                <label>Expense Category</label>
+                <select name="ExpenseCategory" id="ExpenseCategory">
+                    <option value="">-- Select Expense Category --</option>
+
+                    @foreach (var item in ExpenseCateogries)
+                    {
+                        <option value="@( (int)item )">
+                            @item
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Amount</label>
+                <input class="form-control" id="Amount" name="Amount" type="number" required />
+            </div>
+
+            <div class="form-group">
+                <label>Expense Type</label>
+                <select id="ExpenseType" name="ExpenseType" required>
+                    <option value="">-- Select Expense Type --</option>
+
+                    @foreach (var item in ExpenseTypes)
+                    {
+                        <option value="@( (int)item )">
+                            @item
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Date</label>
+                <input class="form-control" id="ExpenseDate" name="ExpenseDate" type="date" required />
+            </div>
+            <div class="form-group">
+                <label>Note</label>
+                <input class="form-control" id="Note" name="Note" type="text" />
+            </div>
+
+            <br />
+            <div class="modal-actions">
+                <button class="btn outline" type="button" onclick="closeExpenseModal()">Cancel</button>
+                <button class="btn primary" type="button" onclick="addExpense()">Add</button>
+            </div>
+        </div>
+    </div>
+    <form id="antiForgeryForm" style="display:none;">
+        @Html.AntiForgeryToken()
+    </form>
+
+    <!-- Right Side Edit Panel -->
+    <div class="expense-drawer" id="expenseDrawer">
+        <div class="drawer-overlay" onclick="closeExpenseDrawer()"></div>
+
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <h3>Edit Expense</h3>
+                <button class="close-btn" onclick="closeExpenseDrawer()">✕</button>
+            </div>
+
+            <div class="drawer-body">
+                <input type="hidden" id="EditExpenseId" />
+
+                <div class="form-group">
+                    <label>Expense Category</label>
+                    <select id="EditExpenseCategory">
+                        <option value="">-- Select Expense Category --</option>
+                        @foreach (var item in ExpenseCateogries)
+                        {
+                            <option value="@((int)item)">@item</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Amount</label>
+                    <input id="EditAmount" type="number" />
+                </div>
+
+                <div class="form-group">
+                    <label>Expense Type</label>
+                    <select id="EditExpenseType">
+                        <option value="">-- Select Expense Type --</option>
+                        @foreach (var item in ExpenseTypes)
+                        {
+                            <option value="@((int)item)">@item</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Date</label>
+                    <input id="EditExpenseDate" type="date" />
+                </div>
+
+                <div class="form-group">
+                    <label>Note</label>
+                    <input id="EditNote" type="text" />
+                </div>
+            </div>
+
+            <div class="drawer-footer">
+                <button class="btn-primary" onclick="closeExpenseDrawer()">Cancel</button>
+                <button class="btn-save" onclick="saveExpense()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+

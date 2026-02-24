@@ -1,0 +1,70 @@
+﻿@model CalendarViewModel
+
+@{
+    var selectedDateOnly = Model.SelectedDate.HasValue
+    ? DateOnly.FromDateTime(Model.SelectedDate.Value)
+    : (DateOnly?)null;
+}
+<div class="time-grid">
+
+    @foreach (var hour in Enumerable.Range(8, 14))
+    {
+        <div class="time-row">
+            <div class="time-label">@hour:00</div>
+            <div class="time-slot">
+
+                @{
+                    var dayOfWeek = Model.SelectedDate?.DayOfWeek;
+
+                    var eventsToday = Model?.Events
+                    .Where(e =>
+                    selectedDateOnly != null &&
+                    selectedDateOnly.Value >= e.StartDate &&
+                    selectedDateOnly.Value <= e.EndDate &&
+                    (
+                    (dayOfWeek == DayOfWeek.Monday && e.IsMonday == true) ||
+                    (dayOfWeek == DayOfWeek.Tuesday && e.IsTuesday == true) ||
+                    (dayOfWeek == DayOfWeek.Wednesday && e.IsWednesday == true) ||
+                    (dayOfWeek == DayOfWeek.Thursday && e.IsThursday == true) ||
+                    (dayOfWeek == DayOfWeek.Friday && e.IsFriday == true) ||
+                    (dayOfWeek == DayOfWeek.Saturday && e.IsSaturday == true) ||
+                    (dayOfWeek == DayOfWeek.Sunday && e.IsSunday == true)
+                    )
+                    && e.StartTime.Hour == hour
+                    )
+                    .ToList();
+                }
+
+                @foreach (var ev in eventsToday)
+                {
+                    var durationMinutes =
+                    (int)(ev.EndTime - ev.StartTime).TotalMinutes;
+
+                    var height = durationMinutes; // 1 phút = 1px (có thể chỉnh)
+                    var top = ev.StartTime.Minute;
+                    <div class="event"
+                         style="top:@(top)px; height:@(height)px;"
+                         data-id="@ev.EventId"
+                         data-name="@ev.EventName"
+                         data-link="@ev.LinkMeeting"
+                         data-startdate="@ev.StartDate.ToString("yyyy-MM-dd")"
+                         data-enddate="@ev.EndDate.ToString("yyyy-MM-dd")"
+                         data-starttime="@ev.StartTime.ToString("HH:mm")"
+                         data-endtime="@ev.EndTime.ToString("HH:mm")"
+                         data-ismon="@ev.IsMonday"
+                         data-istue="@ev.IsTuesday"
+                         data-iswed="@ev.IsWednesday"
+                         data-isthu="@ev.IsThursday"
+                         data-isfri="@ev.IsFriday"
+                         data-issat="@ev.IsSaturday"
+                         data-issun="@ev.IsSunday">
+                        @ev.EventName
+                        (@ev.StartTime.ToString("HH:mm") -
+                        @ev.EndTime.ToString("HH:mm"))
+                    </div>
+                }
+
+            </div>
+        </div>
+    }
+</div>

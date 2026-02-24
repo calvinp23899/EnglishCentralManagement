@@ -1,79 +1,175 @@
-﻿<div class="teacher-form view-only">
+﻿@model CreatedStudentDto
+<div class="teacher-form view-only">
     <div class="teacher-form__header">
-        <h2>Teacher Information</h2>
+        <h2>Student Information</h2>
     </div>
 
     <div class="teacher-form__grid">
 
         <div class="form-group">
             <label>First Name</label>
-            <div class="form-value">John</div>
+            <div class="form-value">@Model.FirstName</div>
         </div>
 
         <div class="form-group">
             <label>Last Name</label>
-            <div class="form-value">Doe</div>
+            <div class="form-value">@Model.LastName</div>
         </div>
 
         <div class="form-group">
             <label>Date of Birth</label>
-            <div class="form-value">1995-08-12</div>
+            <div class="form-value">@Model.DateOfBirth</div>
         </div>
 
         <div class="form-group">
             <label>Phone Number</label>
-            <div class="form-value">0123456789</div>
+            <div class="form-value">@Model.PhoneNumber</div>
         </div>
 
         <div class="form-group">
             <label>Email</label>
-            <div class="form-value">teacher@email.com</div>
+            <div class="form-value">@Model.Email</div>
         </div>
 
         <div class="form-group">
             <label>Status</label>
-            <span class="form-value">Active</span>
+            <span class="form-value">@Model.Status</span>
         </div>
-
+        
         <div class="form-group">
-            <label>Contract Type</label>
-            <div class="form-value">Full-time</div>
-        </div>
-
-        <div class="form-group">
-            <label>Working Type</label>
-            <div class="form-value">Hybrid</div>
-        </div>
-
-        <div class="form-group">
-            <label>Years of Experience</label>
-            <div class="form-value">5 years</div>
-        </div>
-
-        <div class="form-group">
-            <label>Hourly Rate</label>
-            <div class="form-value">$25 / hour</div>
-        </div>
-
-        <div class="form-group">
-            <label>Salary</label>
-            <div class="form-value">$1,200 / month</div>
-        </div>
-
-        <div class="form-group">
-            <label>Onboarding Date</label>
-            <div class="form-value">2024-01-10</div>
+            <label>Gender</label>
+            <span class="form-value">@Model.Gender</span>
         </div>
 
         <div class="form-group full">
             <label>Address</label>
-            <div class="form-value">123 Nguyen Trai, District 5, HCMC</div>
-        </div>
-
-        <div class="form-group full">
-            <label>Avatar</label>
-            <img class="avatar" src="/assets/avatar-default.png" />
+            <div class="form-value">@Model.Address</div>
         </div>
 
     </div>
 </div>
+
+<!-- TABLE -->
+@* <div class="admin-page__table">
+    <table>
+        <thead>
+            <tr>
+                <th>Class</th>
+                <th>Class - StartedDate</th>
+                <th>Class - EndedDate</th>
+                <th>Student - JoinedDate</th>
+                <th>Student - LessonAttended</th>
+                <th>Student - StatusInClass</th>
+                <th width="120">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model == null || !Model.Items.Any())
+            {
+                <tr>
+                    <td colspan="5" style="text-align:center;">
+                        No Classes found
+                    </td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var classItem in Model.Items)
+                {
+                    <tr>
+                        <td>@classItem.FullName</td>
+                        <td>@classItem.Email</td>
+                        <td>@classItem.PhoneNumber</td>
+                        <td>@classItem.Gender</td>
+                        <td>@classItem.Status</td>
+                        <td class="actions">
+                            <a class="view"
+                               href="#">
+                                View
+                            </a>                          
+                        </td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+
+    </table>
+</div>
+
+<!-- PAGINATION -->
+<div class="admin-page__pagination-wrapper">
+    <div class="admin-page__pagination-info">
+        Showing <strong>
+            @((Model.PageIndex - 1) * Model.PageSize + 1)
+            –
+            @(Math.Min(Model.PageIndex * Model.PageSize, Model.TotalRecords))
+        </strong>
+        of
+        <strong>@Model.TotalRecords</strong>
+        records
+    </div>
+
+    <div class="admin-page__pagination">
+        <!-- Prev -->
+        <button class="btn-prev"
+                onclick="location.href='@Url.Action("Index", new { page = Model.PageIndex - 1 })'"
+        @(Model.HasPrevious ? "" : "disabled")>
+            ‹ Prev
+        </button>
+
+        <!-- Page 1 -->
+        <button class="@(Model.PageIndex == 1 ? "active" : "")"
+                onclick="location.href='@Url.Action("Index", new { page = 1 })'">
+            1
+        </button>
+
+        @{
+            int start = Math.Max(2, Model.PageIndex - 2);
+            int end = Math.Min(Model.TotalPages - 1, Model.PageIndex + 2);
+        }
+
+        <!-- ... trước -->
+        @if (start > 2)
+        {
+            <span class="pagination-dots">...</span>
+        }
+
+        <!-- Pages giữa -->
+        @for (int i = start; i <= end; i++)
+        {
+            if (i == Model.PageIndex)
+            {
+                <button class="active">@i</button>
+            }
+            else
+            {
+                <button onclick="location.href='@Url.Action("Index", new { page = i })'">
+                    @i
+                </button>
+            }
+        }
+
+        <!-- ... sau -->
+        @if (end < Model.TotalPages - 1)
+        {
+            <span class="pagination-dots">...</span>
+        }
+
+        <!-- Page cuối -->
+        @if (Model.TotalPages > 1)
+        {
+            <button class="@(Model.PageIndex == Model.TotalPages ? "active" : "")"
+                    onclick="location.href='@Url.Action("Index", new { page = Model.TotalPages })'">
+                @Model.TotalPages
+            </button>
+        }
+
+        <!-- Next -->
+        <button class="btn-next"
+                onclick="location.href='@Url.Action("Index", new { page = Model.PageIndex + 1 })'"
+        @(Model.HasNext ? "" : "disabled")>
+            Next ›
+        </button>
+    </div>
+</div> *@

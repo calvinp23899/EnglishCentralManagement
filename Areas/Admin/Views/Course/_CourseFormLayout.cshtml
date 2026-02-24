@@ -1,0 +1,30 @@
+﻿<div class="teacher-form__grid">
+    <!-- CourseName -->
+    <div class="form-group">
+        <label>CourseName</label>
+        <input type="text" placeholder="IELTS-" name="CourseName" value="@Model?.CourseName" required />
+    </div>
+
+    <!-- DurationInMonth -->
+    <div class="form-group">
+        <label>DurationInMonths</label>
+        <input type="number" name="DurationInMonth" value="@Model?.DurationInMonth" required />
+    </div>
+
+    <!-- MonthlyFee -->
+    <div class="form-group">
+        <label>MonthlyFee</label>
+        <input type="text"
+               id="MonthlyFeeDisplay"
+               placeholder="VND / hour"
+               value="@Model?.MonthlyFee"
+               data-target="MonthlyFee"
+               oninput="formatNumber(this)" />
+
+        <!-- value send to server -->
+        <input type="hidden"
+               id="MonthlyFee"
+               name="MonthlyFee" />
+    </div>
+
+</div>

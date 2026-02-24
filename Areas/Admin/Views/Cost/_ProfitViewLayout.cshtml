@@ -1,0 +1,83 @@
+﻿@model ProfitViewDto
+
+<div class="profit-content">
+    <div class="dashboard__stats">
+
+        <div class="dashboard__stat-card">
+            <div class="icon">
+                <i class="fa-solid fa-sack-dollar"></i>
+            </div>
+            <div class="info">
+                <span class="value">
+                    @Model.TotalProfit.ToString("c0",
+                             new System.Globalization.CultureInfo("vi-VN"))
+                </span>
+                <span class="label">Total Profit @ViewBag.SelectedProfitYear</span>
+            </div>
+        </div>
+
+        <div class="dashboard__stat-card">
+            <div class="icon">
+                <i class="fa-solid fa-sack-dollar"></i>
+            </div>
+            <div class="info">
+                <span class="value">
+                    @Model.TotalRevenue.ToString("c0",
+                             new System.Globalization.CultureInfo("vi-VN"))
+                </span>
+                <span class="label">Total Revenue @ViewBag.SelectedProfitYear</span>
+            </div>
+        </div>
+
+        <div class="dashboard__stat-card">
+            <div class="icon">
+                <i class="fa-solid fa-sack-dollar"></i>
+            </div>
+            <div class="info">
+                <span class="value">@($"{Model.ProfitMargin}%")</span>
+                <span class="label">Profit Margin %</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+<br />
+<!-- TOOLBAR -->
+<div class="admin-page__toolbar">
+    <div class="toolbar-left">
+        <select class="filter-select" id="yearProfitFilter">
+            @for (int y = DateTime.Now.Year - 2; y <= DateTime.Now.Year + 1; y++)
+            {
+                if (y == (int)ViewBag.SelectedProfitYear)
+                {
+                    <option value="@y" selected>@y</option>
+                }
+                else
+                {
+                    <option value="@y">@y</option>
+                }
+            }
+        </select>
+    </div>
+</div>
+
+<br />
+<!-- ===== Charts Row ===== -->
+<div class="profit-chart-row">
+
+    <!-- Revenue vs Expense -->
+    <div class="chart-card">
+        <h4>Revenue vs Expense @ViewBag.SelectedProfitYear</h4>
+        <div class="chart-wrapper">
+            <canvas id="revenueExpenseChart"></canvas>
+        </div>
+    </div>
+
+    <div class="chart-card">
+        <h3>Profit Trend @ViewBag.SelectedProfitYear</h3>
+        <div class="chart-wrapper">
+            <canvas id="profitTrendChart"></canvas>
+        </div>
+    </div>
+
+</div>

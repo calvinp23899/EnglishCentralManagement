@@ -1,4 +1,6 @@
-﻿<div class="admin-profile-page">
+﻿@model ProfileDto
+
+<div class="admin-profile-page">
     <!-- HEADER -->
     <div class="profile__header">
         <h1>Profile</h1>
@@ -7,53 +9,53 @@
         <!-- LEFT: BASIC INFO -->
         <div class="profile-card profile-sidebar">
             <div class="avatar">
-                <img src="/assets/avatar-default.png" alt="Avatar" />
+                <img src="/assets/img/avatar-default.png" alt="Avatar" />
             </div>
 
-            <h3 class="name">John Doe</h3>
-            <p class="role">Senior IELTS Teacher</p>
+            <h3 class="name">@Model.FullName</h3>
+            <p class="role">@Model.Title</p>
 
             <div class="social-links">
-                <a href="#">📞 00-1230-123131 </a>
-                <a href="#">📍 03 Abc Str Address</a>
+                <a href="#">📞 @Model.PhoneNumber </a>
+                <a href="#">📍 @Model.Address</a>
             </div>
         </div>
 
         <!-- RIGHT: DETAIL INFO -->
         <div class="profile-card profile-details">
-            <div class="detail-row">
-                <span class="label">Full Name</span>
-                <span class="value">Kenneth Valdez</span>
-            </div>
 
             <div class="detail-row">
                 <span class="label">Email</span>
-                <span class="value">fip@jukmuh.al</span>
+                <span class="value">@Model.Email</span>
             </div>
 
             <div class="detail-row">
                 <span class="label">Age</span>
-                <span class="value">Bay Area, San Francisco, CA</span>
+                <span class="value">@Model.Age</span>
             </div>
             <div class="detail-row">
                 <span class="label">Gender</span>
-                <span class="value">Bay Area, San Francisco, CA</span>
+                <span class="value">@Model.Gender</span>
             </div>
             <div class="detail-row">
                 <span class="label">Date Of Birth</span>
-                <span class="value">Bay Area, San Francisco, CA</span>
-            </div>
-            <div class="detail-row">
-                <span class="label">Work Exp</span>
-                <span class="value">Bay Area, San Francisco, CA</span>
-            </div>
-            <div class="detail-row">
-                <span class="label">Credit Card</span>
-                <span class="value">000xxxxxxxxxxx</span>
+                <span class="value">@Model.DateOfBirth</span>
             </div>
             <div class="detail-row">
                 <span class="label">Contract</span>
-                <span class="value">Temporary Contract</span>
+                <span class="value">@Model.ContractType</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Role</span>
+                <span class="value">@Model.Role</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Resume</span>
+                <span class="value">Download</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Linked</span>
+                <span class="value">xxxxxxxxxxxxxx</span>
             </div>
         </div>
     </div>

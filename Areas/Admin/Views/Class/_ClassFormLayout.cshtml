@@ -1,0 +1,124 @@
+﻿@{
+    var ClassStatusEnum = Enum.GetValues(typeof(ClassStatusEnum)).Cast<ClassStatusEnum>();
+
+}
+<div class="teacher-form__grid">
+    <!-- ClassCode -->
+    <div class="form-group">
+        <label>Class Code</label>
+        <input type="text" placeholder="IELTS-" name="ClassCode" value="@Model?.ClassCode" required />
+    </div>
+
+    <!-- StartedDate -->
+    <div class="form-group">
+        <label>Started Date</label>
+        <input 
+            type="date" 
+            name="StartDate" 
+            value="@(Model?.StartDate?.ToString("yyyy-MM-dd"))" 
+            required />
+    </div>
+
+    <!-- Max Student -->
+    <div class="form-group">
+        <label>Max Students</label>
+        <input type="number" name="MaxStudents" value="@Model.MaxStudents" required />
+    </div>
+
+    <!-- Status -->
+    <div class="form-group">
+        <label>Status</label>
+        <select name="Status" required>
+            <option value="">-- Select Status --</option>
+
+            @foreach (var itemStatus in ClassStatusEnum)
+            {
+                if (Model?.Status == itemStatus)
+                {
+                    <option value="@( (int)itemStatus )" selected="selected">
+                        @itemStatus
+                    </option>
+                }
+                else
+                {
+                    <option value="@( (int)itemStatus )">
+                        @itemStatus
+                    </option>
+                }
+            }
+        </select>
+    </div>
+
+    <!-- TeacherId -->
+    <div class="form-group teacher-select">
+        <label>Teacher</label>      
+        <div class="select-wrapper">
+            <input type="text"
+                   id="teacherInput"
+                   class="select-input"
+                   placeholder="-- Select Teacher --"
+                   value="@Model.TeacherName"
+                   readonly
+                   onclick="toggleTeacherDropdown()" />
+
+            <input type="hidden" name="TeacherId" id="TeacherId" value="@Model.TeacherId"/>
+
+            <div id="teacherDropdown" class="select-dropdown">
+                <input type="text"
+                       id="teacherSearch"
+                       class="select-search"
+                       placeholder="Search teacher..."
+                       onkeyup="filterTeacher()" />
+
+                <ul>
+                    @foreach (var t in Model.Teachers)
+                    {
+                        <li onclick="selectTeacher('@t.FullName', '@t.Id')">
+                            @t.FullName
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- CourseId -->
+    <div class="form-group course-select">
+        <label>Course</label>       
+        <div class="select-wrapper">
+            <input type="text"
+                   id="courseInput"
+                   class="select-input"
+                   placeholder="-- Select Course --"
+                   value="@Model.CourseName"
+                   readonly
+                   onclick="toggleCourseDropdown()" />
+
+            <input type="hidden" name="CourseId" id="CourseId" value="@Model.CourseId" />
+
+            <div id="courseDropdown" class="select-dropdown">
+                <input type="text"
+                       id="courseSearch"
+                       class="select-search"
+                       placeholder="Search course..."
+                       onkeyup="filterCourse()" />
+
+                <ul>
+                    @foreach (var t in Model.Courses)
+                    {
+                        <li onclick="selectCourse('@t.CourseName', '@t.Id')">
+                            @t.CourseName
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Note -->
+    <div class="form-group">
+        <label>Note</label>
+        <textarea name="Note" cols="3">@Model?.Note</textarea>
+    </div>
+
+</div>

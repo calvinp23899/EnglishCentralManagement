@@ -403,6 +403,12 @@ body {
         .actions a.delete {
             color: #ef4444;
         }
+
+        .actions a.disabled {
+            pointer-events: none; 
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
     }
 
     &__pagination-wrapper {
@@ -447,6 +453,12 @@ body {
                 color: #fff;
                 border-color: #2563eb;
             }
+        }
+
+        dots {
+            padding: 0 6px;
+            color: #6b7280;
+            font-weight: 600;
         }
     }
 }
@@ -582,8 +594,8 @@ body {
 //====== Toast Success ==========//
 .toast {
     position: fixed;
-    top: 24px;
-    right: 24px;
+    top: 10px;
+    right: 40%;
     min-width: 240px;
     padding: 12px 16px;
     border-radius: 8px;
@@ -599,6 +611,18 @@ body {
     display: none;
 }
 
+.toast.toast--success {
+    background: #16a34a;
+}
+
+.toast.toast--error {
+    background: #dc2626;
+}
+
+.toast.toast--warning {
+    background: #f59e0b;
+}
+
 @keyframes slideIn {
     from {
         opacity: 0;
@@ -611,4 +635,96 @@ body {
     }
 }
 
+//====== Modal Change Password ==========//
+.modalpassword {
+    position: fixed;
+    inset: 0;
+    display: none;
+    z-index: 999;
+}
 
+.modalpassword.show {
+    display: block;
+}
+
+.modalpassword-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,.4);
+}
+
+.modalpassword-content {
+    position: relative;
+    width: 420px;
+    margin: 10% auto;
+    background: #fff;
+    padding: 24px;
+    border-radius: 12px;
+}
+
+.modalpassword .form-group {
+    margin-bottom: 16px; /* hoặc 20px cho thoáng hơn */
+}
+
+.show-password {
+    display: flex;
+    align-items: center;
+    gap: 6px; /* sát chữ */
+    margin-top: 4px;
+    margin-bottom: 20px;
+}
+
+.show-password input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.show-password label {
+    margin: 0;
+    cursor: pointer;
+    font-size: 14px;
+    color: #344054;
+}
+//===========Badge Status ============
+.status {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+/* In Progress – xanh dương */
+.status-in-progress,
+.status-active {
+    background: #eef2ff;
+    color: #3b5bfd;
+}
+
+/* Updating – xanh mint */
+.status-updating {
+    background: #e6fffa;
+    color: #14b8a6;
+}
+
+/* Upcoming – đỏ cam */
+.status-upcoming,
+.status-inactive {
+    background: #fff1f2;
+    color: #f43f5e;
+}
+
+/* Submitted – xanh cyan */
+.status-submitted {
+    background: #ecfeff;
+    color: #22d3ee;
+}
+
+/* Working – cam */
+.status-working {
+    background: #fff7ed;
+    color: #fb923c;
+}
