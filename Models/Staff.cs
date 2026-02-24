@@ -49,6 +49,9 @@ namespace EnglishCentralManagement.Models
         public string? Title { get; set; }
 
         public bool? Gender { get; set; }
+        public int? ContractPeriod { get; set; }
+        public string? PaymentCard { get; set; }
+        public string? BankCard { get; set; }
 
         public ICollection<Class> Classes { get; set; } = new List<Class>();
         public ICollection<EventCalendar> Events { get; set; } = new List<EventCalendar>();

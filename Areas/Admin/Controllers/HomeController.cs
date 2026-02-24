@@ -49,12 +49,6 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             return View();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> RevenueChart()
-        {
-            var data = await _paymentService.GetDataChart();
 
-            return Json(data.Select(x => x.Total));
-        }
     }
 }

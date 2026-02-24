@@ -97,8 +97,8 @@
                     </a>
                 </li>
 
-                <li class="menu-item">
-                    <a href="#">
+                <li class="menu-item @(controller == "Cost" ? "active" : "")">
+                    <a href="@Url.Action("Index", "Cost", new { area = "Admin" })">
                         <div class="left">
                             <span class="fa-solid fa-money-bill-wave"></span>
                             <span class="text">Cost </span>
@@ -224,6 +224,7 @@
         </script>
     }
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- SCRIPT SECTION: -->
     @RenderSection("Scripts", required: false)
     <script src="~/js/admin/admin-layout.js"></script>
@@ -235,6 +236,9 @@
     <script src="~/js/admin/admin-contract.js"></script>
     <script src="~/js/admin/currency.js"></script>
     <script src="~/js/admin/change-password.js"></script>
+    <script src="~/js/admin/admin-cost-chart.js"></script>
+    <script src="~/js/admin/admin-home-chart.js"></script>
+    <script src="~/js/admin/admin-cost.js"></script>
 
 </body>
 </html>

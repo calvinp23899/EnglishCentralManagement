@@ -28,6 +28,7 @@ namespace EnglishCentralManagement.Models
         public bool? IsFriday { get; set; }
         public bool? IsSaturday { get; set; }
         public bool? IsSunday { get; set; }
+        public string? Note { get; set; }
 
         // Foreign Key
         public long StaffId { get; set; }

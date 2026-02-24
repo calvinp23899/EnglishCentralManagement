@@ -90,4 +90,9 @@
   color: #2563eb; /* xanh giáo dục */
 }
 
+.chart-home-wrapper {
+  height: 300px;
+  position: relative;
+}
+
 /*# sourceMappingURL=admin-home.css.map */

@@ -18,6 +18,7 @@ namespace EnglishCentralManagement.Data
         public DbSet<Payment> Payments => Set<Payment>();
         public DbSet<Role> Roles => Set<Role>();
         public DbSet<EventCalendar> EventCalendars => Set<EventCalendar>();
+        public DbSet<Expense> Expenses => Set<Expense>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,6 +31,7 @@ namespace EnglishCentralManagement.Data
             modelBuilder.Entity<PaymentSchedule>().HasQueryFilter(x => !x.IsDeleted);
             modelBuilder.Entity<Payment>().HasQueryFilter(x => !x.IsDeleted);
             modelBuilder.Entity<EventCalendar>().HasQueryFilter(x => !x.IsDeleted);
+            modelBuilder.Entity<Expense>().HasQueryFilter(x => !x.IsDeleted);
             modelBuilder.Entity<PaymentSchedule>()
                     .HasOne(ps => ps.Enrollment)
                     .WithMany(e => e.PaymentSchedules)
