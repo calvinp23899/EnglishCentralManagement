@@ -64,10 +64,13 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                 WorkingType = model.WorkingType,
                 ContractType = model.ContractType,
                 MonthlySalary = model.MonthlySalary,
+                WorkingHour = model.WorkingHour,
                 Status = model.Status.ToString(),
                 YearsOfExperience = model.YearsOfExperience,
                 HourlyRate = model.HourlyRate,
                 OnboardingDate = model.OnboardingDate,
+                Bank = model.BankCard,
+                CardNumber = model.PaymentCard,
                 Image = model.AvatarUrl
             };
             return data;
@@ -87,7 +90,10 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                 WorkingType = newStaff.WorkingType,
                 YearsOfExperience = newStaff.YearsOfExperience,
                 HourlyRate = newStaff.HourlyRate,
-                MonthlySalary = newStaff.MonthlySalary,
+                WorkingHour = newStaff.WorkingHour,
+                PaymentCard = newStaff.PaymentCard,
+                BankCard = newStaff.BankCard,
+                MonthlySalary = newStaff.HourlyRate * newStaff.WorkingHour,
                 OnboardingDate = newStaff.OnboardingDate.Value.ToUniversalTime(),
                 Address = newStaff.Address,
                 Gender = newStaff.Gender.Value > 0 ? true : false,
@@ -131,7 +137,10 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             model.ContractType = updateStaff.ContractType;
             model.WorkingType = updateStaff.WorkingType;
             model.HourlyRate = updateStaff.HourlyRate;
-            model.MonthlySalary = updateStaff.MonthlySalary;
+            model.WorkingHour = updateStaff.WorkingHour;
+            model.BankCard = updateStaff.BankCard;
+            model.PaymentCard = updateStaff.PaymentCard;
+            model.MonthlySalary = updateStaff.HourlyRate * updateStaff.WorkingHour;
             model.OnboardingDate = updateStaff.OnboardingDate.Value.ToUniversalTime();
             model.Title = updateStaff.Title;
             model.UpdatedDate = DateTimeOffset.UtcNow;
@@ -158,6 +167,24 @@ namespace EnglishCentralManagement.Areas.Admin.Services
         {
             int data = await _context.Staffs.CountAsync();
             return data;
+        }
+
+        public async Task<List<StaffExcelDto>> GetStaffForExcel()
+        {
+            var listModel = await _context.Staffs
+                .Select(x => new StaffExcelDto
+                {
+                    FullName = string.Concat(x.FirstName + " " + x.LastName).Trim(),
+                    Email = x.Email,
+                    ContractType = x.ContractType.GetDisplayEnumName(),
+                    BankCard = x.BankCard,
+                    PaymentCard = x.PaymentCard,
+                    HourlyRate = x.HourlyRate,
+                    WorkingHour = x.WorkingHour,
+                    MonthlySalary = x.MonthlySalary
+                })
+                .ToListAsync();
+            return listModel;
         }
     }
 }

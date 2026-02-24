@@ -8,11 +8,15 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
     {
         private readonly IStaffService _staffService;
         private readonly IAccountService _accountService;
+        private readonly IExcelService _excelService;
 
-        public TeacherController(IStaffService staffService, IAccountService accountService)
+        public TeacherController(IStaffService staffService
+            , IAccountService accountService,
+            IExcelService excelService)
         {
             _staffService = staffService;
             _accountService = accountService;
+            _excelService = excelService;
         }
 
         [HttpGet]
@@ -132,6 +136,26 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
                 TempData["ToastType"] = "error";
             }
             return BadRequest(new { message = "Confirm password not match" });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DownloadStaffExcel()
+        {
+            try
+            {
+                var data = await _staffService.GetStaffForExcel();
+                var fileBytes = _excelService.ExportStaffExcel(data);
+
+                return File(
+                    fileBytes,
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    "Staff_List.xlsx"
+                );
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
     }
 }

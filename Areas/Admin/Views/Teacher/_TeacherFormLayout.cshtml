@@ -96,7 +96,7 @@
         <input type="text"
                id="HourlyRateDisplay"
                placeholder="VND / hour"
-               value="@Model?.HourlyRate"
+               value="@(Model?.HourlyRate?.ToString("0"))"
                data-target="HourlyRate"
                oninput="formatNumber(this)" />
 
@@ -106,21 +106,10 @@
                name="HourlyRate" />
     </div>
 
-    <!-- Salary -->
+    <!-- Working Hour -->
     <div class="form-group">
-        <label>Salary</label>
-        <!-- input user -->
-        <input type="text"
-               id="MonthlySalaryDisplay"
-               placeholder="VND / month"
-               value="@Model?.MonthlySalary"
-               data-target="MonthlySalary"
-               oninput="formatNumber(this)" />
-
-        <!-- value send to server -->
-        <input type="hidden"
-               id="MonthlySalary"
-               name="MonthlySalary" />
+        <label>Working Hour</label>
+        <input type="number" name="WorkingHour" value="@(Model?.WorkingHour)" min="1" required />
     </div>
 
     <!-- Onboarding Date -->
@@ -163,6 +152,18 @@
     <div class="form-group">
         <label>Title</label>
         <input placeholder="Junior Teacher..." name="Title" value="@Model?.Title" required></input>
+    </div>
+
+    <!-- Payment Card -->
+    <div class="form-group">
+        <label>Card Number</label>
+        <input placeholder="" name="PaymentCard" value="@Model?.PaymentCard"></input>
+    </div>
+
+    <!-- Bank Card -->
+    <div class="form-group">
+        <label>Bank</label>
+        <input placeholder="" name="BankCard" value="@Model?.BankCard"></input>
     </div>
 
     <!-- Avatar -->

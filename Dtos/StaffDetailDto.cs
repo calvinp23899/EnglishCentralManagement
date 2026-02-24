@@ -24,6 +24,9 @@ namespace EnglishCentralManagement.Dtos
         public RoleType? Role { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
+        public int? WorkingHour { get; set; }
+        public string? CardNumber { get; set; }
+        public string? Bank { get; set; }
         public IFormFile Avatar { get; set; }
     }
 }

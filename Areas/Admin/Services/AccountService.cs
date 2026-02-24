@@ -59,6 +59,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                 YearsOfExperience = model.Staff.YearsOfExperience,
                 HourlyRate = model.Staff.HourlyRate,
                 MonthlySalary = model.Staff.MonthlySalary,
+                WorkingHour = model.Staff.WorkingHour,
                 OnboardingDate = model.Staff.OnboardingDate.Value.ToUniversalTime(),
                 Address = model.Staff.Address,
                 Gender = model.Staff.Gender == true ? GenderEnum.Male : GenderEnum.Female,
@@ -66,6 +67,8 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                 StaffId = model.StaffId,
                 Username = model.Username,
                 Password = model.PasswordHash,
+                PaymentCard = model.Staff.PaymentCard,
+                BankCard = model.Staff.BankCard,
                 Role = (RoleType?)model.RoleId,
             };
             return data;

@@ -31,6 +31,7 @@ namespace EnglishCentralManagement
             builder.Services.AddScoped<IEventService, EventService>();
             builder.Services.AddScoped<IReceiptService, ReceiptService>();
             builder.Services.AddScoped<IExpenseService, ExpenseService>();
+            builder.Services.AddScoped<IExcelService, ExcelService>();
             #endregion
 
             //Authentication + Authorization
