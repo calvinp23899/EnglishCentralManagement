@@ -11,5 +11,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services.Interfaces
         Task<CreatedStaffDto> UpdateAsync(CreatedStaffDto staff);
         Task SoftDeleteAsync(long id);
         Task<int> CountAllStaff();
+        Task<List<StaffExcelDto>> GetStaffForExcel();
+
     }
 }

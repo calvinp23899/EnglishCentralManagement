@@ -29,6 +29,7 @@ namespace EnglishCentralManagement.Dtos
 
         public decimal? HourlyRate { get; set; }
         public decimal? MonthlySalary { get; set; }
+        public int? WorkingHour { get; set; }
 
         [DataType(DataType.Date)]
         public DateTimeOffset? OnboardingDate { get; set; }
@@ -49,5 +50,7 @@ namespace EnglishCentralManagement.Dtos
 
         public IFormFile? Avatar { get; set; }
         public long? StaffId { get; set; }
+        public string? PaymentCard { get; set; }
+        public string? BankCard { get; set; }
     }
 }

@@ -50,8 +50,11 @@ namespace EnglishCentralManagement.Models
 
         public bool? Gender { get; set; }
         public int? ContractPeriod { get; set; }
+        //CardNumber
         public string? PaymentCard { get; set; }
+        //Bank - TP, BIDV, ACB
         public string? BankCard { get; set; }
+        public int? WorkingHour { get; set; }
 
         public ICollection<Class> Classes { get; set; } = new List<Class>();
         public ICollection<EventCalendar> Events { get; set; } = new List<EventCalendar>();

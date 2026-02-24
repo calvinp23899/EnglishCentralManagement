@@ -56,6 +56,13 @@
         </div>
 
         <div class="form-group">
+            <label>Working Hour</label>
+            <div class="form-value">
+                @Model.WorkingHour
+            </div>
+        </div>
+
+        <div class="form-group">
             <label>Salary</label>
             <div class="form-value">
                 @Model.MonthlySalary?.ToString("c0",
@@ -71,6 +78,15 @@
         <div class="form-group full">
             <label>Address</label>
             <div class="form-value">@Model.Address</div>
+        </div>
+
+        <div class="form-group full">
+            <label>CardNumber</label>
+            <div class="form-value">@Model.CardNumber</div>
+        </div>
+        <div class="form-group full">
+            <label>Bank</label>
+            <div class="form-value">@Model.Bank</div>
         </div>
 
         <div class="form-group full">
