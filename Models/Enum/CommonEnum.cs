@@ -26,13 +26,15 @@ namespace EnglishCentralManagement.Models.Enum
         Hybrid = 3
     }
 
-    public enum StudentStatus {
+    public enum StudentStatus
+    {
         [Display(Name = "Active")]
         Active = 1,
         [Display(Name = "Inactive")]
         Inactive = 0
     }
-    public enum EnrollmentStatus {
+    public enum EnrollmentStatus
+    {
         [Display(Name = "Active")]
         Active = 1,
         [Display(Name = "InActive")]
@@ -42,14 +44,16 @@ namespace EnglishCentralManagement.Models.Enum
         [Display(Name = "Cancelled")]
         Cancelled = 4
     }
-    public enum PaymentScheduleStatus { 
-        Pending, 
-        Paid, 
-        Overdue, 
-        Cancelled 
+    public enum PaymentScheduleStatus
+    {
+        Pending,
+        Paid,
+        Overdue,
+        Cancelled
     }
-    public enum PaymentMethod { 
-        Cash, 
+    public enum PaymentMethod
+    {
+        Cash,
         BankTransfer,
     }
     public enum RoleType
@@ -67,13 +71,13 @@ namespace EnglishCentralManagement.Models.Enum
         [Display(Name = "Teacher")]
         Teacher = 6,
         [Display(Name = "Coordinator")]
-        Coordinator = 7 
+        Coordinator = 7
     }
 
     public enum GenderEnum
     {
         Female = 0,
-        Male = 1,        
+        Male = 1,
     }
 
     public enum ClassStatusEnum
@@ -84,5 +88,39 @@ namespace EnglishCentralManagement.Models.Enum
         Completed = 2,
         [Display(Name = "Cancelled")]
         Cancelled = 3,
+    }
+
+    public enum ExpenseCategory
+    {
+        [Display(Name = "TeacherSalary")]
+        TeacherSalary = 1,
+        [Display(Name = "AdminSalary")]
+        AdminSalary = 2,
+        [Display(Name = "Rent")]
+        Rent = 3, //House Rent
+        [Display(Name = "Utilities")]
+        Utilities = 4, //Water, Electricbill, Internet, ...
+        [Display(Name = "Marketing")]
+        Marketing = 5,
+        [Display(Name = "Material")]
+        Material = 6, //Class Material
+        [Display(Name = "Commission")]
+        Commission = 7,
+        [Display(Name = "Other")]
+        Other = 8,
+        [Display(Name = "HRSalary")]
+        HRSalary = 9,
+        [Display(Name = "AccountantSalary")]
+        AccountantSalary = 10,
+        [Display(Name = "ManagerSalary")]
+        ManagerSalary = 11
+
+    }
+
+    public enum ExpenseType
+    {
+        //Để tính break-even
+        Fixed = 1,
+        Variable = 2
     }
 }

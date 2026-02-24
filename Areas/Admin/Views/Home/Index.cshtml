@@ -2,11 +2,6 @@
 @{
     ViewData["Title"] = "Dashboard";
 }
-@section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/js/admin/admin-home-chart.js"></script>
-}
-
 
 <div class="dashboard">
 
@@ -65,12 +60,6 @@
             </div>
         </div>
 
-    </div>
-
-    <!-- CHART -->
-    <div class="dashboard__chart card">
-        <h3>Revenue by Month (@Model.ThisYear)</h3>
-        <canvas id="revenueChart"></canvas>
     </div>
 
 </div>

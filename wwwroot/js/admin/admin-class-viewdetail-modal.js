@@ -22,12 +22,12 @@ document.querySelectorAll("[data-tab-scope]").forEach(scope => {
             if (pane) pane.classList.add("active");
 
             // lưu tab
-            localStorage.setItem(storageKey, tab);
+            sessionStorage.setItem(storageKey, tab);
         });
     });
 
     // ===== Restore khi F5 =====
-    const savedTab = localStorage.getItem(storageKey);
+    const savedTab = sessionStorage.getItem(storageKey);
     if (savedTab) {
         const btn = scope.querySelector(`.tab-btn[data-tab="${savedTab}"]`);
         if (btn) btn.click();

@@ -51,7 +51,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             var paymentSchedules = new List<PaymentSchedule>();
             for (int month = 0; month < classModel.Course.DurationInMonths; month++)
             {
-                var dueDate = data.EnrolledAt.AddMonths(month);
+                var dueDate = classModel.StartDate.AddMonths(month);
                 paymentSchedules.Add(new PaymentSchedule
                 {
                     Enrollment = data,
@@ -80,14 +80,13 @@ namespace EnglishCentralManagement.Areas.Admin.Services
 
             var startOfNextMonth = startOfMonth.AddMonths(1);
 
-            var total = await _context.Payments
-                .Include(x => x.PaymentSchedule)
+            var total = await _context.PaymentSchedules
                 .Where(x =>
-                    x.PaidAt >= startOfMonth &&
-                    x.PaidAt < startOfNextMonth &&
-                    x.PaymentSchedule.Status == PaymentScheduleStatus.Paid
+                    x.Status == PaymentScheduleStatus.Paid &&
+                    x.DueDate >= startOfMonth &&
+                    x.DueDate < startOfNextMonth
                 )
-                .SumAsync(x => x.PaidAmount);
+                .SumAsync(x => x.Amount);
             return total;
         }
 
@@ -116,16 +115,15 @@ namespace EnglishCentralManagement.Areas.Admin.Services
         {
             int year = DateTime.Now.Year;
 
-            // Lấy dữ liệu có trong DB
             var rawData = await _context.Payments
-                .Include(x => x.PaymentSchedule)
-                .Where(x => x.PaidAt.Year == year
-                && x.PaymentSchedule.Status == PaymentScheduleStatus.Paid)
-                .GroupBy(x => x.PaidAt.Month)
+                .Where(x =>
+                    x.PaymentSchedule.Status == PaymentScheduleStatus.Paid &&
+                    x.PaymentSchedule.DueDate.Year == year)
+                .GroupBy(x => x.PaymentSchedule.DueDate.Month)
                 .Select(g => new
                 {
                     Month = g.Key,
-                    Total = g.Sum(x => x.PaidAmount)
+                    Total = g.Sum(x => x.PaymentSchedule.Amount)
                 })
                 .ToListAsync();
 
