@@ -9,6 +9,7 @@ using System.Security.Claims;
 namespace EnglishCentralManagement.Areas.Admin.Controllers
 {
     [AllowAnonymous]
+    [Route("admin")]
     public class LoginController : AdminBaseController
     {
         private readonly IAuthService _authService;
@@ -17,13 +18,13 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             _authService = authService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Index()
+        [HttpGet("login")]
+        public async Task<IActionResult> Login()
         {
             return View();
         }
 
-        [HttpPost]
+        [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto model)
         {
             var account = await _authService.Login(model.Username, model.Password);

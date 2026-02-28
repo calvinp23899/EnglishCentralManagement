@@ -647,19 +647,22 @@ body {
 
 /* In Progress – xanh dương */
 .status-in-progress,
+.status-scheduled,
 .status-active {
   background: #eef2ff;
   color: #3b5bfd;
 }
 
 /* Updating – xanh mint */
-.status-updating {
+.status-updating,
+.status-ongoing {
   background: #e6fffa;
   color: #14b8a6;
 }
 
 /* Upcoming – đỏ cam */
 .status-upcoming,
+.status-cancelled,
 .status-inactive {
   background: #fff1f2;
   color: #f43f5e;
@@ -672,9 +675,16 @@ body {
 }
 
 /* Working – cam */
+.status-rescheduled,
 .status-working {
   background: #fff7ed;
   color: #fb923c;
+}
+
+/* Working – green */
+.status-completed {
+  background: #ecfdf5;
+  color: #16a34a;
 }
 
 .dashboard {
@@ -709,6 +719,7 @@ body {
   gap: 16px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-color: powderblue;
 }
 .dashboard__stat-card:hover {
   transform: translateY(-3px);
@@ -1110,6 +1121,23 @@ body {
   padding: 24px;
   border-radius: 8px;
   width: 400px;
+}
+
+.attendance-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.attendance-table th,
+.attendance-table td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+.attendance-table th:first-child,
+.attendance-table td:first-child {
+  text-align: left;
 }
 
 .modal {
@@ -1663,6 +1691,16 @@ body {
   padding: 20px;
   flex: 1;
   overflow-y: auto;
+}
+
+.drawer-body .form-group input:disabled,
+.drawer-body .form-group select:disabled,
+.drawer-body .form-group textarea:disabled {
+  background-color: #f5f7fa;
+  color: #6c757d;
+  border: 1px dashed #ced4da;
+  cursor: not-allowed;
+  opacity: 1; /* tránh bị mờ quá */
 }
 
 .drawer-footer {

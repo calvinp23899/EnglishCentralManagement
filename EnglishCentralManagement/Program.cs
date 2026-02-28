@@ -32,6 +32,7 @@ namespace EnglishCentralManagement
             builder.Services.AddScoped<IReceiptService, ReceiptService>();
             builder.Services.AddScoped<IExpenseService, ExpenseService>();
             builder.Services.AddScoped<IExcelService, ExcelService>();
+            builder.Services.AddScoped<IClassSessionService, ClassSessionService>();
             #endregion
 
             //Authentication + Authorization
@@ -39,7 +40,7 @@ namespace EnglishCentralManagement
             .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {
-                options.LoginPath = "/Admin/Login/Index";           // URL login
+                options.LoginPath = "/Admin/Login";           // URL login
                 options.AccessDeniedPath = "/Admin/Login/AccessDenied";
                 options.ExpireTimeSpan = TimeSpan.FromHours(2);
             });
@@ -92,6 +93,11 @@ namespace EnglishCentralManagement
             app.UseAuthentication();
             app.UseAuthorization();
             #region Admin Route
+            app.MapControllerRoute(
+                name: "admin-login",
+                pattern: "admin/login",
+                defaults: new { area = "Admin", controller = "Login", action = "Login" }
+            );
             app.MapControllerRoute(
                 name: "areas",
                 pattern: "{area:exists}/{controller=Login}/{action=Index}/{id?}"

@@ -3,6 +3,7 @@ using System;
 using EnglishCentralManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EnglishCentralManagement.Migrations
 {
     [DbContext(typeof(EnglishCentreDbContext))]
-    partial class EnglishCentreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260226031135_updateClassSession")]
+    partial class updateClassSession
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -207,12 +210,8 @@ namespace EnglishCentralManagement.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset>("SessionDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("SessionName")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<DateOnly>("SessionDate")
+                        .HasColumnType("date");
 
                     b.Property<TimeOnly>("StartTime")
                         .HasColumnType("time without time zone");

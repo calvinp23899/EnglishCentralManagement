@@ -19,8 +19,6 @@ namespace EnglishCentralManagement.Models
         public DateTimeOffset EnrolledAt { get; set; }
         public DateTimeOffset StartDate { get; set; }
         public DateTimeOffset EndDate { get; set; }
-        public int? LessonAttended { get; set; }
-
         public EnrollmentStatus Status { get; set; } = EnrollmentStatus.Active;
 
         public ICollection<PaymentSchedule> PaymentSchedules { get; set; } = new List<PaymentSchedule>();

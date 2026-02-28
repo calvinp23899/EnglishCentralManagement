@@ -53,4 +53,21 @@
   width: 400px;
 }
 
+.attendance-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.attendance-table th,
+.attendance-table td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+.attendance-table th:first-child,
+.attendance-table td:first-child {
+  text-align: left;
+}
+
 /*# sourceMappingURL=admin-class-viewdetail.css.map */
