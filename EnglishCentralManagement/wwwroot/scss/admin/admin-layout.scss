@@ -699,19 +699,22 @@ body {
 
 /* In Progress – xanh dương */
 .status-in-progress,
+.status-scheduled,
 .status-active {
     background: #eef2ff;
     color: #3b5bfd;
 }
 
 /* Updating – xanh mint */
-.status-updating {
+.status-updating,
+.status-ongoing {
     background: #e6fffa;
     color: #14b8a6;
 }
 
 /* Upcoming – đỏ cam */
 .status-upcoming,
+.status-cancelled,
 .status-inactive {
     background: #fff1f2;
     color: #f43f5e;
@@ -724,7 +727,13 @@ body {
 }
 
 /* Working – cam */
+.status-rescheduled,
 .status-working {
     background: #fff7ed;
     color: #fb923c;
+}
+/* Working – green */
+.status-completed {
+    background: #ecfdf5; 
+    color: #16a34a; 
 }

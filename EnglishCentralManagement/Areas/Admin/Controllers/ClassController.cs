@@ -12,6 +12,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         private readonly IEnrollmentService _enrollmentService;
         private readonly IStudentService _studentService;
         private readonly IPaymentService _paymentService;
+        private readonly IClassSessionService _classSessionService;
 
         public ClassController(
             IClassService classService,
@@ -19,7 +20,8 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             ICourseService courseService,
             IEnrollmentService enrollmentService,
             IStudentService studentService,
-            IPaymentService paymentService
+            IPaymentService paymentService,
+            IClassSessionService classSessionService
         )
         {
             _classService = classService;
@@ -28,6 +30,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             _enrollmentService = enrollmentService;
             _studentService = studentService;
             _paymentService = paymentService;
+            _classSessionService = classSessionService;
         }
 
         public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
@@ -220,5 +223,118 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             }
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> LoadSessionTab(long classId, string searchSessionName = null, int page = 1, int pageSize = 10)
+        {
+            try
+            {
+                var data = await _classSessionService.GetAllClassSession(classId, page, pageSize, searchSessionName);
+                return PartialView("~/Areas/Admin/Views/Class/_ClassSessionView.cshtml", data);
+            }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+            }
+            return Json(new { success = false });
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateSession(CreateSessionDto createSession)
+        {
+            try
+            {
+                await _classSessionService.CreateSessionClass(createSession);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+            }
+            return Json(new { success = false });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetSessionDetail(long id)
+        {
+            try
+            {
+                var data = await _classSessionService.GetSessionDetail(id);
+                return Json(data);
+            }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+                return Json(new { success = false });
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateSession(UpdateSessionDto updateSession)
+        {
+            try
+            {
+                await _classSessionService.UpdateSessionDetail(updateSession);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+            }
+            return Json(new { success = false });
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteSession(long id)
+        {
+            try
+            {
+                await _classSessionService.DeleteSession(id);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+            }
+            return Json(new { success = false });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetStudentsBySession(long id, long classId)
+        {
+            try
+            {
+                var data = await _classSessionService.GetStudentsBySession(id, classId);
+                return Json(data);
+            }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+            }
+            return Json(new { success = false });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveAttendanceSession(SaveAttendanceDto request)
+        {
+            if (request == null || request.Students == null)
+                return BadRequest();
+            try
+            {
+                await _classSessionService.SaveAttendance(request.SessionId, request.Students);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+            }
+            return BadRequest();
+        }
+
+
     }
 }

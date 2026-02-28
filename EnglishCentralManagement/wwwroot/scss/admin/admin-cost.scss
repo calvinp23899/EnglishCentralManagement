@@ -137,8 +137,18 @@
     padding: 20px;
     flex: 1;
     overflow-y: auto;
+
 }
 
+.drawer-body .form-group input:disabled,
+.drawer-body .form-group select:disabled,
+.drawer-body .form-group textarea:disabled {
+    background-color: #f5f7fa;
+    color: #6c757d;
+    border: 1px dashed #ced4da;
+    cursor: not-allowed;
+    opacity: 1; /* tránh bị mờ quá */
+}
 .drawer-footer {
     padding: 16px;
     border-top: 1px solid #eee;

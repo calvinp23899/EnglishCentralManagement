@@ -24,6 +24,7 @@ namespace EnglishCentralManagement.Models
         public ClassStatusEnum? Status { get; set; }
 
         public string? Note { get; set; }
+        public string? LinkSyllabus { get; set; }
 
         public Course Course { get; set; } = null!;
         public Staff Staff { get; set; } = null!;

@@ -123,4 +123,26 @@ namespace EnglishCentralManagement.Models.Enum
         Fixed = 1,
         Variable = 2
     }
+
+    public enum SessionStatusEnum
+    {
+        [Display(Name = "OnGoing")]
+        OnGoing = 0,    // Vẫn đang 
+        [Display(Name = "Completed")]
+        Completed = 1,    // Đã dạy xong
+        [Display(Name = "Cancelled")]
+        Cancelled = 2,    // Huỷ buổi
+        [Display(Name = "Rescheduled")]
+        Rescheduled = 3,   // Dời lịch
+        [Display(Name = "Scheduled")]
+        Scheduled = 4   // Tạo trước
+    }
+
+    public enum AttendanceStatusEnum
+    {
+        [Display(Name = "Present")]
+        Present = 1,
+        [Display(Name = "Absent")]
+        Absent = 2,
+    }
 }

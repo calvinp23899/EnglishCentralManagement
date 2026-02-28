@@ -42,7 +42,6 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                 EnrolledAt = DateTime.UtcNow.ToUniversalTime(),
                 StartDate = DateTime.UtcNow.ToUniversalTime(),
                 EndDate = classModel.EndDate,
-                LessonAttended = 0,
                 Status = EnrollmentStatus.Active,
                 CreatedDate = DateTimeOffset.UtcNow.ToUniversalTime(),
             };
