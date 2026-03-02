@@ -12,10 +12,16 @@
     </div>
 
     <!-- TOOLBAR -->
-    <div class="admin-page__toolbar">
-        <input type="text" placeholder="Search course..." />
-        <button class="btn-search">Search</button>
-    </div>
+    <form method="get" asp-action="Index" asp-controller="Course" asp-area="Admin">
+        <div class="admin-page__toolbar">
+            <input type="text"
+                   name="search"
+                   value="@ViewBag.courseSearch"
+                   placeholder="Search name..." />
+
+            <button type="submit" class="btn-search">Search</button>
+        </div>
+    </form>
 
     <!-- TABLE -->
     <div class="admin-page__table">
@@ -47,7 +53,7 @@
                             <td>@(stt++)</td>
                             <td>@item.CourseName</td>
                             <td>@item.DurationInMonth</td>
-                            <td>@item.CreatedDate</td>
+                            <td>@item.CreatedDate?.ToString("yyyy/MM/dd")</td>
                             <td>@item.CreatedBy</td>
                             <td class="actions">
                                 <a class="view"

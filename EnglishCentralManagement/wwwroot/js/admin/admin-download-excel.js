@@ -18,8 +18,22 @@
 
             window.URL.revokeObjectURL(link.href);
         },
-        error: function () {
-            showToast("Failed to download", "error");
+        error: function (xhr) {
+
+            if (xhr.response) {
+                const reader = new FileReader();
+                reader.onload = function () {
+                    try {
+                        const err = JSON.parse(reader.result);
+                        showToast(err.message, "error");
+                    } catch {
+                        showToast("Download failed", "error");
+                    }
+                };
+                reader.readAsText(xhr.response);
+            } else {
+                showToast("Download failed", "error");
+            }
         }
     })
 }

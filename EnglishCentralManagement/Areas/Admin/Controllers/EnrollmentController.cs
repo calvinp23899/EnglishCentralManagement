@@ -1,4 +1,6 @@
 ﻿using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
+using EnglishCentralManagement.Dtos;
+using EnglishCentralManagement.Dtos.Pagination;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EnglishCentralManagement.Areas.Admin.Controllers
@@ -15,11 +17,12 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 10, string search = null)
         {
             try
             {
-                var data = await _enrollmentService.GetAllAsync(page, pageSize);
+                var data = await _enrollmentService.GetAllAsync(page, pageSize, search);
+                ViewBag.enrollmentSearch = search;
                 return View(data);
             }
             catch (Exception ex)
@@ -27,7 +30,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
                 TempData["ToastMessage"] = ex.Message;
                 TempData["ToastType"] = "error";
             }
-            return View();
+            return View(new PagedResult<EnrollmentDto>());
         }
 
         [HttpGet]

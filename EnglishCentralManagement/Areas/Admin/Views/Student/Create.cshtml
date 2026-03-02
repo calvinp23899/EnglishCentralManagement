@@ -1,5 +1,7 @@
 ﻿@model CreatedStudentDto
-
+@{
+    ViewBag.IsEdit = false;
+}
 <div class="teacher-form">
     <div class="teacher-form__header">
         <h2>Create Student</h2>
@@ -10,7 +12,7 @@
         @Html.Partial("_StudentFormLayout", Model)
         <div class="teacher-form__actions">
             <button class="btn primary" type="submit">Create</button>
-            <button class="btn outline">Cancel</button>
+            <button class="btn outline" type="reset">Cancel</button>
         </div>
     </form>
 

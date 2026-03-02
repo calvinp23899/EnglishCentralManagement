@@ -11,7 +11,7 @@
 
     <!-- TOOLBAR -->
     <div class="admin-page__toolbar">
-        <input type="text" id="searchSessionName" placeholder="Search session name..." />
+        <input type="text" id="searchSessionName" value="@ViewBag.sessionSearch" placeholder="Search session name..." />
         <button class="btn-search" onclick="searchSessionName()">Search</button>
     </div>
 
@@ -44,7 +44,7 @@
                     {
                         <tr id="session-row-@item.Id">
                             <td>@item.SessionName</td>
-                            <td>@item.SessionDate</td>
+                            <td>@item.SessionDate?.ToString("yyyy-MM-dd")</td>
                             <td>@item.StartTime</td>
                             <td>@item.EndTime</td>
                             <td>@item.Attendance</td>
@@ -99,28 +99,20 @@
         <div class="admin-page__pagination">
             <!-- Prev -->
             <button class="btn-prev"
-                    onclick="location.href='@Url.Action("Index", new { page = Model.PageIndex - 1 })'"
+                    onclick="loadSession(@(Model.PageIndex - 1), '@ViewBag.sessionSearch')"
             @(Model.HasPrevious ? "" : "disabled")>
                 ‹ Prev
             </button>
 
             <!-- Page 1 -->
             <button class="@(Model.PageIndex == 1 ? "active" : "")"
-                    onclick="location.href='@Url.Action("Index", new { page = 1 })'">
+                    onclick="loadSession(1, '@ViewBag.sessionSearch')">
                 1
             </button>
-
             @{
                 int start = Math.Max(2, Model.PageIndex - 2);
                 int end = Math.Min(Model.TotalPages - 1, Model.PageIndex + 2);
             }
-
-            <!-- ... trước -->
-            @if (start > 2)
-            {
-                <span class="pagination-dots">...</span>
-            }
-
             <!-- Pages giữa -->
             @for (int i = start; i <= end; i++)
             {
@@ -130,30 +122,22 @@
                 }
                 else
                 {
-                    <button onclick="location.href='@Url.Action("Index", new { page = i })'">
-                        @i
-                    </button>
+                    <button onclick="loadSession(@i, '@ViewBag.sessionSearch')">@i</button>
                 }
-            }
-
-            <!-- ... sau -->
-            @if (end < Model.TotalPages - 1)
-            {
-                <span class="pagination-dots">...</span>
             }
 
             <!-- Page cuối -->
             @if (Model.TotalPages > 1)
             {
                 <button class="@(Model.PageIndex == Model.TotalPages ? "active" : "")"
-                        onclick="location.href='@Url.Action("Index", new { page = Model.TotalPages })'">
+                        onclick="loadSession(@Model.TotalPages, '@ViewBag.sessionSearch')">
                     @Model.TotalPages
                 </button>
             }
 
             <!-- Next -->
             <button class="btn-next"
-                    onclick="location.href='@Url.Action("Index", new { page = Model.PageIndex + 1 })'"
+                    onclick="loadSession(@(Model.PageIndex + 1), '@ViewBag.sessionSearch')"
             @(Model.HasNext ? "" : "disabled")>
                 Next ›
             </button>

@@ -22,13 +22,26 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             _currentUser = currentUser;
         }
 
-        public async Task<PagedResult<EnrollmentDto>> GetAllAsync(int pageIndex, int pageSize)
+        public async Task<PagedResult<EnrollmentDto>> GetAllAsync(int pageIndex, int pageSize, string search)
         {
             var query = _context.Enrollments
                 .Include(x => x.Class)
                 .Include(x => x.Student)
-                .Where(e => e.IsDeleted == false && (e.Status != EnrollmentStatus.InActive || e.Status != EnrollmentStatus.Cancelled));
-
+                .Where(e => e.IsDeleted == false
+                        && e.Status != EnrollmentStatus.InActive
+                        && e.Status != EnrollmentStatus.Cancelled
+                );
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                if (long.TryParse(search, out var id))
+                {
+                    query = query.Where(x => x.Id == id);
+                }
+                else
+                {
+                    query = query.Where(x => x.Class.Code.ToLower().Contains(search.ToLower()));
+                }
+            }
             var totalRecords = await query.CountAsync();
 
             var items = await query

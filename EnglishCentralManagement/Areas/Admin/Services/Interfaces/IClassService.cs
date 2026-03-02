@@ -5,8 +5,8 @@ namespace EnglishCentralManagement.Areas.Admin.Services.Interfaces
 {
     public interface IClassService
     {
-        Task<PagedResult<ClassDto>> GetAllAsync(int pageIndex, int pageSize);
-        Task<PagedResult<ClassDto>> GetAllMyClassAsync(int pageIndex, int pageSize, long teacherId);
+        Task<PagedResult<ClassDto>> GetAllAsync(int pageIndex, int pageSize, string search);
+        Task<PagedResult<ClassDto>> GetAllMyClassAsync(int pageIndex, int pageSize, long teacherId, string search);
         Task CreateAsync(CreatedClassDto newClass);
         Task UpdateAsync(CreatedClassDto updateClass);
         Task SoftDeleteAsync(long id);

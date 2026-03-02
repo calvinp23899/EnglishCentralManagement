@@ -13,11 +13,12 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             _courseService = courseService;
         }
 
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 10, string search = null)
         {
             try
             {
-                var data = await _courseService.GetAllCourseAsync(page, pageSize);
+                var data = await _courseService.GetAllCourseAsync(page, pageSize, search);
+                ViewBag.courseSearch = search;
                 return View(data);
             }
             catch (Exception ex)

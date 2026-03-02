@@ -43,11 +43,17 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<PagedResult<CourseDto>> GetAllCourseAsync(int pageIndex, int pageSize)
+        public async Task<PagedResult<CourseDto>> GetAllCourseAsync(int pageIndex, int pageSize, string search)
         {
             var query = _context.Courses
                 .Where(x => !x.IsDeleted);
-
+            if (!string.IsNullOrEmpty(search))
+            {
+                string searchLower = search.ToLower();
+                query = query.Where(x =>
+                    x.Name.ToLower().Contains(searchLower)
+               );
+            }
             var totalRecords = await query.CountAsync();
 
             var items = await query

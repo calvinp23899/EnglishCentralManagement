@@ -687,6 +687,10 @@ body {
   color: #16a34a;
 }
 
+.form-group .text-danger {
+  color: #dc3545 !important;
+}
+
 .dashboard {
   display: flex;
   flex-direction: column;

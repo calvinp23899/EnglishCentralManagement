@@ -10,11 +10,16 @@
     </div>
 
     <!-- TOOLBAR -->
-    <div class="admin-page__toolbar">
-        <input type="text" placeholder="Search teacher..." />
-        <button class="btn-search">Search</button>
-        <button class="btn-search btn-download" onclick="downloadStaffExcel()">Download Excel</button>
-    </div>
+    <form method="get" asp-action="Index" asp-controller="Teacher" asp-area="Admin">
+        <div class="admin-page__toolbar">
+            <input type="text"
+                   name="search"
+                   value="@ViewBag.teacherSearch"
+                   placeholder="Search name,email,phone..." />
+
+            <button type="submit" class="btn-search">Search</button>
+        </div>
+    </form>
 
     <!-- TABLE -->
     <div class="admin-page__table">
@@ -92,14 +97,14 @@
         <div class="admin-page__pagination">
             <!-- Prev -->
             <button class="btn-prev"
-                    onclick="location.href='@Url.Action("Index", new { page = Model.PageIndex - 1 })'"
+                    onclick="location.href='@Url.Action("Index", new { page = Model.PageIndex - 1, search = ViewBag.teacherSearch  })'"
             @(Model.HasPrevious ? "" : "disabled")>
                 ‹ Prev
             </button>
 
             <!-- Page 1 -->
             <button class="@(Model.PageIndex == 1 ? "active" : "")"
-                    onclick="location.href='@Url.Action("Index", new { page = 1 })'">
+                    onclick="location.href='@Url.Action("Index", new { page = 1, search = ViewBag.teacherSearch })'">
                 1
             </button>
 
@@ -123,7 +128,7 @@
                 }
                 else
                 {
-                    <button onclick="location.href='@Url.Action("Index", new { page = i })'">
+                    <button onclick="location.href='@Url.Action("Index", new { page = i, search = ViewBag.teacherSearch })'">
                         @i
                     </button>
                 }
@@ -139,14 +144,14 @@
             @if (Model.TotalPages > 1)
             {
                 <button class="@(Model.PageIndex == Model.TotalPages ? "active" : "")"
-                        onclick="location.href='@Url.Action("Index", new { page = Model.TotalPages })'">
+                        onclick="location.href='@Url.Action("Index", new { page = Model.TotalPages, search = ViewBag.teacherSearch })'">
                     @Model.TotalPages
                 </button>
             }
 
             <!-- Next -->
             <button class="btn-next"
-                    onclick="location.href='@Url.Action("Index", new { page = Model.PageIndex + 1 })'"
+                    onclick="location.href='@Url.Action("Index", new { page = Model.PageIndex + 1, search = ViewBag.teacherSearch })'"
             @(Model.HasNext ? "" : "disabled")>
                 Next ›
             </button>

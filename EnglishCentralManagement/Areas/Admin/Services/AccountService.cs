@@ -1,6 +1,7 @@
 ﻿using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
 using EnglishCentralManagement.Data;
 using EnglishCentralManagement.Dtos;
+using EnglishCentralManagement.Extensions;
 using EnglishCentralManagement.Helpers;
 using EnglishCentralManagement.Models;
 using EnglishCentralManagement.Models.Enum;
@@ -60,13 +61,14 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                 HourlyRate = model.Staff.HourlyRate,
                 MonthlySalary = model.Staff.MonthlySalary,
                 WorkingHour = model.Staff.WorkingHour,
-                OnboardingDate = model.Staff.OnboardingDate.Value.ToUniversalTime(),
+                OnboardingDate = model.Staff.OnboardingDate.HasValue
+                                    ? model.Staff.OnboardingDate.Value.ToVnTime()
+                                    : null,
                 Address = model.Staff.Address,
                 Gender = model.Staff.Gender == true ? GenderEnum.Male : GenderEnum.Female,
                 Title = model.Staff.Title,
                 StaffId = model.StaffId,
                 Username = model.Username,
-                Password = model.PasswordHash,
                 PaymentCard = model.Staff.PaymentCard,
                 BankCard = model.Staff.BankCard,
                 Role = (RoleType?)model.RoleId,
