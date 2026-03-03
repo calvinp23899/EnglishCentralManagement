@@ -14,7 +14,14 @@ namespace EnglishCentralManagement.Dtos
         public WorkingType? WorkingType { get; set; }
         public int? YearsOfExperience { get; set; }
         public decimal? HourlyRate { get; set; }
-        public decimal? MonthlySalary { get; set; }
+        public decimal? MonthlySalary
+        {
+            get
+            {
+                var total = HourlyRate * WorkingHour;
+                return total;
+            }
+        }
         public DateTimeOffset? OnboardingDate { get; set; }
         public string? Address { get; set; }
         public string? Title { get; set; }
@@ -28,5 +35,11 @@ namespace EnglishCentralManagement.Dtos
         public string? CardNumber { get; set; }
         public string? Bank { get; set; }
         public IFormFile Avatar { get; set; }
+
+        public string? CreatedBy { get; set; }
+        public DateTimeOffset? CreatedDate { get; set; }
+
+        public string? UpdatedBy { get; set; }
+        public DateTimeOffset? UpdatedDate { get; set; }
     }
 }

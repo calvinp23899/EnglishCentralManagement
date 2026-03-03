@@ -687,4 +687,8 @@ body {
   color: #16a34a;
 }
 
+.form-group .text-danger {
+  color: #dc3545 !important;
+}
+
 /*# sourceMappingURL=admin-layout.css.map */

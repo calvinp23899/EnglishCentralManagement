@@ -1,38 +1,47 @@
-﻿@{
+﻿@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+@{
     var genders = Enum.GetValues(typeof(GenderEnum)).Cast<GenderEnum>();
     var workingTypes = Enum.GetValues(typeof(WorkingType)).Cast<WorkingType>();
     var ContractTypes = Enum.GetValues(typeof(ContractType)).Cast<ContractType>();
     var roleTypes = Enum.GetValues(typeof(RoleType)).Cast<RoleType>();
+    bool isEdit = ViewBag.IsEdit ?? false;
 }
 <div class="teacher-form__grid">
     <!-- First Name -->
     <div class="form-group">
         <label>First Name</label>
-        <input type="text" placeholder="John" name="FirstName" value="@Model?.FirstName" required/>
+        <input type="text" placeholder="John" name="FirstName" value="@Model?.FirstName"/>
+        @Html.ValidationMessage("FirstName", "", new { @class = "text-danger" })
     </div>
 
     <!-- Last Name -->
     <div class="form-group">
         <label>Last Name</label>
-        <input type="text" placeholder="Doe" name="LastName" value="@Model?.LastName" required />
+        <input type="text" placeholder="Doe" name="LastName" value="@Model?.LastName"  />
+        @Html.ValidationMessage("LastName", "", new { @class = "text-danger" })
     </div>
 
     <!-- Date of Birth -->
     <div class="form-group">
         <label>Date of Birth</label>
-        <input type="date" name="DateOfBirth" value="@(Model?.DateOfBirth?.ToString("yyyy-MM-dd"))" required />
+        <input type="date" name="DateOfBirth" value="@(Model?.DateOfBirth?.ToString("yyyy-MM-dd"))"  />
+        @Html.ValidationMessage("DateOfBirth", "", new { @class = "text-danger" })
     </div>
 
     <!-- Phone Number -->
     <div class="form-group">
         <label>Phone Number</label>
-        <input type="text" placeholder="0123456789" name="PhoneNumber" value="@Model?.PhoneNumber" required />
+        <input type="text" placeholder="0123456789" name="PhoneNumber" value="@Model?.PhoneNumber"  />
+        @Html.ValidationMessage("PhoneNumber", "", new { @class = "text-danger" })
     </div>
 
     <!-- Email -->
     <div class="form-group">
         <label>Email</label>
-        <input type="email" placeholder="teacher@email.com" name="Email" value="@Model?.Email" required />
+        <input type="email" placeholder="teacher@email.com" name="Email" value="@Model?.Email"  />
+        @Html.ValidationMessage("Email", "", new { @class = "text-danger" })
     </div>
 
     <!-- Contract Type -->
@@ -57,6 +66,7 @@
                 }
             }
         </select>
+        @Html.ValidationMessage("ContractType", "", new { @class = "text-danger" })
     </div>
 
     <!-- Working Type -->
@@ -81,12 +91,14 @@
                 }
             }
         </select>
+        @Html.ValidationMessage("WorkingType", "", new { @class = "text-danger" })
     </div>
 
     <!-- Years of Experience -->
     <div class="form-group">
         <label>Years of Experience</label>
         <input type="number" min="0" name="YearsOfExperience" value="@Model?.YearsOfExperience" />
+        @Html.ValidationMessage("YearsOfExperience", "", new { @class = "text-danger" })
     </div>
 
     <!-- Hourly Rate -->
@@ -99,6 +111,7 @@
                value="@(Model?.HourlyRate?.ToString("0"))"
                data-target="HourlyRate"
                oninput="formatNumber(this)" />
+        @Html.ValidationMessage("HourlyRate", "", new { @class = "text-danger" })
 
         <!-- value send to server -->
         <input type="hidden"
@@ -109,19 +122,20 @@
     <!-- Working Hour -->
     <div class="form-group">
         <label>Working Hour</label>
-        <input type="number" name="WorkingHour" value="@(Model?.WorkingHour)" min="1" required />
+        <input type="number" name="WorkingHour" value="@(Model?.WorkingHour)" min="1"  />
+        @Html.ValidationMessage("WorkingHour", "", new { @class = "text-danger" })
     </div>
 
     <!-- Onboarding Date -->
     <div class="form-group">
         <label>Onboarding Date</label>
-        <input type="date" name="OnboardingDate" value="@(Model?.OnboardingDate?.ToString("yyyy-MM-dd"))" required/>
+        <input type="date" name="OnboardingDate" value="@(Model?.OnboardingDate?.ToString("yyyy-MM-dd"))" />
     </div>
 
     <!-- Gender -->
     <div class="form-group">
         <label>Gender</label>
-        <select name="Gender" required>
+        <select name="Gender">
             <option value="">-- Select Gender --</option>
 
             @foreach (var gender in genders)
@@ -140,30 +154,35 @@
                 }
             }
         </select>
+        @Html.ValidationMessage("Gender", "", new { @class = "text-danger" })
     </div>
 
     <!-- Address -->
     <div class="form-group">
         <label>Address</label>
-        <input placeholder="1A Street..." name="Address" value="@Model?.Address" required></input>
+        <input placeholder="1A Street..." name="Address" value="@Model?.Address"></input>
+        @Html.ValidationMessage("Address", "", new { @class = "text-danger" })
     </div>
 
     <!-- Title -->
     <div class="form-group">
         <label>Title</label>
-        <input placeholder="Junior Teacher..." name="Title" value="@Model?.Title" required></input>
+        <input placeholder="Junior Teacher..." name="Title" value="@Model?.Title" ></input>
+        @Html.ValidationMessage("Title", "", new { @class = "text-danger" })
     </div>
 
     <!-- Payment Card -->
     <div class="form-group">
         <label>Card Number</label>
         <input placeholder="" name="PaymentCard" value="@Model?.PaymentCard"></input>
+        @Html.ValidationMessage("PaymentCard", "", new { @class = "text-danger" })
     </div>
 
     <!-- Bank Card -->
     <div class="form-group">
         <label>Bank</label>
         <input placeholder="" name="BankCard" value="@Model?.BankCard"></input>
+        @Html.ValidationMessage("BankCard", "", new { @class = "text-danger" })
     </div>
 
     <!-- Avatar -->
@@ -178,13 +197,15 @@
         <!-- Username -->
         <div class="form-group">
             <label>Username</label>
-            <input placeholder="" name="Username" value="@Model?.Username" required></input>
+            <input placeholder="" name="Username" value="@Model?.Username" @(isEdit ? "disabled" : "")></input>
+            @Html.ValidationMessage("Username", "", new { @class = "text-danger" })
         </div>
 
-        <!-- Username -->
+        <!-- Password -->
         <div class="form-group">
             <label>Password</label>
-            <input type="password" placeholder="••••••••" name="Password" value="@Model?.Password" required></input>
+            <input type="password"  name="Password" value="@Model?.Password" ></input>
+            @Html.ValidationMessage("Password", "", new { @class = "text-danger" })
         </div>
 
         <!-- Role -->
@@ -209,6 +230,7 @@
                     }
                 }
             </select>
+            @Html.ValidationMessage("Role", "", new { @class = "text-danger" })
         </div>
     </div>
     

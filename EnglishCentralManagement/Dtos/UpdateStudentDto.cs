@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EnglishCentralManagement.Dtos
 {
-    public class CreatedStudentDto
+    public class UpdateStudentDto
     {
         [MaxLength(50, ErrorMessage = "{0} cannot exceed {1} characters")]
         [Required(ErrorMessage = "First name is required")]
@@ -33,21 +33,8 @@ namespace EnglishCentralManagement.Dtos
         public StudentStatus? Status { get; set; }
 
         [MaxLength(50, ErrorMessage = "{0} cannot exceed {1} characters")]
-        [Required(ErrorMessage = "Username is required")]
-        public string? Username { get; set; }
-
-        [MaxLength(50, ErrorMessage = "{0} cannot exceed {1} characters")]
-        [Required(ErrorMessage = "Password is required")]
         public string? Password { get; set; }
-        public RoleType? Role { get; set; }
 
         public long? StudentId { get; set; }
-        public DateTimeOffset? CreatedDate { get; set; }
-        public string? CreatedBy { get; set; }
-        public DateTimeOffset? UpdatedDate { get; set; }
-        public string? UpdatedBy { get; set; }
-
-        public List<StudentClassDto>? StudentClasses { get; set; } = new List<StudentClassDto>();
-
     }
 }

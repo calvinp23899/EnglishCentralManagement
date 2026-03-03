@@ -737,3 +737,8 @@ body {
     background: #ecfdf5; 
     color: #16a34a; 
 }
+
+//===== Message Validation =====
+.form-group .text-danger {
+    color: #dc3545 !important;
+}

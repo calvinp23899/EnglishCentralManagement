@@ -1,8 +1,6 @@
-﻿using EnglishCentralManagement.Areas.Admin.Services;
-using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
+﻿using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
 using EnglishCentralManagement.Dtos;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EnglishCentralManagement.Areas.Admin.Controllers
 {
@@ -16,10 +14,20 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task <IActionResult> Index(int page = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(string search = null, int page = 1, int pageSize = 10)
         {
-            var data = await _studentService.GetAllAsync(page, pageSize);
-            return View(data);
+            try
+            {
+                var data = await _studentService.GetAllAsync(page, pageSize, search);
+                ViewBag.studentSearch = search;
+                return View(data);
+            }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+                return View();
+            }
         }
 
         [HttpGet]
@@ -36,13 +44,12 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    TempData["ToastMessage"] = "Invalid Input Form. Please Try Again";
-                    TempData["ToastType"] = "error";
                     return View(newStudent);
                 }
                 await _studentService.CreateAsync(newStudent);
                 TempData["ToastMessage"] = "Create teacher successfully!";
                 TempData["ToastType"] = "success";
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
@@ -50,7 +57,6 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
                 TempData["ToastType"] = "error";
                 return View(newStudent);
             }
-            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -71,22 +77,28 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(CreatedStudentDto updateStudent)
+        public async Task<IActionResult> Edit(UpdateStudentDto updateStudent)
         {
+            var dataReturn = new CreatedStudentDto();
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    dataReturn = ReturnDataCreated(updateStudent);
+                    return View(dataReturn);
+                }
                 var data = await _studentService.UpdateAsync(updateStudent);
                 TempData["ToastMessage"] = "Update student successfully!";
                 TempData["ToastType"] = "success";
-                //TODO: Update Account
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
+                dataReturn = ReturnDataCreated(updateStudent);
                 TempData["ToastMessage"] = ex.Message;
                 TempData["ToastType"] = "error";
-                return View(updateStudent);
+                return View(dataReturn);
             }
-            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -121,6 +133,24 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
             return Json(new { success = true });
+        }
+
+        private CreatedStudentDto ReturnDataCreated(UpdateStudentDto updateStudent)
+        {
+            var dataReturn = new CreatedStudentDto
+            {
+                FirstName = updateStudent.FirstName,
+                LastName = updateStudent.LastName,
+                Email = updateStudent.Email,
+                Address = updateStudent.Address,
+                DateOfBirth = updateStudent.DateOfBirth,
+                Gender = updateStudent.Gender,
+                PhoneNumber = updateStudent.PhoneNumber,
+                Status = updateStudent.Status,
+                StudentId = updateStudent.StudentId
+            };
+            return dataReturn;
+
         }
     }
 }

@@ -51,12 +51,18 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<PagedResult<ClassDto>> GetAllAsync(int pageIndex, int pageSize)
+        public async Task<PagedResult<ClassDto>> GetAllAsync(int pageIndex, int pageSize, string search = null)
         {
             var query = _context.Classes
                 .Include(x => x.Course)
                 .Where(x => !x.IsDeleted);
-
+            if (!string.IsNullOrEmpty(search))
+            {
+                string searchLower = search.ToLower();
+                query = query.Where(x =>
+                    x.Code.ToLower().Contains(searchLower)
+               );
+            }
             var totalRecords = await query.CountAsync();
 
             var items = await query
@@ -83,12 +89,18 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             };
         }
 
-        public async Task<PagedResult<ClassDto>> GetAllMyClassAsync(int pageIndex, int pageSize, long teacherId)
+        public async Task<PagedResult<ClassDto>> GetAllMyClassAsync(int pageIndex, int pageSize, long teacherId, string search = null)
         {
             var query = _context.Classes
                .Include(x => x.Course)
                .Where(x => !x.IsDeleted && x.StaffId == teacherId);
-
+            if (!string.IsNullOrEmpty(search))
+            {
+                string searchLower = search.ToLower();
+                query = query.Where(x =>
+                    x.Code.ToLower().Contains(searchLower)
+               );
+            }
             var totalRecords = await query.CountAsync();
 
             var items = await query

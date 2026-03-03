@@ -20,12 +20,20 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 10, string? search = null)
         {
-
-            var result = await _staffService.GetAllAsync(page, pageSize) ?? null;
-
-            return View(result);
+            try
+            {
+                var result = await _staffService.GetAllAsync(page, pageSize, search) ?? null;
+                ViewBag.teacherSearch = search;
+                return View(result);
+            }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+                return View();
+            }
         }
 
         [HttpGet]
@@ -42,8 +50,6 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    TempData["ToastMessage"] = "Invalid Input Form. Please Try Again";
-                    TempData["ToastType"] = "error";
                     return View(newStaff);
                 }
 
@@ -80,15 +86,15 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(CreatedStaffDto updatedStaff)
+        public async Task<IActionResult> Edit(UpdatedStaffDto updatedStaff)
         {
+            var returnData = new CreatedStaffDto();
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    TempData["ToastMessage"] = "Invalid Input Form. Please Try Again";
-                    TempData["ToastType"] = "error";
-                    return View(updatedStaff);
+                    returnData = ReturnData(updatedStaff);
+                    return View(returnData);
                 }
                 var data = await _staffService.UpdateAsync(updatedStaff);
                 //TODO: Update Account
@@ -100,7 +106,8 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             {
                 TempData["ToastMessage"] = ex.Message;
                 TempData["ToastType"] = "error";
-                return View(updatedStaff);
+                returnData = ReturnData(updatedStaff);
+                return View(returnData);
             }
             return RedirectToAction("Index");
         }
@@ -154,8 +161,35 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             }
             catch (Exception)
             {
-                return BadRequest();
+                return StatusCode(500, new
+                {
+                    message = "Failed to export excel"
+                });
             }
+        }
+
+        private CreatedStaffDto ReturnData(UpdatedStaffDto updatedStaff)
+        {
+            var returnData = new CreatedStaffDto
+            {
+                FirstName = updatedStaff.FirstName,
+                LastName = updatedStaff.LastName,
+                Email = updatedStaff.Email,
+                PhoneNumber = updatedStaff.PhoneNumber,
+                Address = updatedStaff.Address,
+                DateOfBirth = updatedStaff.DateOfBirth,
+                Title = updatedStaff.Title,
+                OnboardingDate = updatedStaff.OnboardingDate,
+                Password = updatedStaff.Password,
+                Gender = updatedStaff.Gender,
+                WorkingHour = updatedStaff.WorkingHour,
+                HourlyRate = updatedStaff.HourlyRate,
+                ContractType = updatedStaff.ContractType,
+                WorkingType = updatedStaff.WorkingType,
+                BankCard = updatedStaff.BankCard,
+                PaymentCard = updatedStaff.PaymentCard,
+            };
+            return returnData;
         }
     }
 }

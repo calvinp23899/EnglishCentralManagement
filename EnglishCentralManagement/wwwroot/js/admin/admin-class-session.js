@@ -84,6 +84,10 @@ function loadAttendanceStudents(sessionId) {
 
             $("#attendanceList").html(html);
             viewAttendanceDrawer();
+        },
+        error: function (xhr) {
+            const res = JSON.parse(xhr.responseText);
+            showToast(res.message, "error");
         }
     });
 }
@@ -222,8 +226,9 @@ function createSession() {
             closeSessionDrawer();
             loadSession(1);
         },
-        error: function () {
-            showToast("Action Failed", "error");
+        error: function (xhr) {
+            const res = JSON.parse(xhr.responseText);
+            showToast(res.message || "Action Failed", "error");
         }
     });
 }
@@ -258,8 +263,9 @@ function loadSessionData(id) {
             $("#SessionUpdatedBy").val(data.updatedBy);
             $("#SessionUpdatedDate").val(data.updatedDate.split("T")[0]);
         },
-        error: function () {
-            showToast("Failed to load session data", "error");
+        error: function (xhr) {
+            const res = JSON.parse(xhr.responseText);
+            showToast(res.message || "Action Load Session Data Failed", "error");
         }
     });
 }

@@ -67,12 +67,12 @@
 
                     <ul class="submenu">
                         <li>
-                            <a href="@Url.Action("Index", "Class", new { area = "Admin" })" class="@(controller == "Class" && action == "Index" ? "active" : "")">
+                            <a href="@Url.Action("Index", "Class", new { area = "Admin" })" class="@(controller == "Class" && (action == "Index" || action == "Create" || action == "GetDetailId" || action == "Edit") ? "active" : "")">
                                 Class Management
                             </a>
                         </li>
                         <li>
-                            <a href="@Url.Action("MyClass", "Class", new { area = "Admin" })" class="@(controller == "Class" && action == "MyClass" ? "active" : "")">
+                            <a href="@Url.Action("MyClass", "Class", new { area = "Admin" })" class="@(controller == "Class" && (action == "MyClass" || action == "MyClassDetail") ? "active" : "")">
                                 My Class
                             </a>
                         </li>
@@ -144,7 +144,7 @@
                             <a href="@Url.Action("Index", "Profile", new { area = "Admin" })">Profile</a>
                             <a onclick="openPasswordModal()">Change Password</a>
                             <hr />
-                            <a href="@Url.Action("LogOut","Login", new { area = "Admin" })">Logout</a>
+                            <a href="@Url.Action("Logout","login", new { area = "Admin" })">Logout</a>
                         </div>
                     </div>
                 </div>

@@ -5,16 +5,16 @@ namespace EnglishCentralManagement.Dtos
 {
     public class CreateSessionDto
     {
-        [Required]
+        [Required(ErrorMessage = "SessionName is required")]
         public string SessionName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "SessionDate is required")]
         public DateTimeOffset SessionDate { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "StartTime is required")]
         public TimeOnly StartTime { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "EndTime is required")]
         public TimeOnly EndTime { get; set; }
 
         public SessionStatusEnum Status { get; set; } = SessionStatusEnum.Scheduled;

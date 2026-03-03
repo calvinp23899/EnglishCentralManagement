@@ -33,11 +33,12 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             _classSessionService = classSessionService;
         }
 
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 10, string search = null)
         {
             try
             {
-                var data = await _classService.GetAllAsync(page, pageSize);
+                var data = await _classService.GetAllAsync(page, pageSize, search);
+                ViewBag.classSearch = search;
                 return View(data);
             }
             catch (Exception ex)
@@ -48,12 +49,13 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             return View();
         }
 
-        public async Task<IActionResult> MyClass(int page = 1, int pageSize = 10)
+        public async Task<IActionResult> MyClass(int page = 1, int pageSize = 10, string search = null)
         {
             try
             {
                 var userId = CurrentUserId();
-                var data = await _classService.GetAllMyClassAsync(page, pageSize, userId);
+                var data = await _classService.GetAllMyClassAsync(page, pageSize, userId, search);
+                ViewBag.myClassSearch = search;
                 return View(data);
             }
             catch (Exception ex)
@@ -230,6 +232,8 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             try
             {
                 var data = await _classSessionService.GetAllClassSession(classId, page, pageSize, searchSessionName);
+                ViewBag.sessionSearch = searchSessionName;
+                ViewBag.sessionClassId = classId;
                 return PartialView("~/Areas/Admin/Views/Class/_ClassSessionView.cshtml", data);
             }
             catch (Exception ex)
@@ -242,6 +246,16 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateSession(CreateSessionDto createSession)
         {
+            if (!ModelState.IsValid)
+            {
+                var invalidFields = ModelState
+                    .Where(x => x.Value.Errors.Count > 0)
+                    .Select(x => x.Key)
+                    .ToList();
+                var verb = invalidFields.Count == 1 ? "is" : "are";
+                var msg = $"{string.Join(", ", invalidFields)} {verb} required";
+                return StatusCode(400, new { success = false, message = msg });
+            }
             try
             {
                 await _classSessionService.CreateSessionClass(createSession);
@@ -249,10 +263,8 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ToastMessage"] = ex.Message;
-                TempData["ToastType"] = "error";
+                return StatusCode(400, new { success = false, message = ex.Message });
             }
-            return Json(new { success = false });
         }
 
         [HttpGet]
@@ -265,9 +277,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ToastMessage"] = ex.Message;
-                TempData["ToastType"] = "error";
-                return Json(new { success = false });
+                return StatusCode(400, new { success = false, message = ex.Message });
             }
         }
         [HttpPost]
@@ -280,10 +290,8 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ToastMessage"] = ex.Message;
-                TempData["ToastType"] = "error";
+                return StatusCode(400, new { success = false, message = ex.Message });
             }
-            return Json(new { success = false });
         }
         [HttpPost]
         public async Task<IActionResult> DeleteSession(long id)
@@ -295,10 +303,8 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ToastMessage"] = ex.Message;
-                TempData["ToastType"] = "error";
+                return StatusCode(400, new { success = false, message = ex.Message });
             }
-            return Json(new { success = false });
         }
 
         [HttpGet]
@@ -311,10 +317,8 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ToastMessage"] = ex.Message;
-                TempData["ToastType"] = "error";
+                return StatusCode(400, new { success = false, message = ex.Message });
             }
-            return Json(new { success = false });
         }
 
         [HttpPost]
@@ -329,10 +333,8 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ToastMessage"] = ex.Message;
-                TempData["ToastType"] = "error";
+                return StatusCode(400, new { success = false, message = ex.Message });
             }
-            return BadRequest();
         }
 
 

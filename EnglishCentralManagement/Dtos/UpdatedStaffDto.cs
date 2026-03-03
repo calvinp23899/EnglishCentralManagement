@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EnglishCentralManagement.Dtos
 {
-    public class CreatedStaffDto
+    public class UpdatedStaffDto
     {
         [MaxLength(50, ErrorMessage = "{0} cannot exceed {1} characters")]
         [Required(ErrorMessage = "First name is required")]
@@ -22,7 +22,7 @@ namespace EnglishCentralManagement.Dtos
         public string? PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
-        [EmailAddress(ErrorMessage = "{0} invalid email format")]
+        [EmailAddress(ErrorMessage = "{0} invalid email address, should be ...@gmail.com")]
         public string? Email { get; set; }
 
         [Required(ErrorMessage = "ContractType is required")]
@@ -47,12 +47,6 @@ namespace EnglishCentralManagement.Dtos
         public GenderEnum? Gender { get; set; }
         [MaxLength(10, ErrorMessage = "{0} cannot exceed {1} characters")]
         public string? Title { get; set; }
-
-        [Required(ErrorMessage = "Username is required")]
-        [MaxLength(20, ErrorMessage = "{0} cannot exceed {1} characters")]
-        public string? Username { get; set; }
-
-        [Required(ErrorMessage = "Password is required")]
         [MaxLength(100, ErrorMessage = "{0} cannot exceed {1} characters")]
         public string? Password { get; set; }
 

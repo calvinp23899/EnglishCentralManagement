@@ -1,6 +1,4 @@
-﻿using System.Data;
-
-namespace EnglishCentralManagement.Models
+﻿namespace EnglishCentralManagement.Models
 {
     public class Account : BaseModel
     {
