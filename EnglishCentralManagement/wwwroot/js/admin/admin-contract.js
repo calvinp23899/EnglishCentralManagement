@@ -54,67 +54,66 @@ function DownloadInvoice(id, element) {
     $btn.addClass("disabled");
     $btn.css("pointer-events", "none");
     $btn.text("Downloading...");
+    setTimeout(() => {
+        $.ajax({
+            url: URL,
+            type: "POST",
+            data: {
+                id: id
+            },
+            headers: {
+                "RequestVerificationToken": token
+            },
+            xhrFields: {
+                responseType: 'blob'
+            },
+            success: function (data, status, xhr) {
 
-    $.ajax({
-        url: URL,
-        type: "POST",
-        data: {
-            id: id
-        },
-        headers: {
-            "RequestVerificationToken": token
-        },
-        xhrFields: {
-            responseType: 'blob'  
-        },
-        success: function (data, status, xhr) {
+                const blob = new Blob([data], { type: "application/pdf" });
+                const url = window.URL.createObjectURL(blob);
 
-            const blob = new Blob([data], { type: "application/pdf" });
-            const url = window.URL.createObjectURL(blob);
+                let fileName = "download.pdf";
 
-            let fileName = "download.pdf";
+                const disposition = xhr.getResponseHeader("Content-Disposition");
 
-            const disposition = xhr.getResponseHeader("Content-Disposition");
+                if (disposition) {
 
-            if (disposition) {
+                    // Ưu tiên filename* (UTF-8 chuẩn)
+                    const fileNameStarMatch = disposition.match(/filename\*=UTF-8''([^;]+)/);
 
-                // Ưu tiên filename* (UTF-8 chuẩn)
-                const fileNameStarMatch = disposition.match(/filename\*=UTF-8''([^;]+)/);
-
-                if (fileNameStarMatch && fileNameStarMatch.length > 1) {
-                    fileName = decodeURIComponent(fileNameStarMatch[1]);
-                } else {
-                    // fallback filename thường
-                    const fileNameMatch = disposition.match(/filename="?([^"]+)"?/);
-                    if (fileNameMatch && fileNameMatch.length > 1) {
-                        fileName = fileNameMatch[1];
+                    if (fileNameStarMatch && fileNameStarMatch.length > 1) {
+                        fileName = decodeURIComponent(fileNameStarMatch[1]);
+                    } else {
+                        // fallback filename thường
+                        const fileNameMatch = disposition.match(/filename="?([^"]+)"?/);
+                        if (fileNameMatch && fileNameMatch.length > 1) {
+                            fileName = fileNameMatch[1];
+                        }
                     }
                 }
+
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+
+                a.remove();
+                window.URL.revokeObjectURL(url);
+                showToast("Invoice downloaded successfully", "success");
+                $btn.removeClass("disabled");
+                $btn.css("pointer-events", "auto");
+                $btn.text("Download Invoice");
+            },
+            error: function () {
+                showToast("Download failed", "error");
+                // enable lại
+                $btn.removeClass("disabled");
+                $btn.css("pointer-events", "auto");
+                $btn.text("Download Invoice");
             }
-
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = fileName;
-            document.body.appendChild(a);
-            a.click();
-
-            a.remove();
-            window.URL.revokeObjectURL(url);
-            setTimeout(() => {
-                showToast("Invoice downloaded successfully","success");
-            }, 1000);            
-            $btn.removeClass("disabled");
-            $btn.css("pointer-events", "auto");
-            $btn.text("Download Invoice");
-        },
-        error: function () {
-            showToast("Download failed", "error");
-            // enable lại
-            $btn.removeClass("disabled");
-            $btn.css("pointer-events", "auto");
-            $btn.text("Download Invoice");
-        }
-    });
+        });
+    }, 2000);
 }
 
 

@@ -89,52 +89,57 @@
                                     Staff
                                 </a>
                             </li>
-
-                            <li>
-                                <a href="@Url.Action("Index", "Student", new { area = "Admin" })"
-                                   class="@(controller == "Student" ? "active" : "")">
-                                    Student
-                                </a>
-                            </li>
+                            @if (canManageClass)
+                            {
+                                <li>
+                                    <a href="@Url.Action("Index", "Student", new { area = "Admin" })"
+                                       class="@(controller == "Student" ? "active" : "")">
+                                        Student
+                                    </a>
+                                </li>
+                            }
                         </ul>
                     </li>
 
 
                 }
-
-                <li class="menu-item has-sub @(controller == "Class" ? "open active" : "")">
-                    <div class="menu-link">
-                        <div class="left">
-                            <span class="fa-solid fa-chalkboard-user"></span>
-                            <span class="text">Class</span>
+                @if (canManageClass || isTeacher)
+                {
+                    <li class="menu-item has-sub @(controller == "Class" ? "open active" : "")">
+                        <div class="menu-link">
+                            <div class="left">
+                                <span class="fa-solid fa-chalkboard-user"></span>
+                                <span class="text">Class</span>
+                            </div>
+                            <span class="arrow"></span>
                         </div>
-                        <span class="arrow"></span>
-                    </div>
 
-                    <ul class="submenu">
+                        <ul class="submenu">
 
-                        @if (canManageClass)
-                        {
-                            <li>
-                                <a href="@Url.Action("Index", "Class", new { area = "Admin" })"
-                                   class="@(controller == "Class" && action == "Index" ? "active" : "")">
-                                    Class Management
-                                </a>
-                            </li>
-                        }
+                            @if (canManageClass)
+                            {
+                                <li>
+                                    <a href="@Url.Action("Index", "Class", new { area = "Admin" })"
+                                       class="@(controller == "Class" && action == "Index" ? "active" : "")">
+                                        Class Management
+                                    </a>
+                                </li>
+                            }
 
-                        @if (isTeacher)
-                        {
-                            <li>
-                                <a href="@Url.Action("MyClass", "Class", new { area = "Admin" })"
-                                   class="@(controller == "Class" && action == "MyClass" ? "active" : "")">
-                                    My Class
-                                </a>
-                            </li>
-                        }
+                            @if (isTeacher)
+                            {
+                                <li>
+                                    <a href="@Url.Action("MyClass", "Class", new { area = "Admin" })"
+                                       class="@(controller == "Class" && action == "MyClass" ? "active" : "")">
+                                        My Class
+                                    </a>
+                                </li>
+                            }
 
-                    </ul>
-                </li>
+                        </ul>
+                    </li>
+                }
+                
 
                 <li class="menu-item @(controller == "Calendar" ? "active" : "")">
                     <a href="@Url.Action("Index", "Calendar", new { area = "Admin" })">

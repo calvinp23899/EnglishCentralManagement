@@ -1,5 +1,9 @@
 ﻿@model PagedResult<StudentDto>
-
+@{
+    var isAdmin = User.IsInRole("Admin");
+    var isManager = User.IsInRole("Manager");
+    var canDelete = isAdmin || isManager;
+}
 <div class="admin-page admin-teacher">
     <!-- HEADER -->
     <div class="admin-page__header">
@@ -67,12 +71,15 @@
                                    href="@Url.Action("Edit", "Student", new { area = "Admin", id = student.Id })">
                                     Edit
                                 </a>
+                                @if (canDelete)
+                                {
+                                    <a class="delete"
+                                       data-id="@student.Id"
+                                       onclick="confirmDeleteStudent(@student.Id)">
+                                        Delete
+                                    </a>
+                                }
 
-                                <a class="delete"
-                                   data-id="@student.Id"
-                                   onclick="confirmDeleteStudent(@student.Id)">
-                                    Delete
-                                </a>
                             </td>
                         </tr>
                     }
