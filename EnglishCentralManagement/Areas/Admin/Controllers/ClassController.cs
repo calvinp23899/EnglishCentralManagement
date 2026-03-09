@@ -1,5 +1,6 @@
 ﻿using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
 using EnglishCentralManagement.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EnglishCentralManagement.Areas.Admin.Controllers
@@ -49,24 +50,9 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             return View();
         }
 
-        public async Task<IActionResult> MyClass(int page = 1, int pageSize = 10, string search = null)
-        {
-            try
-            {
-                var userId = CurrentUserId();
-                var data = await _classService.GetAllMyClassAsync(page, pageSize, userId, search);
-                ViewBag.myClassSearch = search;
-                return View(data);
-            }
-            catch (Exception ex)
-            {
-                TempData["ToastMessage"] = ex.Message;
-                TempData["ToastType"] = "error";
-            }
-            return View();
-        }
 
         [HttpGet]
+        [Authorize(Policy = "ManageClassPolicy")]
         public async Task<IActionResult> Create()
         {
             var data = new CreatedClassDto();
@@ -89,6 +75,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "ManageClassPolicy")]
         public async Task<IActionResult> Create(CreatedClassDto newClass)
         {
             try
@@ -116,15 +103,14 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "ManageClassPolicy")]
         public async Task<IActionResult> GetDetailId(long id)
         {
             try
             {
                 var listStdInClass = await _enrollmentService.GetStudentInClassAsync(1, 10, id);
-                var listStdNotInClass = await _studentService.GetStudentNotInClassAsync(1, 10, id);
                 var data = await _classService.GetDetailById(id);
                 data.StudentsInClass = listStdInClass;
-                data.StudentsAddToClass = listStdNotInClass;
                 return View(data);
             }
             catch (Exception ex)
@@ -135,7 +121,24 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        [Authorize(Policy = "ManageClassPolicy")]
+        public async Task<IActionResult> SearchStudentToAdd(long classId, string search = null, int page = 1)
+        {
+            try
+            {
+                var result = await _studentService.GetStudentNotInClassAsync(page, 10, classId, search);
+                ViewBag.searchStudentToAdd = search;
+                return PartialView("_StudentAddTable", result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
         [HttpPost]
+        [Authorize(Policy = "ManageClassPolicy")]
         public async Task<IActionResult> AddStudentToClass(long studentId, long classId)
         {
             try
@@ -148,13 +151,12 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ToastMessage"] = ex.Message;
-                TempData["ToastType"] = "error";
+                return StatusCode(500, ex.Message);
             }
-            return Json(new { success = false });
         }
 
         [HttpGet]
+        [Authorize(Policy = "ManageClassPolicy")]
         public async Task<IActionResult> Edit(long id)
         {
             try
@@ -173,6 +175,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "ManageClassPolicy")]
         public async Task<IActionResult> Edit(CreatedClassDto updateClass)
         {
             try
@@ -191,6 +194,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "ManageClassPolicy")]
         public async Task<IActionResult> Delete(long id)
         {
             try
@@ -208,7 +212,29 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             return Json(new { success = true });
         }
 
+        #region My Class
         [HttpGet]
+        [Authorize(Policy = "TeacherPolicy")]
+        public async Task<IActionResult> MyClass(int page = 1, int pageSize = 10, string search = null)
+        {
+            try
+            {
+                var userId = CurrentUserId();
+                var data = await _classService.GetAllMyClassAsync(page, pageSize, userId, search);
+                ViewBag.myClassSearch = search;
+                return View(data);
+            }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error";
+            }
+            return View();
+        }
+
+
+        [HttpGet]
+        [Authorize(Policy = "TeacherPolicy")]
         public async Task<IActionResult> MyClassDetail(long id)
         {
             try
@@ -227,6 +253,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "TeacherPolicy")]
         public async Task<IActionResult> LoadSessionTab(long classId, string searchSessionName = null, int page = 1, int pageSize = 10)
         {
             try
@@ -244,6 +271,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             return Json(new { success = false });
         }
         [HttpPost]
+        [Authorize(Policy = "TeacherPolicy")]
         public async Task<IActionResult> CreateSession(CreateSessionDto createSession)
         {
             if (!ModelState.IsValid)
@@ -268,6 +296,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "TeacherPolicy")]
         public async Task<IActionResult> GetSessionDetail(long id)
         {
             try
@@ -281,6 +310,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             }
         }
         [HttpPost]
+        [Authorize(Policy = "TeacherPolicy")]
         public async Task<IActionResult> UpdateSession(UpdateSessionDto updateSession)
         {
             try
@@ -294,6 +324,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             }
         }
         [HttpPost]
+        [Authorize(Policy = "TeacherPolicy")]
         public async Task<IActionResult> DeleteSession(long id)
         {
             try
@@ -308,6 +339,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "TeacherPolicy")]
         public async Task<IActionResult> GetStudentsBySession(long id, long classId)
         {
             try
@@ -322,6 +354,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "TeacherPolicy")]
         public async Task<IActionResult> SaveAttendanceSession(SaveAttendanceDto request)
         {
             if (request == null || request.Students == null)
@@ -336,7 +369,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
                 return StatusCode(400, new { success = false, message = ex.Message });
             }
         }
-
+        #endregion
 
     }
 }

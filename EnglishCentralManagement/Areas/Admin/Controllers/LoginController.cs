@@ -1,5 +1,7 @@
 ﻿using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
 using EnglishCentralManagement.Dtos;
+using EnglishCentralManagement.Helpers;
+using EnglishCentralManagement.Models.Enum;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -52,6 +54,21 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 principal
             );
+            if (account.Role == RoleType.Teacher.GetDisplayEnumName())
+            {
+                return RedirectToAction("MyClass", "Class", new { area = "Admin" });
+            }
+
+            if (account.Role == RoleType.HR.GetDisplayEnumName())
+            {
+                return RedirectToAction("Index", "Teacher", new { area = "Admin" });
+            }
+
+            if (account.Role == RoleType.Coordinator.GetDisplayEnumName())
+            {
+                return RedirectToAction("Index", "Class", new { area = "Admin" });
+            }
+            //Auto Admim, Manager
             return RedirectToAction(
                     "Index",
                     "Home",
@@ -73,7 +90,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
             );
         }
 
-        [HttpGet]
+        [HttpGet("access-denied")]
         public IActionResult AccessDenied(string? returnUrl = null)
         {
             ViewBag.Error = "Bạn không có quyền truy cập vào trang này";

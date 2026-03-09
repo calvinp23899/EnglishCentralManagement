@@ -67,12 +67,6 @@
                 <h2>Students In Class</h2>
             </div>
 
-            <!-- TOOLBAR -->
-            <div class="admin-page__toolbar">
-                <input type="text" placeholder="Search teacher..." />
-                <button class="btn-search">Search</button>
-            </div>
-
             <div class="admin-page__table">
                 <div class="table-detail-form__content">
                     <table>
@@ -202,143 +196,8 @@
                 </div>
             </div>
             <br />
-
-            <!-- All Students Content -->
-            <div class="table-detail-form__header">
-                <h2>Add Student To Class</h2>
-            </div>
-
-            <!-- TOOLBAR -->
-            <div class="admin-page__toolbar">
-                <input type="text" placeholder="Search teacher..." />
-                <button class="btn-search">Search</button>
-            </div>
-
-            <div class="admin-page__table">
-                <div class="table-detail-form__content">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>FullName</th>
-                                <th>Email</th>
-                                <th>PhoneNumber</th>
-                                <th>StudentStatus</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Model == null || !Model.StudentsAddToClass.Items.Any())
-                            {
-                                <tr>
-                                    <td colspan="5" style="text-align:center;">
-                                        No Students found
-                                    </td>
-                                </tr>
-                            }
-                            else
-                            {
-                                @foreach (var studentItem in Model?.StudentsAddToClass.Items)
-                                {
-                                    <tr>
-                                        <td>@studentItem.FullName</td>
-                                        <td>@studentItem.Email</td>
-                                        <td>@studentItem.PhoneNumber</td>
-                                        <td>@studentItem.Status</td>
-                                        <td class="actions">
-                                            <a class="view"
-                                               data-id="@studentItem.Id"
-                                               onclick="openAddModal(@studentItem.Id, @Model.ClassId)">
-                                                Add
-                                            </a>
-
-                                        </td>
-                                    </tr>
-                                }
-                            }
-
-                        </tbody>
-
-                    </table>
-                </div>
-
-            </div>
-
-            <!-- PAGINATION -->
-            <div class="admin-page__pagination-wrapper">
-                <div class="admin-page__pagination-info">
-                    Showing <strong>
-                        @((Model.StudentsAddToClass.PageIndex - 1) * Model.StudentsAddToClass.PageSize + 1)
-                        –
-                        @(Math.Min(Model.StudentsAddToClass.PageIndex * Model.StudentsAddToClass.PageSize, Model.StudentsAddToClass.TotalRecords))
-                    </strong>
-                    of
-                    <strong>@Model.StudentsAddToClass.TotalRecords</strong>
-                    records
-                </div>
-
-                <div class="admin-page__pagination">
-                    <!-- Prev -->
-                    <button class="btn-prev"
-                            onclick="location.href='@Url.Action("Index", new { page = Model.StudentsAddToClass.PageIndex - 1 })'"
-                    @(Model.StudentsAddToClass.HasPrevious ? "" : "disabled")>
-                        ‹ Prev
-                    </button>
-
-                    <!-- Page 1 -->
-                    <button class="@(Model.StudentsAddToClass.PageIndex == 1 ? "active" : "")"
-                            onclick="location.href='@Url.Action("Index", new { page = 1 })'">
-                        1
-                    </button>
-
-                    @{
-                        int start2 = Math.Max(2, Model.StudentsAddToClass.PageIndex - 2);
-                        int end2 = Math.Min(Model.StudentsAddToClass.TotalPages - 1, Model.StudentsAddToClass.PageIndex + 2);
-                    }
-
-                    <!-- ... trước -->
-                    @if (start2 > 2)
-                    {
-                        <span class="pagination-dots">...</span>
-                    }
-
-                    <!-- Pages giữa -->
-                    @for (int i = start2; i <= end2; i++)
-                    {
-                        if (i == Model.StudentsAddToClass.PageIndex)
-                        {
-                            <button class="active">@i</button>
-                        }
-                        else
-                        {
-                            <button onclick="location.href='@Url.Action("Index", new { page = i })'">
-                                @i
-                            </button>
-                        }
-                    }
-
-                    <!-- ... sau -->
-                    @if (end < Model.StudentsAddToClass.TotalPages - 1)
-                    {
-                        <span class="pagination-dots">...</span>
-                    }
-
-                    <!-- Page cuối -->
-                    @if (Model.StudentsAddToClass.TotalPages > 1)
-                    {
-                        <button class="@(Model.StudentsAddToClass.PageIndex == Model.StudentsAddToClass.TotalPages ? "active" : "")"
-                                onclick="location.href='@Url.Action("Index", new { page = Model.StudentsAddToClass.TotalPages })'">
-                            @Model.StudentsAddToClass.TotalPages
-                        </button>
-                    }
-
-                    <!-- Next -->
-                    <button class="btn-next"
-                            onclick="location.href='@Url.Action("Index", new { page = Model.StudentsAddToClass.PageIndex + 1 })'"
-                    @(Model.StudentsAddToClass.HasNext ? "" : "disabled")>
-                        Next ›
-                    </button>
-                </div>
-            </div>
+            <input type="hidden" id="classIdHidden" value="@Model.ClassId"/>
+            <div id="StudentAddTableContent"></div>
 
         </div>
 

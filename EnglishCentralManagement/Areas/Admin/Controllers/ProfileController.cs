@@ -1,8 +1,11 @@
 ﻿using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EnglishCentralManagement.Areas.Admin.Controllers
 {
+
+    [Authorize(Policy = "ProfilePolicy")]
     public class ProfileController : AdminBaseController
     {
         private readonly IAccountService _accountService;

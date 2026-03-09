@@ -128,11 +128,21 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             return data;
         }
 
-        public async Task<PagedResult<StudentListDto>> GetStudentNotInClassAsync(int pageIndex, int pageSize, long classId)
+        public async Task<PagedResult<StudentListDto>> GetStudentNotInClassAsync(int pageIndex, int pageSize, long classId, string search)
         {
             var query = _context.Students
                     .Where(s => !s.Enrollments.Any(e => e.ClassId == classId));
-
+            if (!string.IsNullOrEmpty(search))
+            {
+                var keyword = search.ToLower();
+                query = query.Where(x =>
+                    (x.FirstName + " " + x.LastName).ToLower().Contains(keyword) ||
+                    x.FirstName.ToLower().Contains(keyword) ||
+                    x.LastName.ToLower().Contains(keyword) ||
+                    x.Email.ToLower().Contains(keyword) ||
+                    x.PhoneNumber.Contains(search)
+                );
+            }
             var totalRecords = await query.CountAsync();
 
             var items = await query

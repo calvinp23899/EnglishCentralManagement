@@ -16,7 +16,6 @@
     public class TuitionReceiptItemDto
     {
         public string Description { get; set; } = string.Empty;
-
         public decimal Amount { get; set; }
     }
 }

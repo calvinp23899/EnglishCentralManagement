@@ -82,12 +82,6 @@
                 <h2>PaymentSchedule</h2>
             </div>
 
-            <!-- TOOLBAR -->
-            <div class="admin-page__toolbar">
-                <input type="text" placeholder="Search payment..." />
-                <button class="btn-search">Search</button>
-            </div>
-
             <div class="admin-page__table">
                 <div class="table-detail-form__content">
                     <table>
@@ -125,7 +119,12 @@
                                             @item.Amount.ToString("c0",
                                                      new System.Globalization.CultureInfo("vi-VN"))
                                         </td>
-                                        <td>@item.Status</td>
+                                        <td>
+
+                                            <span class="status status-@item.Status.ToLower().Replace(" ", "-")">
+                                                @item.Status
+                                            </span>
+                                        </td>
                                         <td class="actions">
                                             <a class="view  @(item.Status?.Trim().Equals("Paid", StringComparison.OrdinalIgnoreCase) == true ? "disabled" : "")"
                                                data-id="@item.Id"

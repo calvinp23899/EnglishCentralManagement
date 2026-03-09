@@ -655,6 +655,7 @@ body {
 
 /* Updating – xanh mint */
 .status-updating,
+.status-pending,
 .status-ongoing {
   background: #e6fffa;
   color: #14b8a6;

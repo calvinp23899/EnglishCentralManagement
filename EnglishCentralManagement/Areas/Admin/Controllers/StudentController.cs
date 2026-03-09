@@ -1,9 +1,11 @@
 ﻿using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
 using EnglishCentralManagement.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EnglishCentralManagement.Areas.Admin.Controllers
 {
+    [Authorize(Policy = "ManageClassPolicy")]
     public class StudentController : AdminBaseController
     {
         private readonly IStudentService _studentService;
