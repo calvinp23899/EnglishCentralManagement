@@ -1,5 +1,10 @@
 ﻿@model PagedResult<StaffDto>
+@{
+    var isAdmin = User.IsInRole("Admin");
+    var isManager = User.IsInRole("Manager");
+    var canDelete = isAdmin || isManager;
 
+}
 <div class="admin-page admin-teacher">
     <!-- HEADER -->
     <div class="admin-page__header">     
@@ -10,16 +15,22 @@
     </div>
 
     <!-- TOOLBAR -->
-    <form method="get" asp-action="Index" asp-controller="Teacher" asp-area="Admin">
-        <div class="admin-page__toolbar">
+    <div class="admin-page__toolbar">
+        <form method="get" asp-action="Index" asp-controller="Teacher" asp-area="Admin">
             <input type="text"
                    name="search"
                    value="@ViewBag.teacherSearch"
                    placeholder="Search name,email,phone..." />
 
             <button type="submit" class="btn-search">Search</button>
-        </div>
-    </form>
+        </form>
+        @if (canDelete)
+        {
+            <button type="button" class="btn-primary" onclick="downloadStaffExcel(this)">Download Excel</button>
+        }
+
+    </div>
+    
 
     <!-- TABLE -->
     <div class="admin-page__table">
@@ -30,6 +41,7 @@
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Gender</th>
+                    <th>Role</th>
                     <th>Status</th>
                     <th width="120">Actions</th>
                 </tr>
@@ -50,6 +62,7 @@
                             <td>@staff.Email</td>
                             <td>@staff.PhoneNumber</td>
                             <td>@staff.Gender</td>
+                            <td>@staff.Role</td>
                             <td>
                                 <span class="status status-@staff.Status.ToLower().Replace(" ", "-")">
                                     @staff.Status
@@ -65,12 +78,15 @@
                                    href="@Url.Action("Edit", "Teacher", new { area = "Admin", id = staff.Id })">
                                     Edit
                                 </a>
+                                @if (canDelete)
+                                {
+                                    <a class="delete"
+                                       data-id="@staff.Id"
+                                       onclick="confirmDeleteTeacher(@staff.Id)">
+                                        Delete
+                                    </a>
+                                }
 
-                                <a class="delete"
-                                   data-id="@staff.Id"
-                                   onclick="confirmDeleteTeacher(@staff.Id)">
-                                    Delete
-                                </a>
                             </td>
                         </tr>
                     }

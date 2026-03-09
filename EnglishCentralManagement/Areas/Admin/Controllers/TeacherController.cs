@@ -132,6 +132,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "DashboardPolicy")]
         public async Task<IActionResult> Delete(long id)
         {
             try
