@@ -99,14 +99,7 @@
                         </ul>
                     </li>
 
-                    <li class="menu-item @(controller == "Enrollment" ? "active" : "")">
-                        <a href="@Url.Action("Index", "Enrollment", new { area = "Admin" })">
-                            <div class="left">
-                                <span class="fa-solid fa-user-plus"></span>
-                                <span class="text">Student Contract</span>
-                            </div>
-                        </a>
-                    </li>
+
                 }
 
                 <li class="menu-item has-sub @(controller == "Class" ? "open active" : "")">
@@ -151,6 +144,19 @@
                         </div>
                     </a>
                 </li>
+
+                @if (canManageClass)
+                {
+                    <li class="menu-item @(controller == "Enrollment" ? "active" : "")">
+                        <a href="@Url.Action("Index", "Enrollment", new { area = "Admin" })">
+                            <div class="left">
+                                <span class="fa-solid fa-user-plus"></span>
+                                <span class="text">Student Contract</span>
+                            </div>
+                        </a>
+                    </li>
+                }
+
 
             </ul>
         </aside>

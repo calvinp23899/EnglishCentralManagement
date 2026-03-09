@@ -137,7 +137,7 @@
                                                 Edit 
                                             </a>
                                             <a class="view @(item.Status?.Trim().Equals("Paid", StringComparison.OrdinalIgnoreCase) == true ? "" : "disabled")"
-                                               onclick="DownloadInvoice(@item.Id)">
+                                               onclick="DownloadInvoice(@item.Id, this)">
                                                 Download Invoice
                                             </a>
                                         </td>

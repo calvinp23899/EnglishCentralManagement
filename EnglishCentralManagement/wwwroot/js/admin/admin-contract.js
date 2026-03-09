@@ -44,12 +44,17 @@ function savePayment() {
     });
 }
 
-function DownloadInvoice(id) {
+function DownloadInvoice(id, element) {
     const URL = "/Admin/Enrollment/DownloadInvoice";
     const token = $('#antiForgeryForm input[name="__RequestVerificationToken"]').val();
-    const btn = $(".btn.primary");
+    const $btn = $(element);
+    showToast("Preparing invoice download...","progress");
 
-    btn.prop("disabled", true);
+    // disable link
+    $btn.addClass("disabled");
+    $btn.css("pointer-events", "none");
+    $btn.text("Downloading...");
+
     $.ajax({
         url: URL,
         type: "POST",
@@ -95,9 +100,19 @@ function DownloadInvoice(id) {
 
             a.remove();
             window.URL.revokeObjectURL(url);
+            setTimeout(() => {
+                showToast("Invoice downloaded successfully","success");
+            }, 1000);            
+            $btn.removeClass("disabled");
+            $btn.css("pointer-events", "auto");
+            $btn.text("Download Invoice");
         },
         error: function () {
             showToast("Download failed", "error");
+            // enable lại
+            $btn.removeClass("disabled");
+            $btn.css("pointer-events", "auto");
+            $btn.text("Download Invoice");
         }
     });
 }
