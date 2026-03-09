@@ -41,7 +41,7 @@ namespace EnglishCentralManagement
             .AddCookie(options =>
             {
                 options.LoginPath = "/Admin/Login";           // URL login
-                options.AccessDeniedPath = "/Admin/Login/AccessDenied";
+                options.AccessDeniedPath = "/Admin/access-denied";
                 options.ExpireTimeSpan = TimeSpan.FromHours(2);
             });
             builder.Services.AddAuthorization(options =>
@@ -52,6 +52,43 @@ namespace EnglishCentralManagement
                     policy.RequireAssertion(context =>
                     !context.User.IsInRole(RoleType.User.ToString()));
                 });
+                #region Authorize Controller
+                options.AddPolicy("DashboardPolicy", policy =>
+                    policy.RequireRole(
+                        nameof(RoleType.Admin),
+                        nameof(RoleType.Manager)
+                    ));
+
+                options.AddPolicy("ManageUsersPolicy", policy =>
+                    policy.RequireRole(
+                        nameof(RoleType.Admin),
+                        nameof(RoleType.Manager),
+                        nameof(RoleType.HR)
+                    ));
+
+                options.AddPolicy("ManageClassPolicy", policy =>
+                    policy.RequireRole(
+                        nameof(RoleType.Admin),
+                        nameof(RoleType.Manager),
+                        nameof(RoleType.Coordinator)
+                    ));
+
+                options.AddPolicy("TeacherPolicy", policy =>
+                    policy.RequireRole(
+                        nameof(RoleType.Teacher),
+                        nameof(RoleType.Manager),
+                        nameof(RoleType.Admin)
+                    ));
+                options.AddPolicy("ProfilePolicy", policy =>
+                    policy.RequireRole(
+                        nameof(RoleType.Teacher),
+                        nameof(RoleType.Manager),
+                        nameof(RoleType.Coordinator),
+                        nameof(RoleType.HR),
+                        nameof(RoleType.Accountant),
+                        nameof(RoleType.Admin)
+                    ));
+                #endregion
             });
 
             // Session

@@ -33,19 +33,25 @@ namespace EnglishCentralManagement.Data
                 {
                     Name = "IELTS Foundation",
                     DurationInMonths = 6,
-                    MonthlyFee = 2500000
+                    MonthlyFee = 2500000,
+                    CreatedBy = "System",
+                    CreatedDate = DateTimeOffset.UtcNow.ToUtcDb()
                 },
                 new Course
                 {
                     Name = "IELTS Intermediate",
                     DurationInMonths = 6,
-                    MonthlyFee = 3000000
+                    MonthlyFee = 3000000,
+                    CreatedBy = "System",
+                    CreatedDate = DateTimeOffset.UtcNow.ToUtcDb()
                 },
                 new Course
                 {
                     Name = "IELTS Advanced",
                     DurationInMonths = 9,
-                    MonthlyFee = 3500000
+                    MonthlyFee = 3500000,
+                    CreatedBy = "System",
+                    CreatedDate = DateTimeOffset.UtcNow.ToUtcDb()
                 }
             );
 
@@ -116,7 +122,9 @@ namespace EnglishCentralManagement.Data
                 StartDate = DateTimeOffset.UtcNow.ToUtcDb(),
                 EndDate = DateTimeOffset.UtcNow.AddMonths(course.DurationInMonths),
                 Status = ClassStatusEnum.Active,
-                MaxStudents = 20
+                MaxStudents = 20,
+                CreatedBy = "System",
+                CreatedDate = DateTimeOffset.UtcNow.ToUtcDb()
             });
 
             await context.SaveChangesAsync();
@@ -296,43 +304,16 @@ namespace EnglishCentralManagement.Data
         {
             if (context.Roles.Any()) return;
 
-            context.Roles.AddRange(
-            new Role
-            {
-                Name = RoleType.User.GetDisplayEnumName(),
-                CreatedBy = "System",
-                CreatedDate = DateTimeOffset.UtcNow.ToUtcDb(),
-            },
-            new Role
-            {
-                Name = RoleType.Admin.GetDisplayEnumName(),
-                CreatedBy = "System",
-                CreatedDate = DateTimeOffset.UtcNow.ToUtcDb(),
-            },
-            new Role
-            {
-                Name = RoleType.Teacher.GetDisplayEnumName(),
-                CreatedBy = "System",
-                CreatedDate = DateTimeOffset.UtcNow.ToUtcDb(),
-            },
-            new Role
-            {
-                Name = RoleType.Manager.GetDisplayEnumName(),
-                CreatedBy = "System",
-                CreatedDate = DateTimeOffset.UtcNow.ToUtcDb(),
-            },
-            new Role
-            {
-                Name = RoleType.HR.GetDisplayEnumName(),
-                CreatedBy = "System",
-                CreatedDate = DateTimeOffset.UtcNow.ToUtcDb(),
-            },
-            new Role
-            {
-                Name = RoleType.Coordinator.GetDisplayEnumName(),
-                CreatedBy = "System",
-                CreatedDate = DateTimeOffset.UtcNow.ToUtcDb(),
-            });
+            var roles = Enum.GetValues(typeof(RoleType))
+               .Cast<RoleType>()
+               .Select(role => new Role
+               {
+                   Name = role.GetDisplayEnumName(),
+                   CreatedBy = "System",
+                   CreatedDate = DateTimeOffset.UtcNow.ToUtcDb(),
+               });
+
+            context.Roles.AddRange(roles);
 
             await context.SaveChangesAsync();
         }

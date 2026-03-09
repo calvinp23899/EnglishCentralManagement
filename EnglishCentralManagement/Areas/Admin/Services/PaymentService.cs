@@ -27,7 +27,6 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                 throw new Exception("Class not found");
             var currentStudents = await _context.Enrollments
                 .CountAsync(x => x.ClassId == classId && x.Status == EnrollmentStatus.Active);
-            var countMaxPayment = await _context.PaymentSchedules.CountAsync();
 
             if (classModel.MaxStudents.HasValue &&
                 currentStudents >= classModel.MaxStudents.Value)
@@ -59,7 +58,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                     Status = PaymentScheduleStatus.Pending,
                     CreatedBy = _currentUser.FullName,
                     CreatedDate = DateTimeOffset.UtcNow.ToUtcDb(),
-                    PaymenCode = string.Join("-", "TF", data.ClassId, data.StudentId, countMaxPayment),
+                    PaymenCode = string.Join("-", "TF", data.ClassId, data.StudentId, month + 1),
                     Title = string.Join(" ", "Thu Phí Lần", month + 1)
                 });
             }

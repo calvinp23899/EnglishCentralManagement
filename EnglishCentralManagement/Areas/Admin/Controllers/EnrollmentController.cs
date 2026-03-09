@@ -1,10 +1,12 @@
 ﻿using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
 using EnglishCentralManagement.Dtos;
 using EnglishCentralManagement.Dtos.Pagination;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EnglishCentralManagement.Areas.Admin.Controllers
 {
+    [Authorize(Policy = "ManageClassPolicy")]
     public class EnrollmentController : AdminBaseController
     {
         private readonly IEnrollmentService _enrollmentService;

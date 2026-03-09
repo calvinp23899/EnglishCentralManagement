@@ -1,5 +1,6 @@
 ﻿using EnglishCentralManagement.Dtos.Invoice;
 using EnglishCentralManagement.Extensions;
+using EnglishCentralManagement.Models.Constants;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
@@ -24,7 +25,7 @@ namespace EnglishCentralManagement.Documents
                 page.Margin(40);
 
                 page.DefaultTextStyle(x => x
-                    .FontSize(12)
+                    .FontSize(CommonConstant.FontSize)
                     .FontFamily("Times New Roman"));
 
                 page.Content().Column(col =>
@@ -46,9 +47,9 @@ namespace EnglishCentralManagement.Documents
             {
                 row.RelativeItem().Column(left =>
                 {
-                    left.Item().Text("TRUNG TÂM NGOẠI NGỮ ABC").Bold().FontSize(12);
-                    left.Item().Text("Địa chỉ: 99 Đà Nẵng");
-                    left.Item().Text("Điện thoại: 0909 999 999");
+                    left.Item().Text(CommonConstant.CentralTitle).Bold().FontSize(CommonConstant.FontSize);
+                    left.Item().Text(CommonConstant.CentralAddress);
+                    left.Item().Text(CommonConstant.CentralPhone);
                 });
 
                 row.RelativeItem().AlignRight().Column(right =>
@@ -75,7 +76,7 @@ namespace EnglishCentralManagement.Documents
 
             BuildDottedField(col, "Học viên:", _model.StudentName);
             BuildDottedField(col, "Lớp:", _model.ClassName);
-            BuildDottedField(col, "Địa Chỉ:", _model.Address);
+            //BuildDottedField(col, "Địa Chỉ:", _model.Address);
             BuildDottedField(col, "SĐT:", _model.Phone);
         }
 
@@ -131,17 +132,18 @@ namespace EnglishCentralManagement.Documents
 
         private void BuildFooter(ColumnDescriptor col)
         {
-            col.Item().PaddingTop(30);
+            var date = DateTimeOffset.Now;
+            col.Item().PaddingTop(10);
             // ===== Dòng ngày tháng bên phải =====
             col.Item().AlignRight().Text(text =>
             {
                 text.Span("Đà Nẵng, ").SemiBold();
                 text.Span("Ngày ").SemiBold();
-                text.Span($"{_model.Date:dd} ");
+                text.Span($"{date:dd} ");
                 text.Span("Tháng ").SemiBold();
-                text.Span($"{_model.Date:MM} ");
+                text.Span($"{date:MM} ");
                 text.Span("Năm ").SemiBold();
-                text.Span($"{_model.Date:yyyy}");
+                text.Span($"{date:yyyy}");
             });
 
             col.Item().PaddingTop(20).Row(row =>

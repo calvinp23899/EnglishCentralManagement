@@ -24,33 +24,40 @@ namespace EnglishCentralManagement.Areas.Admin.Services
 
         public async Task<PagedResult<StaffDto>> GetAllAsync(int pageIndex, int pageSize, string? search = null)
         {
-            var query = _context.Staffs
-                .Where(x => !x.IsDeleted);
+            var query =
+                    from s in _context.Staffs
+                    join a in _context.Accounts on s.Id equals a.StaffId into acc
+                    from a in acc.DefaultIfEmpty()
+                    join r in _context.Roles on a.RoleId equals r.Id into roles
+                    from r in roles.DefaultIfEmpty()
+                    where !s.IsDeleted
+                    select new { s, a, r };
             if (!string.IsNullOrEmpty(search))
             {
                 string searchLower = search.ToLower();
                 query = query.Where(x =>
-                    x.FirstName.ToLower().Contains(searchLower) ||
-                    x.LastName.ToLower().Contains(searchLower) ||
-                    x.Email.ToLower().Contains(searchLower) ||
-                    x.PhoneNumber.Contains(searchLower)
-               );
+                    x.s.FirstName.ToLower().Contains(searchLower) ||
+                    x.s.LastName.ToLower().Contains(searchLower) ||
+                    x.s.Email.ToLower().Contains(searchLower) ||
+                    x.s.PhoneNumber.Contains(searchLower)
+                );
             }
 
             var totalRecords = await query.CountAsync();
 
             var items = await query
-                .OrderByDescending(x => x.Id)
+                .OrderByDescending(x => x.s.Id)
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .Select(x => new StaffDto
                 {
-                    Id = x.Id,
-                    FullName = (x.FirstName + " " + x.LastName).Trim(),
-                    Email = x.Email,
-                    PhoneNumber = x.PhoneNumber,
-                    Gender = (bool)x.Gender ? "Male" : "Female",
-                    Status = Common.GetDisplayEnumName(x.Status)
+                    Id = x.s.Id,
+                    FullName = (x.s.FirstName + " " + x.s.LastName).Trim(),
+                    Email = x.s.Email,
+                    PhoneNumber = x.s.PhoneNumber,
+                    Gender = (bool)x.s.Gender ? "Male" : "Female",
+                    Status = Common.GetDisplayEnumName(x.s.Status),
+                    Role = x.r != null ? x.r.Name : null
                 })
                 .ToListAsync();
             return new PagedResult<StaffDto>

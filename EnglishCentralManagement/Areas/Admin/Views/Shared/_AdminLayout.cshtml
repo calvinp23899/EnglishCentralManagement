@@ -1,6 +1,17 @@
-﻿@{
+﻿@using System.Security.Claims
+@{
     var controller = ViewContext.RouteData.Values["controller"]?.ToString();
     var action = ViewContext.RouteData.Values["action"]?.ToString();
+    var loginName = User.FindFirst(ClaimTypes.Name)?.Value;
+    var isAdmin = User.IsInRole("Admin");
+    var isManager = User.IsInRole("Manager"); 
+    var isTeacher = User.IsInRole("Teacher");
+    var isHR = User.IsInRole("HR");
+    var isCoordinator = User.IsInRole("Coordinator");
+
+    var canViewDashboard = isAdmin || isManager;
+    var canManageUsers = isAdmin || isManager || isHR;
+    var canManageClass = isAdmin || isManager || isCoordinator;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -23,40 +34,75 @@
             </div>
 
             <ul class="menu">
-                <li class="menu-item @(controller == "Home" ? "active" : "")">
-                    <a href="@Url.Action("Index", "Home", new { area = "Admin" })">
-                        <div class="left">
-                            <span class="fa-solid fa-house"></span>
-                            <span class="text">Home</span>
+
+                @if (canViewDashboard)
+                {
+                    <li class="menu-item @(controller == "Home" ? "active" : "")">
+                        <a href="@Url.Action("Index", "Home", new { area = "Admin" })">
+                            <div class="left">
+                                <span class="fa-solid fa-house"></span>
+                                <span class="text">Home</span>
+                            </div>
+                        </a>
+                    </li>
+                }
+
+                @if (canViewDashboard)
+                {
+                    <li class="menu-item @(controller == "Course" ? "active" : "")">
+                        <a href="@Url.Action("Index", "Course", new { area = "Admin" })">
+                            <div class="left">
+                                <span class="fa-solid fa-book-open"></span>
+                                <span class="text">Course</span>
+                            </div>
+                        </a>
+                    </li>
+                }
+
+                @if (canViewDashboard)
+                {
+                    <li class="menu-item @(controller == "Cost" ? "active" : "")">
+                        <a href="@Url.Action("Index", "Cost", new { area = "Admin" })">
+                            <div class="left">
+                                <span class="fa-solid fa-money-bill-wave"></span>
+                                <span class="text">Cost</span>
+                            </div>
+                        </a>
+                    </li>
+                }
+
+                @if (canManageUsers)
+                {
+                    <li class="menu-item has-sub @(controller == "Teacher" || controller == "Student" ? "open active" : "")">
+                        <div class="menu-link">
+                            <div class="left">
+                                <span class="fa-solid fa-user"></span>
+                                <span class="text">User</span>
+                            </div>
+                            <span class="arrow"></span>
                         </div>
-                    </a>
-                </li>
+
+                        <ul class="submenu">
+                            <li>
+                                <a href="@Url.Action("Index", "Teacher", new { area = "Admin" })"
+                                   class="@(controller == "Teacher" ? "active" : "")">
+                                    Staff
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="@Url.Action("Index", "Student", new { area = "Admin" })"
+                                   class="@(controller == "Student" ? "active" : "")">
+                                    Student
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
 
 
-                <li class="menu-item has-sub @(controller == "Teacher" || controller == "Student" ? "open active" : "")">
-                    <div class="menu-link">
-                        <div class="left">
-                            <span class="fa-solid fa-user"></span>
-                            <span class="text">User</span>
-                        </div>
-                        <span class="arrow"></span>
-                    </div>
+                }
 
-                    <ul class="submenu">
-                        <li>
-                            <a href="@Url.Action("Index", "Teacher", new { area = "Admin" })" class="@(controller == "Teacher" ? "active" : "")">
-                                Staff
-                            </a>
-                        </li>
-                        <li>
-                            <a href="@Url.Action("Index", "Student", new { area = "Admin" })" class="@(controller == "Student" ? "active" : "")">
-                                Student
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="menu-item has-sub @(controller == "Class" || controller == "My Class" ? "open active" : "")">
+                <li class="menu-item has-sub @(controller == "Class" ? "open active" : "")">
                     <div class="menu-link">
                         <div class="left">
                             <span class="fa-solid fa-chalkboard-user"></span>
@@ -66,44 +112,28 @@
                     </div>
 
                     <ul class="submenu">
-                        <li>
-                            <a href="@Url.Action("Index", "Class", new { area = "Admin" })" class="@(controller == "Class" && (action == "Index" || action == "Create" || action == "GetDetailId" || action == "Edit") ? "active" : "")">
-                                Class Management
-                            </a>
-                        </li>
-                        <li>
-                            <a href="@Url.Action("MyClass", "Class", new { area = "Admin" })" class="@(controller == "Class" && (action == "MyClass" || action == "MyClassDetail") ? "active" : "")">
-                                My Class
-                            </a>
-                        </li>
+
+                        @if (canManageClass)
+                        {
+                            <li>
+                                <a href="@Url.Action("Index", "Class", new { area = "Admin" })"
+                                   class="@(controller == "Class" && action == "Index" ? "active" : "")">
+                                    Class Management
+                                </a>
+                            </li>
+                        }
+
+                        @if (isTeacher)
+                        {
+                            <li>
+                                <a href="@Url.Action("MyClass", "Class", new { area = "Admin" })"
+                                   class="@(controller == "Class" && action == "MyClass" ? "active" : "")">
+                                    My Class
+                                </a>
+                            </li>
+                        }
+
                     </ul>
-                </li>
-
-                <li class="menu-item @(controller == "Course" ? "active" : "")">
-                    <a href="@Url.Action("Index", "Course", new { area = "Admin" })">
-                        <div class="left">
-                            <span class="fa-solid fa-book-open"></span>
-                            <span class="text">Course </span>
-                        </div>
-                    </a>
-                </li>
-
-                <li class="menu-item @(controller == "Enrollment" ? "active" : "")">
-                    <a href="@Url.Action("Index", "Enrollment", new { area = "Admin" })">
-                        <div class="left">
-                            <span class="fa-solid fa-user-plus"></span>
-                            <span class="text">Student Contract </span>
-                        </div>
-                    </a>
-                </li>
-
-                <li class="menu-item @(controller == "Cost" ? "active" : "")">
-                    <a href="@Url.Action("Index", "Cost", new { area = "Admin" })">
-                        <div class="left">
-                            <span class="fa-solid fa-money-bill-wave"></span>
-                            <span class="text">Cost </span>
-                        </div>
-                    </a>
                 </li>
 
                 <li class="menu-item @(controller == "Calendar" ? "active" : "")">
@@ -115,14 +145,19 @@
                     </a>
                 </li>
 
-                <li class="menu-item">
-                    <a href="#">
-                        <div class="left">
-                            <span class="icon">⚙️</span>
-                            <span class="text">Setting</span>
-                        </div>
-                    </a>
-                </li>
+                @if (canManageClass)
+                {
+                    <li class="menu-item @(controller == "Enrollment" ? "active" : "")">
+                        <a href="@Url.Action("Index", "Enrollment", new { area = "Admin" })">
+                            <div class="left">
+                                <span class="fa-solid fa-user-plus"></span>
+                                <span class="text">Student Contract</span>
+                            </div>
+                        </a>
+                    </li>
+                }
+
+
             </ul>
         </aside>
 
@@ -138,7 +173,7 @@
                 <div class="topbar-right">
                     <div class="user-dropdown">
                         <img src="/assets/img/avatar-default.png" class="avatar" />
-                        <span class="username">Admin</span>
+                        <span class="username">@loginName</span>
 
                         <div class="dropdown-menu">
                             <a href="@Url.Action("Index", "Profile", new { area = "Admin" })">Profile</a>

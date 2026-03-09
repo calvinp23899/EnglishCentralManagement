@@ -1,9 +1,11 @@
 ﻿using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
 using EnglishCentralManagement.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EnglishCentralManagement.Areas.Admin.Controllers
 {
+    [Authorize(Policy = "DashboardPolicy")]
     public class HomeController : AdminBaseController
     {
         private readonly IStaffService _staffService;

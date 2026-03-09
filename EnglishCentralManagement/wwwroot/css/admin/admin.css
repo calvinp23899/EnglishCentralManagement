@@ -574,6 +574,10 @@ body {
   background: #f59e0b;
 }
 
+.toast.toast--progress {
+  background: #3498db;
+}
+
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -676,12 +680,14 @@ body {
 
 /* Working – cam */
 .status-rescheduled,
+.status-pending,
 .status-working {
   background: #fff7ed;
   color: #fb923c;
 }
 
 /* Working – green */
+.status-paid,
 .status-completed {
   background: #ecfdf5;
   color: #16a34a;
