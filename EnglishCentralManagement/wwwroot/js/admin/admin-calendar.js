@@ -209,7 +209,7 @@ function saveEvent() {
 
         },
         error: function (err) {
-            showToast("Action failed", "error");
+            showToast(err.responseJSON.message, "error");
         }
     });
 }
