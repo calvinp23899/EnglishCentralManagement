@@ -6,44 +6,189 @@
     <title>@ViewData["Title"] - EnglishCentralManagement</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/user/user-home-page.css"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="~/EnglishCentralManagement.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">EnglishCentralManagement</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
+            <div class="container">
+                <a class="navbar-brand fw-bold" href="#">English Center</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" href="#courses">Khoá Học</a>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link" href="#teachers">Giáo Viên</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#contact">Chúng Tôi</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="modal" data-bs-target="#registerModal">
+                                Đăng Ký
+                            </a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container-fluid p-0">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer-main">
         <div class="container">
-            &copy; 2026 - EnglishCentralManagement - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="row">
+
+                <!-- Column 1 -->
+                <div class="col-md-3">
+                    <h4 class="footer-logo">The English Central</h4>
+
+                    <p>Hotline: 0900 000 000</p>
+                    <p>Email: englishcentral@gmail.com</p>
+                    <p>Giờ hoạt động: 8:00 - 21:00</p>
+                </div>
+
+                <!-- Column 2 -->
+                <div class="col-md-3">
+                    <h5>Hệ thống cơ sở</h5>
+
+                    <p>00 Nguyễn Hữu Thọ, Đà Nẵng</p>
+                    <p>0000 Nguyễn Hữu Thọ, Đà Nẵng</p>
+                </div>
+
+                <!-- Column 3 -->
+                <div class="col-md-3">
+                    <h5>Khóa Học Tiếng Anh</h5>
+
+                    <ul class="footer-links">
+                        <li>Khóa IELTS Kèm Cấp Tốc</li>
+                        <li>Khóa Pre-IELTS</li>
+                        <li>Khóa Foundation</li>
+                        <li>Khóa Beginner</li>
+                        <li>Khóa Intermediate</li>
+                    </ul>
+                </div>
+
+                <!-- Column 4 -->
+                <div class="col-md-3">
+                    <h5>Liên hệ</h5>
+                    <p>Facebook</p>
+                    <p>Zalo</p>
+                    <p>Youtube</p>
+                </div>
+            </div>
+        </div>
+        <!-- COPYRIGHT -->
+        <div class="footer-bottom text-center">
+            © @DateTime.Now.Year The English Central. All rights reserved.
         </div>
     </footer>
+
+    <div class="floating-contact">
+
+        <!-- Zalo -->
+        <a href="#" target="_blank" class="zalo-btn">
+            <img src="/assets/img/zalo-icon.png" alt="Zalo">
+        </a>
+
+        <!-- Phone -->
+        <a href="tel:0900000000" class="phone-btn">
+            <i class="fa-solid fa-phone phone-icon"></i>
+            <span>0900000000</span>
+        </a>
+
+    </div>
+    <button id="backToTop" class="back-to-top">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+    <div class="modal fade" id="registerModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content register-modal">
+                <!-- Close button -->
+                <button type="button" class="close-register"
+                        data-bs-dismiss="modal">
+                </button>
+
+                <div class="modal-body">
+
+                    <form>
+
+                        <div class="row g-3">
+
+                            <div class="col-12">
+                                <input type="text" class="form-control register-input" placeholder="Họ Và Tên *">
+                            </div>
+
+                            <div class="col-md-6">
+                                <input type="text" class="form-control register-input" placeholder="Điện thoại *">
+                            </div>
+
+                            <div class="col-md-6">
+                                <select class="form-control register-input">
+                                    <option>Hình thức học</option>
+                                    <option>Online</option>
+                                    <option>Offline</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <input type="email" class="form-control register-input" placeholder="Địa chỉ email">
+                            </div>
+
+                            <div class="col-md-6">
+                                <select class="form-control register-input">
+                                    <option>Tỉnh / Thành phố *</option>
+                                    <option>Đà Nẵng</option>
+                                    <option>Hà Nội</option>
+                                    <option>HCM</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12">
+                                <select class="form-control register-input">
+                                    <option>Khóa học *</option>
+                                    <option>IELTS Beginner</option>
+                                    <option>IELTS Foundation</option>
+                                    <option>IELTS Intermediate</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12">
+                                <button class="btn register-btn w-100">
+                                    TƯ VẤN NGAY
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/js/user/user-home-page.js"></script>
+
 </body>
 </html>
