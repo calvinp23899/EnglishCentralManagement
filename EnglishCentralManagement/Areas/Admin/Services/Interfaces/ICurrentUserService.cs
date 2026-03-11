@@ -5,5 +5,7 @@
         long? UserId { get; }
         string? FullName { get; }
         string? UserRole { get; }
+        long? StaffId { get; }
+
     }
 }

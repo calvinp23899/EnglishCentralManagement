@@ -2,6 +2,7 @@
 using EnglishCentralManagement.Data;
 using EnglishCentralManagement.Dtos;
 using EnglishCentralManagement.Dtos.Pagination;
+using EnglishCentralManagement.Dtos.User;
 using EnglishCentralManagement.Extensions;
 using EnglishCentralManagement.Helpers;
 using EnglishCentralManagement.Models;
@@ -166,6 +167,45 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                 PageSize = pageSize,
                 TotalRecords = totalRecords
             };
+        }
+
+        public async Task RegisterStudentAsync(UserRegisterDto newStudent)
+        {
+            var data = new Student
+            {
+                FirstName = newStudent.FullName,
+                LastName = null,
+                DateOfBirth = DateTime.Now,
+                PhoneNumber = newStudent.Phone,
+                Email = newStudent.Email,
+                Address = newStudent.Address,
+                Gender = true,
+                Status = StudentStatus.Inactive,
+                CreatedBy = _currentUser.FullName,
+                CreatedDate = DateTimeOffset.UtcNow.ToUtcDb(),
+            };
+            var countUser = await _context.Accounts.CountAsync();
+            var userNameCreated = $"anonymoussystem{countUser + 1}";
+            var isAccountExist = await _context.Accounts
+                .AnyAsync(x => x.Username.ToLower() == userNameCreated.ToLower() && !x.IsDeleted);
+            if (isAccountExist)
+            {
+                _context.Students.Add(data);
+                await _context.SaveChangesAsync();
+                return;
+            }
+            var account = new Account
+            {
+                Username = userNameCreated.ToLower(),
+                PasswordHash = EncryptHelper.Hash("123"),
+                RoleId = (long?)RoleType.User,
+                CreatedBy = _currentUser.FullName,
+                CreatedDate = DateTimeOffset.UtcNow.ToUtcDb(),
+                Student = data,
+            };
+            _context.Students.Add(data);
+            _context.Accounts.Add(account);
+            await _context.SaveChangesAsync();
         }
 
         public async Task SoftDeleteAsync(long id)

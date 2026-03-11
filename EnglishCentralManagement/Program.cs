@@ -4,6 +4,7 @@ using EnglishCentralManagement.Data;
 using EnglishCentralManagement.Models.Enum;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.RateLimiting;
 
 namespace EnglishCentralManagement
 {
@@ -34,7 +35,24 @@ namespace EnglishCentralManagement
             builder.Services.AddScoped<IExcelService, ExcelService>();
             builder.Services.AddScoped<IClassSessionService, ClassSessionService>();
             #endregion
-
+            //Rate Limiting
+            builder.Services.AddRateLimiter(options =>
+            {
+                //Rateliming chống spam từ 1 user 
+                // muốn chặn DDOS thì dùng Cloudfare hoặc Azure DDoS Protection + API Management
+                options.RejectionStatusCode = 429;
+                options.AddPolicy("RegisterPolicy", context =>
+                    RateLimitPartition.GetFixedWindowLimiter(
+                        partitionKey: context.Connection.RemoteIpAddress?.ToString(),
+                        factory: _ => new FixedWindowRateLimiterOptions
+                        {
+                            PermitLimit = 3,
+                            Window = TimeSpan.FromMinutes(60),
+                            QueueLimit = 0
+                        }
+                    )
+                );
+            });
             //Authentication + Authorization
             builder.Services
             .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -128,6 +146,7 @@ namespace EnglishCentralManagement
             app.UseRouting();
             app.UseSession();
             app.UseAuthentication();
+            app.UseRateLimiter();
             app.UseAuthorization();
             #region Admin Route
             app.MapControllerRoute(

@@ -2,12 +2,8 @@
 using EnglishCentralManagement.Data;
 using EnglishCentralManagement.Dtos;
 using EnglishCentralManagement.Helpers;
-using EnglishCentralManagement.Models;
 using EnglishCentralManagement.Models.Enum;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Net.WebSockets;
 
 namespace EnglishCentralManagement.Areas.Admin.Services
 {
@@ -19,11 +15,11 @@ namespace EnglishCentralManagement.Areas.Admin.Services
         {
             _context = context;
         }
-        public  async Task<AccountDto?> Login(string username, string password)
+        public async Task<AccountDto?> Login(string username, string password)
         {
-            var account =  _context.Accounts
+            var account = _context.Accounts
                 .Include(x => x.Role)
-                .Include(x=>x.Staff)
+                .Include(x => x.Staff)
             .FirstOrDefault(x => x.Username == username && x.IsDeleted == false);
 
             if (account == null)
@@ -34,6 +30,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             var data = new AccountDto
             {
                 Id = account.Id,
+                StaffId = account.Staff.Id,
                 FirstName = account.Staff.FirstName,
                 LastName = account.Staff.LastName,
                 Role = Common.GetDisplayEnumName((RoleType)account.RoleId),

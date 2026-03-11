@@ -47,5 +47,17 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                 return userRole != null ? userRole : null;
             }
         }
+
+        public long? StaffId
+        {
+            get
+            {
+                var staffId = _httpContextAccessor.HttpContext?
+                    .User?
+                    .FindFirstValue("StaffId");
+
+                return staffId != null ? long.Parse(staffId) : null;
+            }
+        }
     }
 }
