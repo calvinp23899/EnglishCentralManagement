@@ -3,23 +3,23 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - EnglishCentralManagement</title>
+    <title>@ViewData["Title"] - Trang Chủ</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/user/user-home-page.css"/>
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="~/EnglishCentralManagement.styles.css" asp-append-version="true" />
+    <link rel="icon" type="image/png" href="~/assets/img/full-logo.png">
+
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
             <div class="container">
-                <a class="navbar-brand fw-bold" href="#">English Center</a>
-
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                <a class="navbar-brand fw-bold" >
+                    <img src="/assets/img/logo-1.png" alt="English Central" height="60" width="240">
+                </a>
 
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
@@ -58,7 +58,9 @@
                 <!-- Column 1 -->
                 <div class="col-md-3">
                     <h4 class="footer-logo">The English Central</h4>
-
+                    <a class="navbar-brand fw-bold">
+                        <img src="/assets/img/white-logo.png" alt="English Central" height="120">
+                    </a>
                     <p>Hotline: 0900 000 000</p>
                     <p>Email: englishcentral@gmail.com</p>
                     <p>Giờ hoạt động: 8:00 - 21:00</p>
@@ -67,9 +69,8 @@
                 <!-- Column 2 -->
                 <div class="col-md-3">
                     <h5>Hệ thống cơ sở</h5>
-
-                    <p>00 Nguyễn Hữu Thọ, Đà Nẵng</p>
-                    <p>0000 Nguyễn Hữu Thọ, Đà Nẵng</p>
+                    <p><i class="fas fa-map-marker-alt me-2"></i>00 Nguyễn Hữu Thọ, Đà Nẵng</p>
+                    <p><i class="fas fa-map-marker-alt me-2"></i>0000 Nguyễn Hữu Thọ, Đà Nẵng</p>
                 </div>
 
                 <!-- Column 3 -->
@@ -88,9 +89,9 @@
                 <!-- Column 4 -->
                 <div class="col-md-3">
                     <h5>Liên hệ</h5>
-                    <p>Facebook</p>
-                    <p>Zalo</p>
-                    <p>Youtube</p>
+                    <p><i class="fab fa-facebook me-2"></i>Facebook</p>
+                    <p><i class="fab fa-zalo me-2"></i>Zalo</p>
+                    <p><i class="fab fa-youtube me-2"></i>Youtube</p>
                 </div>
             </div>
         </div>
@@ -170,7 +171,7 @@
                             </div>
 
                             <div class="col-12">
-                                <button class="btn register-btn w-100">
+                                <button class="btn register-btn w-100" type="button" onclick="submitRegisterForm()">
                                     TƯ VẤN NGAY
                                 </button>
                             </div>
@@ -184,6 +185,9 @@
             </div>
         </div>
     </div>
+    <form id="antiForgeryForm" style="display:none;">
+        @Html.AntiForgeryToken()
+    </form>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

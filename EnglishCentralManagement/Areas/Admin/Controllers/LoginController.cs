@@ -41,6 +41,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
                 new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()),
                 new Claim(ClaimTypes.Name, string.Join(" ",account.FirstName,account.LastName).Trim()),
                 new Claim(ClaimTypes.Role, account.Role),
+                new Claim("StaffId", account.StaffId.ToString()),
             };
 
             var identity = new ClaimsIdentity(

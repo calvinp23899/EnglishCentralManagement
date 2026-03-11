@@ -20,13 +20,14 @@ namespace EnglishCentralManagement.Areas.Admin.Services
         public async Task CreateEvent(CreatedEventDto newEvent)
         {
             CheckValidateCreateEvent(newEvent);
+            NormalizeSingleDayEvent(newEvent);
             await CheckOverlapEvent(newEvent);
             var data = new EventCalendar
             {
                 EventName = newEvent.EventName,
                 CreatedDate = DateTimeOffset.UtcNow.ToUtcDb(),
                 CreatedBy = _currentUser.FullName,
-                StaffId = (long)_currentUser.UserId,
+                StaffId = (long)_currentUser.StaffId,
                 LinkMeeting = newEvent.LinkMeeting,
                 StartDate = newEvent.StartDate,
                 EndDate = newEvent.EndDate,
@@ -82,6 +83,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services
         public async Task UpdateEvent(CreatedEventDto updateEvent)
         {
             CheckValidateCreateEvent(updateEvent);
+            NormalizeSingleDayEvent(updateEvent);
             await CheckOverlapEvent(updateEvent);
             var model = await _context.EventCalendars
                 .Where(x => x.Id == updateEvent.EventId && !x.IsDeleted)
@@ -179,6 +181,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             /// </summary>
 
             var isConflict = await _context.EventCalendars.AnyAsync(x =>
+                    x.StaffId == (long)_currentUser.StaffId &&
                     x.StartDate <= newEvent.EndDate &&
                     x.EndDate >= newEvent.StartDate &&
                     newEvent.StartTime < x.EndTime &&
@@ -197,6 +200,21 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             if (isConflict)
             {
                 throw new Exception("Khoảng thời gian của lịch đã bị trùng với event khác.");
+            }
+        }
+
+        private void NormalizeSingleDayEvent(CreatedEventDto newEvent)
+        {
+            if (newEvent.StartDate == newEvent.EndDate)
+            {
+                var dow = newEvent.StartDate.DayOfWeek;
+                newEvent.IsMonday = dow == DayOfWeek.Monday;
+                newEvent.IsTuesday = dow == DayOfWeek.Tuesday;
+                newEvent.IsWednesday = dow == DayOfWeek.Wednesday;
+                newEvent.IsThursday = dow == DayOfWeek.Thursday;
+                newEvent.IsFriday = dow == DayOfWeek.Friday;
+                newEvent.IsSaturday = dow == DayOfWeek.Saturday;
+                newEvent.IsSunday = dow == DayOfWeek.Sunday;
             }
         }
     }

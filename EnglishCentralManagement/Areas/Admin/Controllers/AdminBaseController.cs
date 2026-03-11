@@ -14,7 +14,7 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
 
         protected long CurrentUserId()
         {
-            return long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            return long.Parse(User.FindFirstValue("StaffId")!);
         }
     }
 }

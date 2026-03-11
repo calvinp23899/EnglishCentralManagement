@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="~/css/admin/admin.css" />
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="icon" type="image/png" href="~/assets/img/full-logo.png">
+
     @RenderSection("css", required: false)
 </head>
 <body>
@@ -30,7 +32,7 @@
         <!-- SIDEBAR -->
         <aside class="sidebar">
             <div class="sidebar-logo">
-                English Centre
+                English Central
             </div>
 
             <ul class="menu">
@@ -71,7 +73,7 @@
                     </li>
                 }
 
-                @if (canManageUsers)
+                @if (canManageUsers || isCoordinator)
                 {
                     <li class="menu-item has-sub @(controller == "Teacher" || controller == "Student" ? "open active" : "")">
                         <div class="menu-link">
@@ -83,12 +85,16 @@
                         </div>
 
                         <ul class="submenu">
-                            <li>
-                                <a href="@Url.Action("Index", "Teacher", new { area = "Admin" })"
-                                   class="@(controller == "Teacher" ? "active" : "")">
-                                    Staff
-                                </a>
-                            </li>
+                            @if (canManageUsers)
+                            {
+                                <li>
+                                    <a href="@Url.Action("Index", "Teacher", new { area = "Admin" })"
+                                       class="@(controller == "Teacher" ? "active" : "")">
+                                        Staff
+                                    </a>
+                                </li>
+                            }
+
                             @if (canManageClass)
                             {
                                 <li>
