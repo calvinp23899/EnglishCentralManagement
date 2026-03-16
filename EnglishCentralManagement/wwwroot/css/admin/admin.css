@@ -740,7 +740,7 @@ body {
   gap: 16px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  background-color: deepskyblue;
+  background-color: lightblue;
 }
 .dashboard__stat-card:hover {
   transform: translateY(-3px);
@@ -1094,6 +1094,22 @@ body {
   gap: 20px;
   border-bottom: 2px solid #eee;
   margin-bottom: 24px;
+}
+
+.tab-vertical-layout {
+  display: flex;
+  gap: 30px;
+}
+
+.tab-vertical-layout .vertical-tabs {
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+  border-right: 2px solid #eee;
+}
+
+.tab-vertical-layout .tab-content {
+  flex: 1;
 }
 
 .tab-btn {
@@ -1730,6 +1746,17 @@ body {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+}
+
+.sectionChoice {
+  display: flex;
+  justify-content: flex-start;
+  gap: 35px;
+}
+
+.sectionChoice .form-group {
+  display: flex;
+  align-items: center;
 }
 
 /*# sourceMappingURL=admin.css.map */

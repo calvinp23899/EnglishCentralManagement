@@ -1,0 +1,8 @@
+﻿@model List<NavItemDto>
+
+@foreach (var item in Model)
+{
+    <li class="nav-item">
+        <a class="nav-link" href="#@item.Link?.ToLower()">@item.Title</a>
+    </li>
+}

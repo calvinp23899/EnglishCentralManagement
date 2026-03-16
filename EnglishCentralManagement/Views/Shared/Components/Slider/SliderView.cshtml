@@ -1,0 +1,41 @@
+﻿@model List<SliderItemDto>
+
+<div id="homeCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+
+    <!-- dots -->
+    <div class="carousel-indicators">
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <button type="button"
+                    data-bs-target="#homeCarousel"
+                    data-bs-slide-to="@i"
+                    class="@(i == 0 ? "active" : "")">
+            </button>
+        }
+    </div>
+
+    <div class="carousel-inner">
+        <div class="carousel-inner">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <div class="carousel-item @(i == 0 ? "active" : "")"
+                     style="background-image:url('@Model[i].ImageUrl')">
+                    @if (!string.IsNullOrEmpty(Model[i].Link))
+                    {
+                        <a href="@Model[i].Link" target="_blank" class="carousel-link"></a>
+                    }
+                </div>
+            }
+        </div>     
+    </div>
+
+    <!-- arrow -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+
+    <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+
+</div>

@@ -145,4 +145,30 @@ namespace EnglishCentralManagement.Models.Enum
         [Display(Name = "Absent")]
         Absent = 2,
     }
+
+    public enum IconEnum
+    {
+        [Display(Name = "Facebook")]
+        Facebook = 1,
+        [Display(Name = "Instagram")]
+        Instagram = 2,
+    }
+
+    public enum FooterTypeEnum
+    {
+        [Display(Name = "Branch")]
+        Branch = 1,
+        [Display(Name = "Course")]
+        Course = 2,
+        [Display(Name = "Contact")]
+        Contact = 3,
+    }
+
+    public enum FolderCloudFare
+    {
+        [Display(Name = "User")]
+        User = 1,
+        [Display(Name = "Admin")]
+        Admin = 2,
+    }
 }

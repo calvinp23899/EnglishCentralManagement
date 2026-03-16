@@ -1,0 +1,92 @@
+﻿@{
+    var IconTypes = Enum.GetValues(typeof(IconEnum)).Cast<IconEnum>();
+    var FooterTypes = Enum.GetValues(typeof(FooterTypeEnum)).Cast<FooterTypeEnum>();
+}
+
+<h3>Home Page Management</h3>
+
+<div class="teacher-form view-only tab-vertical-layout">
+    <div class="class-detail-tabs vertical-tabs" data-tab-scope="setting">
+        <button class="tab-btn active" data-tab="navbar">Section</button>
+        <button class="tab-btn" data-tab="body">BodyItem</button>
+        <button class="tab-btn" data-tab="footer">Footer</button>
+    </div>
+    <div class="tab-content">
+        <!-- TAB: NavItem-->
+        <div id="tab-navbar" class="tab-pane active">
+            <div id="sectionContent"></div>
+        </div>
+
+        <!-- TAB: Body-->
+        <div id="tab-body" class="tab-pane">
+            <div id="sliderContent"></div>
+        </div>
+
+        <!-- TAB: Footer-->
+        <div id="tab-footer" class="tab-pane">
+            <div id="courseContent"></div>
+        </div>
+    </div>
+
+    <!-- RIGHT PANEL HEADERBODY SECTION-->
+    <div class="expense-drawer" id="headerBodyDrawer">
+        <div class="drawer-overlay" onclick="closeHeaderBodyDrawer()"></div>
+
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <h3>Section Form</h3>
+                <button class="close-btn" onclick="closeHeaderBodyDrawer()">✕</button>
+            </div>
+
+            <div class="drawer-body">
+                <input type="hidden" id="HeaderBodyId" />
+                <div class="sectionChoice">
+                    <div class="form-group">
+                        <label for="isNav">IsNav</label>
+                        <input id="isNav" type="radio" name="sectionType" value="isNav" />
+                    </div>
+                    <div class="form-group">
+                        <label for="isSlider">IsSlider</label>
+                        <input id="isSlider" type="radio" name="sectionType" value="isSlider" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Navbar Title</label>
+                    <input id="navTitle" type="text" />
+                </div>
+
+                <div class="form-group">
+                    <label>Title</label>
+                    <input id="headerbodyTitle" type="text" />
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="headerbodyDescription" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Link</label>
+                    <input id="headerbodyLink" type="text" />
+                </div>
+                <div class="form-group">
+                    <label>Order</label>
+                    <input id="headerbodyOrder" type="number" min="1" />
+                </div>
+                <div class="form-group">
+                    <label>ImageUrl</label>
+                    <input id="headerbodyImageUrl" type="text" />
+                </div>
+                <div class="form-group">
+                    <label>Upload</label>
+                    <input id="headerbodyImage" type="file" />
+                </div>
+
+            </div>
+
+            <div class="drawer-footer">
+                <button class="btn-primary" onclick="closeHeaderBodyDrawer()">Cancel</button>
+                <button class="btn-primary" id="btnCreateSection" onclick="createSection()">Add</button>
+                <button class="btn-primary" id="btnSaveSection" onclick="confirmSaveSection()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

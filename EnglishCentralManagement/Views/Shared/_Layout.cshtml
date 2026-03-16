@@ -18,22 +18,12 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
             <div class="container">
                 <a class="navbar-brand fw-bold" >
-                    <img src="/assets/img/logo-1.png" alt="English Central" height="60" width="240">
+                    <img src="/assets/img/logo-1.png" alt="English Central" height="60" width="200">
                 </a>
 
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#courses">Khoá Học</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="#teachers">Giáo Viên</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="#contact">Chúng Tôi</a>
-                        </li>
+                        @await Component.InvokeAsync("NavMenu")
 
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="modal" data-bs-target="#registerModal">
@@ -90,7 +80,7 @@
                 <div class="col-md-3">
                     <h5>Liên hệ</h5>
                     <p><i class="fab fa-facebook me-2"></i>Facebook</p>
-                    <p><i class="fab fa-zalo me-2"></i>Zalo</p>
+                    <p><i class="fab fa-instagram me-2"></i>InStagram</p>
                     <p><i class="fab fa-youtube me-2"></i>Youtube</p>
                 </div>
             </div>

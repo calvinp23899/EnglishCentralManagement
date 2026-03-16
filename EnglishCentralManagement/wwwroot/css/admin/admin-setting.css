@@ -1,0 +1,12 @@
+.sectionChoice {
+  display: flex;
+  justify-content: flex-start;
+  gap: 35px;
+}
+
+.sectionChoice .form-group {
+  display: flex;
+  align-items: center;
+}
+
+/*# sourceMappingURL=admin-setting.css.map */

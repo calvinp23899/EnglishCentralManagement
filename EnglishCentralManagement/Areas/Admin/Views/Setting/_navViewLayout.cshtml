@@ -1,0 +1,154 @@
+﻿@model PagedResult<SectionDto>
+
+<div class="admin-page admin-teacher">
+    <!-- HEADER -->
+    <div class="admin-page__header">
+        <h1>Section Management</h1>
+        <a class="btn-primary" onclick="createSectionDrawer()">
+            + New Section
+        </a>
+    </div>
+
+    <!-- TABLE -->
+    <div class="admin-page__table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Type</th>
+                    <th>Order</th>
+                    <th>Status</th>
+                    <th>CreatedBy</th>
+                    <th>CreatedDate</th>
+                    <th>UpdatedBy</th>
+                    <th>UpdatedDate</th>
+                    <th width="120">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model == null || !Model.Items.Any())
+                {
+                    <tr>
+                        <td colspan="5" style="text-align:center;">
+                            No section found
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var nav in Model.Items)
+                    {
+                        <tr id="nav-row-@nav.HeaderBodySectionId">
+                            <td>@nav.Title</td>
+                            <td>@nav.Type</td>
+                            <td>@nav.Order</td>
+                            <td>
+                                <span class="status status-@nav.Status.ToLower().Replace(" ", "-")">
+                                    @nav.Status
+                                </span>
+                            </td>
+                            <td>@nav.CreatedBy</td>
+                            <td>@nav.CreatedDate?.ToString("yyyy-MM-dd")</td>
+                            <td>@nav.UpdatedBy</td>
+                            <td>@nav.UpdatedDate?.ToString("yyyy-MM-dd")</td>
+                            <td class="actions">
+                                <a class="edit"
+                                   onclick="updateSectionDrawer(@nav.HeaderBodySectionId)">
+                                    Edit
+                                </a>
+                                <a class="delete"
+                                   onclick="#">
+                                    Delete
+                                </a>
+
+                            </td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+
+        </table>
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="admin-page__pagination-wrapper">
+        <div class="admin-page__pagination-info">
+            Showing <strong>
+                @((Model.PageIndex - 1) * Model.PageSize + 1)
+                –
+                @(Math.Min(Model.PageIndex * Model.PageSize, Model.TotalRecords))
+            </strong>
+            of
+            <strong>@Model.TotalRecords</strong>
+            records
+        </div>
+
+        <div class="admin-page__pagination">
+            <!-- Prev -->
+            <button class="btn-prev"
+                    onclick="location.href='@Url.Action("Index", new { page = Model.PageIndex - 1, search = ViewBag.teacherSearch  })'"
+            @(Model.HasPrevious ? "" : "disabled")>
+                ‹ Prev
+            </button>
+
+            <!-- Page 1 -->
+            <button class="@(Model.PageIndex == 1 ? "active" : "")"
+                    onclick="location.href='@Url.Action("Index", new { page = 1, search = ViewBag.teacherSearch })'">
+                1
+            </button>
+
+            @{
+                int start = Math.Max(2, Model.PageIndex - 2);
+                int end = Math.Min(Model.TotalPages - 1, Model.PageIndex + 2);
+            }
+
+            <!-- ... trước -->
+            @if (start > 2)
+            {
+                <span class="pagination-dots">...</span>
+            }
+
+            <!-- Pages giữa -->
+            @for (int i = start; i <= end; i++)
+            {
+                if (i == Model.PageIndex)
+                {
+                    <button class="active">@i</button>
+                }
+                else
+                {
+                    <button onclick="location.href='@Url.Action("Index", new { page = i, search = ViewBag.teacherSearch })'">
+                        @i
+                    </button>
+                }
+            }
+
+            <!-- ... sau -->
+            @if (end < Model.TotalPages - 1)
+            {
+                <span class="pagination-dots">...</span>
+            }
+
+            <!-- Page cuối -->
+            @if (Model.TotalPages > 1)
+            {
+                <button class="@(Model.PageIndex == Model.TotalPages ? "active" : "")"
+                        onclick="location.href='@Url.Action("Index", new { page = Model.TotalPages, search = ViewBag.teacherSearch })'">
+                    @Model.TotalPages
+                </button>
+            }
+
+            <!-- Next -->
+            <button class="btn-next"
+                    onclick="location.href='@Url.Action("Index", new { page = Model.PageIndex + 1, search = ViewBag.teacherSearch })'"
+            @(Model.HasNext ? "" : "disabled")>
+                Next ›
+            </button>
+        </div>
+    </div>
+
+    <form id="antiForgeryForm" style="display:none;">
+        @Html.AntiForgeryToken()
+    </form>
+</div>

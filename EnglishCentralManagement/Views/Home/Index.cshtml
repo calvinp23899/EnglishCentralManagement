@@ -2,51 +2,7 @@
     ViewData["Title"] = "English Central";
 }
 
-<div id="homeCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
-
-    <!-- dots -->
-    <div class="carousel-indicators">
-        <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="0" class="active"></button>
-        <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="1"></button>
-        <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="2"></button>
-    </div>
-
-    <div class="carousel-inner">
-
-        <!-- Banner 1 -->
-        <div class="carousel-item active" style="background-image:url('/assets/img/slider.png')">
-@*             <div class="carousel-caption">
-                <h1>Learn English With Confidence</h1>
-                <p>Luyện thi IELTS cùng giáo viên 8.0+</p>
-
-                <a href="#courses" class="btn btn-warning btn-lg">
-                    Explore Programs
-                </a>
-            </div> *@
-        </div>
-
-        <!-- Banner 2 -->
-        <div class="carousel-item" style="background-image:url('/assets/img/slider.png')">
-
-        </div>
-
-        <!-- Banner 3 -->
-        <div class="carousel-item" style="background-image:url('/assets/img/slider.png')">
-        </div>
-
-
-    </div>
-
-    <!-- arrow -->
-    <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-    </button>
-
-    <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-    </button>
-
-</div>
+@await Component.InvokeAsync("Slider")
 
 
 <section id="courses" class="py-5">

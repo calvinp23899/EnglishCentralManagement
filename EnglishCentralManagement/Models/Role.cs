@@ -1,6 +1,4 @@
-﻿using EnglishCentralManagement.Models.Enum;
-
-namespace EnglishCentralManagement.Models
+﻿namespace EnglishCentralManagement.Models
 {
     public class Role : BaseModel
     {

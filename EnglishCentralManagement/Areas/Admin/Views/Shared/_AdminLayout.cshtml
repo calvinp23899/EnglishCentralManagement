@@ -59,6 +59,14 @@
                             </div>
                         </a>
                     </li>
+                    <li class="menu-item @(controller == "Setting" ? "active" : "")">
+                        <a href="@Url.Action("Index", "Setting", new { area = "Admin" })">
+                            <div class="left">
+                                <span class="fa-solid fa-book-open"></span>
+                                <span class="text">Setting</span>
+                            </div>
+                        </a>
+                    </li>
                 }
 
                 @if (canViewDashboard)
@@ -239,9 +247,7 @@
                     <input id="newPassConfirm"
                            name="newPassConfirm"
                            type="password"
-                           required
-@*                            oninput="validateConfirmPassword()" 
- *@                    />
+                           required/>
                 </div>
                 <div class="show-password">
                     <input type="checkbox" onclick="showPassword()">
@@ -287,7 +293,7 @@
     <script src="~/js/admin/admin-cost.js"></script>
     <script src="~/js/admin/admin-download-excel.js"></script>
     <script src="~/js/admin/admin-class-session.js"></script>
-
+    <script src="~/js/admin/admin-setting.js"></script>
 </body>
 </html>
 
