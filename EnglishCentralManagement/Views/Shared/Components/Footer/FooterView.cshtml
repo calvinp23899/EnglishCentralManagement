@@ -1,0 +1,86 @@
+﻿@model FooterDto
+<footer class="footer-main">
+    <div class="container">
+        <div class="row">
+            @if(Model.ItemsDefault.Count() > 0)
+            {
+                <!-- Column 1 -->
+                <div class="col-md-3">
+                    <h4 class="footer-logo">The English Central</h4>
+                    <a class="navbar-brand fw-bold">
+                        <img src="/assets/img/white-logo.png" alt="English Central" height="120">
+                    </a>
+                    @foreach (var item in Model.ItemsDefault)
+                    {
+                        <p><i class="fas fa-@item.Icon"></i> @item.Description</p>
+                    }
+                </div>
+            }
+            
+            @if (Model.ItemsBranchFooter.Count() > 0)
+            {
+                <!-- Column -->
+                <div class="col-md-3">
+                    <h5>Hệ Thống Cơ Sở</h5>
+                    @foreach (var item in Model.ItemsBranchFooter)
+                    {
+                        <p><i class="@item.Icon me-2"></i>@item.Description</p>
+                    }
+                </div>                    
+            }
+
+            @if (Model.ItemsCourseFooter.Count > 0)
+            {
+                <!-- Column -->
+                <div class="col-md-3">
+                    <h5>Khóa Học Tiếng Anh</h5>
+                    <ul class="footer-links">
+                    @foreach (var item in Model.ItemsCourseFooter)
+                    {               
+                        <p>@item.Description</p>
+                    }
+                    </ul>
+                </div>
+            }
+            @if (Model.ItemsContactFooter.Count() > 0)
+            {
+                <!-- Column -->
+                <div class="col-md-3">
+                    <h5>Liên hệ</h5>
+                    @foreach (var item in Model.ItemsContactFooter)
+                    {
+                        <p><i class="@item.Icon me-2"></i>@item.Description</p>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+    <!-- COPYRIGHT -->
+    <div class="footer-bottom text-center">
+        © @DateTime.Now.Year The English Central. All rights reserved.
+    </div>
+</footer>
+
+@if(Model.ItemsContactDefault.Count > 0)
+{
+    <div class="floating-contact">
+        @foreach (var item in Model.ItemsContactDefault)
+        {
+            if (item.IconName.ToLower().Equals("zalo"))
+            {
+                <!-- Zalo -->
+                <a href="@item.Link" target="_blank" class="zalo-btn">
+                    <img src="/assets/img/zalo-icon.png" alt="Zalo">
+                </a>
+            }
+            if (item.IconName.ToLower().Equals("phone"))
+            {
+                <!-- Phone -->
+                <a href="#" class="phone-btn">
+                    <i class="fa-solid fa-phone phone-icon"></i>
+                    <span>@item.Description</span>
+                </a>
+            }
+        }
+    </div>
+}

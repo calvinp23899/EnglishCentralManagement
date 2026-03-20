@@ -2,6 +2,7 @@
 using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
 using EnglishCentralManagement.Data;
 using EnglishCentralManagement.Models.Enum;
+using EnglishCentralManagement.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.RateLimiting;
@@ -34,6 +35,9 @@ namespace EnglishCentralManagement
             builder.Services.AddScoped<IExpenseService, ExpenseService>();
             builder.Services.AddScoped<IExcelService, ExcelService>();
             builder.Services.AddScoped<IClassSessionService, ClassSessionService>();
+            builder.Services.AddScoped<ISettingService, SettingService>();
+            builder.Services.AddSingleton<CloudflareR2Service>();
+
             #endregion
             //Rate Limiting
             builder.Services.AddRateLimiter(options =>

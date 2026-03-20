@@ -11,16 +11,28 @@ namespace EnglishCentralManagement.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IStudentService _studentService;
+        private readonly ISettingService _settingService;
 
-        public HomeController(ILogger<HomeController> logger, IStudentService studentService)
+        public HomeController(ILogger<HomeController> logger
+            , IStudentService studentService
+            , ISettingService settingService)
         {
             _logger = logger;
             _studentService = studentService;
+            _settingService = settingService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            try
+            {
+                var data = await _settingService.GetContentDataAsync();
+                return View(data);
+            }
+            catch (Exception)
+            {
+                return View(new List<SectionContentDto>());
+            }
         }
 
         [HttpPost]

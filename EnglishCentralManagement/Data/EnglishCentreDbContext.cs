@@ -21,6 +21,9 @@ namespace EnglishCentralManagement.Data
         public DbSet<Expense> Expenses => Set<Expense>();
         public DbSet<ClassSession> ClassSessions => Set<ClassSession>();
         public DbSet<Attendance> Attendances => Set<Attendance>();
+        public DbSet<FooterItem> FooterItems => Set<FooterItem>();
+        public DbSet<HeaderBodySection> HeaderBodyItems => Set<HeaderBodySection>();
+        public DbSet<SectionItem> SectionItems => Set<SectionItem>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,6 +39,8 @@ namespace EnglishCentralManagement.Data
             modelBuilder.Entity<Expense>().HasQueryFilter(x => !x.IsDeleted);
             modelBuilder.Entity<Attendance>().HasQueryFilter(x => !x.IsDeleted);
             modelBuilder.Entity<ClassSession>().HasQueryFilter(x => !x.IsDeleted);
+            //modelBuilder.Entity<FooterItem>().HasQueryFilter(x => !x.IsDeleted);
+            //modelBuilder.Entity<HeaderBodySection>().HasQueryFilter(x => !x.IsDeleted);
             modelBuilder.Entity<PaymentSchedule>()
                     .HasOne(ps => ps.Enrollment)
                     .WithMany(e => e.PaymentSchedules)
@@ -58,6 +63,11 @@ namespace EnglishCentralManagement.Data
                 .HasOne(e => e.Staff)
                 .WithMany(s => s.Events)
                 .HasForeignKey(e => e.StaffId)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<HeaderBodySection>()
+                .HasMany(h => h.SectionItems)
+                .WithOne(s => s.HeaderBodySection)
+                .HasForeignKey(s => s.HeaderBodySectionId)
                 .OnDelete(DeleteBehavior.Cascade);
             base.OnModelCreating(modelBuilder);
         }

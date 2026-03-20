@@ -5,6 +5,22 @@
   margin-bottom: 24px;
 }
 
+.tab-vertical-layout {
+  display: flex;
+  gap: 30px;
+}
+
+.tab-vertical-layout .vertical-tabs {
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+  border-right: 2px solid #eee;
+}
+
+.tab-vertical-layout .tab-content {
+  flex: 1;
+}
+
 .tab-btn {
   padding: 10px 0;
   background: none;

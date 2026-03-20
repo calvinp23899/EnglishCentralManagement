@@ -449,6 +449,110 @@ namespace EnglishCentralManagement.Migrations
                     b.ToTable("Expenses");
                 });
 
+            modelBuilder.Entity("EnglishCentralManagement.Models.FooterItem", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Icon")
+                        .HasColumnType("text");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool?>("IsBranch")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool?>("IsContact")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool?>("IsCourse")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Link")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("Order")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FooterItems");
+                });
+
+            modelBuilder.Entity("EnglishCentralManagement.Models.HeaderBodySection", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool?>("IsNav")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool?>("IsSlider")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Link")
+                        .HasColumnType("text");
+
+                    b.Property<string>("NavTitle")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("Order")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HeaderBodyItems");
+                });
+
             modelBuilder.Entity("EnglishCentralManagement.Models.Payment", b =>
                 {
                     b.Property<long>("Id")
@@ -570,6 +674,54 @@ namespace EnglishCentralManagement.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("EnglishCentralManagement.Models.SectionItem", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<long?>("HeaderBodySectionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Link")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("Order")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HeaderBodySectionId");
+
+                    b.ToTable("SectionItems");
                 });
 
             modelBuilder.Entity("EnglishCentralManagement.Models.Staff", b =>
@@ -705,6 +857,9 @@ namespace EnglishCentralManagement.Migrations
                     b.Property<string>("LastName")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("text");
 
                     b.Property<string>("PhoneNumber")
                         .HasMaxLength(20)
@@ -855,6 +1010,16 @@ namespace EnglishCentralManagement.Migrations
                     b.Navigation("Enrollment");
                 });
 
+            modelBuilder.Entity("EnglishCentralManagement.Models.SectionItem", b =>
+                {
+                    b.HasOne("EnglishCentralManagement.Models.HeaderBodySection", "HeaderBodySection")
+                        .WithMany("SectionItems")
+                        .HasForeignKey("HeaderBodySectionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("HeaderBodySection");
+                });
+
             modelBuilder.Entity("EnglishCentralManagement.Models.Class", b =>
                 {
                     b.Navigation("Enrollments");
@@ -873,6 +1038,11 @@ namespace EnglishCentralManagement.Migrations
             modelBuilder.Entity("EnglishCentralManagement.Models.Enrollment", b =>
                 {
                     b.Navigation("PaymentSchedules");
+                });
+
+            modelBuilder.Entity("EnglishCentralManagement.Models.HeaderBodySection", b =>
+                {
+                    b.Navigation("SectionItems");
                 });
 
             modelBuilder.Entity("EnglishCentralManagement.Models.PaymentSchedule", b =>

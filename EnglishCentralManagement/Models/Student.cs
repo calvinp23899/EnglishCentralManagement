@@ -24,6 +24,7 @@ namespace EnglishCentralManagement.Models
         public string? Address { get; set; }
 
         public bool? Gender { get; set; }
+        public string? Note { get; set; }
 
         public StudentStatus Status { get; set; } = StudentStatus.Active;
 
