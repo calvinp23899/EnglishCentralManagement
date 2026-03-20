@@ -1,12 +1,14 @@
 ﻿@{
-    var IconTypes = Enum.GetValues(typeof(IconEnum)).Cast<IconEnum>();
+    var IconTypes = Enum.GetValues(typeof(IconEnum))
+                .Cast<IconEnum>();
     var FooterTypes = Enum.GetValues(typeof(FooterTypeEnum)).Cast<FooterTypeEnum>();
+    var StatusTypes = Enum.GetValues(typeof(StatusEnum)).Cast<StatusEnum>();
 }
 
 <h3>Home Page Management</h3>
 
-<div class="teacher-form view-only tab-vertical-layout">
-    <div class="class-detail-tabs vertical-tabs" data-tab-scope="setting">
+<div class="teacher-form view-only ">
+    <div class="class-detail-tabs" data-tab-scope="setting">
         <button class="tab-btn active" data-tab="navbar">Section</button>
         <button class="tab-btn" data-tab="body">BodyItem</button>
         <button class="tab-btn" data-tab="footer">Footer</button>
@@ -19,12 +21,12 @@
 
         <!-- TAB: Body-->
         <div id="tab-body" class="tab-pane">
-            <div id="sliderContent"></div>
+            <div id="sectionItem"></div>
         </div>
 
         <!-- TAB: Footer-->
         <div id="tab-footer" class="tab-pane">
-            <div id="courseContent"></div>
+            <div id="footerContent"></div>
         </div>
     </div>
 
@@ -71,6 +73,18 @@
                     <label>Order</label>
                     <input id="headerbodyOrder" type="number" min="1" />
                 </div>
+                <div class="form-group" id="sectionFormStatus">
+                    <label>Status</label>
+                    <select name="sectionStatus" id="sectionStatus" class="form-control">
+                        <option value="">-- Select Status --</option>
+                        @foreach (var item in StatusTypes)
+                        {
+                            <option value="@( (int)item )">
+                                @item
+                            </option>
+                        }
+                    </select>
+                </div>
                 <div class="form-group">
                     <label>ImageUrl</label>
                     <input id="headerbodyImageUrl" type="text" />
@@ -86,6 +100,153 @@
                 <button class="btn-primary" onclick="closeHeaderBodyDrawer()">Cancel</button>
                 <button class="btn-primary" id="btnCreateSection" onclick="createSection()">Add</button>
                 <button class="btn-primary" id="btnSaveSection" onclick="confirmSaveSection()">Save</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- RIGHT PANEL FOOTER-->
+    <div class="expense-drawer" id="footerDrawer">
+        <div class="drawer-overlay" onclick="closeFooterDrawer()"></div>
+
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <h3>Footer Form</h3>
+                <button class="close-btn" onclick="closeFooterDrawer()">✕</button>
+            </div>
+
+            <div class="drawer-body">
+                <input type="hidden" id="FooterItemId" />
+                <div class="form-group">
+                    <label>Type</label>
+                    <select name="footerType">
+                        <option value="">-- Select Type --</option>
+
+                        @foreach (var item in FooterTypes)
+                        {
+                            <option value="@( (int)item )">
+                                @item
+                            </option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input id="footerDescription" type="text" />
+                </div>
+
+                <div class="form-group">
+                    <label>Link</label>
+                    <input id="footerLink" type="text" />
+                </div>
+                <div class="form-group" id="footerFormStatus">
+                    <label>Status</label>
+                    <select name="footerStatus" id="footerStatus" class="form-control">
+                        <option value="">-- Select Status --</option>
+                        @foreach (var item in StatusTypes)
+                        {
+                            <option value="@( (int)item )">
+                                @item
+                            </option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Order</label>
+                    <input id="footerOrder" type="number" min="1" />
+                </div>
+                <div class="form-group">
+                    <label>Icon</label>
+                    <select name="footerIcon">
+                        <option value="">-- Select Icon --</option>
+
+                        @foreach (var item in IconTypes)
+                        {
+                            <option value="@( (int)item )">
+                                @item
+                            </option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>IconDisplay</label>
+                    <input id="footerIconDisplay" type="text" />
+                </div>
+            </div>
+
+            <div class="drawer-footer">
+                <button class="btn-primary" onclick="closeFooterDrawer()">Cancel</button>
+                <button class="btn-primary" id="btnCreateFooter" onclick="createFooter()">Add</button>
+                <button class="btn-primary" id="btnSaveFooter" onclick="confirmSaveFooter()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT PANEL CONTENT ITEMS-->
+    <div class="expense-drawer" id="contentDrawer">
+        <div class="drawer-overlay" onclick="closeContentDrawer()"></div>
+
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <h3>Section Item Form</h3>
+                <button class="close-btn" onclick="closeContentDrawer()">✕</button>
+            </div>
+
+            <div class="drawer-body">
+                <input type="hidden" id="ContentItemId" />
+                <div class="form-group">
+                    <label>Nav Title</label>
+                    <select id="sectionContentType" name="sectionContentType" class="form-control">
+                        <option value="">-- Select Section --</option>
+                        @foreach (var item in (SelectList)ViewBag.Sections)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Content Title</label>
+                    <input id="contentTitle" type="text" />
+                </div>
+                <div class="form-group">
+                    <label>Content Description</label>
+                    <input id="contentDescription" type="text" />
+                </div>
+                <div class="form-group" id="contentFormStatus">
+                    <label>Status</label>
+                    <select name="contentStatus" id="contentStatus" class="form-control">
+                        <option value="">-- Select Status --</option>
+                        @foreach (var item in StatusTypes)
+                        {
+                            <option value="@( (int)item )">
+                                @item
+                            </option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Order</label>
+                    <input id="contentOrder" type="number" min="1" />
+                </div>
+                <div class="form-group">
+                    <label>Link</label>
+                    <input id="contentLink" type="text" />
+                </div>
+                
+                <div class="form-group">
+                    <label>ImageUrl</label>
+                    <input id="contentImgUrl" type="text" />
+                </div>
+                <div class="form-group">
+                    <label>Upload</label>
+                    <input id="contentImage" type="file" />
+                </div>
+            </div>
+
+            <div class="drawer-footer">
+                <button class="btn-primary" onclick="closeContentDrawer()">Cancel</button>
+                <button class="btn-primary" id="btnCreateContent" onclick="createContent()">Add</button>
+                <button class="btn-primary" id="btnSaveContent" onclick="confirmSaveContentItem()">Save</button>
             </div>
         </div>
     </div>

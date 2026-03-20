@@ -19,49 +19,71 @@
 
 function loadSettingTab(tab) {
     if (tab === "body") {
-        loadSlider();
+        loadSectionContentItems();
     }
 
     if (tab === "footer") {
-        loadCourse();
+        loadFooter();
     }
 
     if (tab === "navbar") {
         loadNav();
     }
 }
+function reloadSections() {
+    $.get('/Admin/Setting/GetSections', function (data) {
+        var select = $('#sectionContentType');
+        var currentVal = select.val(); // giữ lại giá trị đang chọn nếu có
 
-function loadSlider() {
+        select.empty();
+        select.append('<option value="">-- Select Section --</option>');
+        $.each(data, function (i, item) {
+            select.append(`<option value="${item.id}">${item.title}</option>`);
+        });
+
+        // Restore lại giá trị cũ nếu vẫn còn tồn tại
+        select.val(currentVal);
+    });
+}
+function loadSectionContentItems(page = 1) {
     $.ajax({
-        url: "/Admin/Setting/LoadSlider",
+        url: "/Admin/Setting/LoadSectionContentItems",
         type: "GET",
+        data: {
+            page: page
+        },
         success: function (html) {
-            $("#sliderContent").html(html);
+            $("#sectionItem").html(html);
         },
         error: function () {
-            showToast("Failed to load slider", "error");
+            showToast("Failed to load content", "error");
         }
     });
 }
 
-function loadCourse() {
+function loadFooter(page = 1) {
     $.ajax({
-        url: "/Admin/Setting/LoadCourse",
+        url: "/Admin/Setting/LoadFooter",
         type: "GET",
+        data: {
+            page: page
+        },
         success: function (html) {
-            $("#courseContent").html(html);
+            $("#footerContent").html(html);
         },
         error: function () {
-            showToast("Failed to load slider", "error");
+            showToast("Failed to load footer", "error");
         }
     });
 }
 
-function loadNav() {
-    console.log("load nav");
+function loadNav(page = 1) {
     $.ajax({
         url: "/Admin/Setting/LoadSectionItem",
         type: "GET",
+        data: {
+            page: page
+        },
         success: function (html) {
             $("#sectionContent").html(html);
         },
@@ -95,6 +117,7 @@ function createSection() {
             showToast("Section created successfully", "success");
             closeHeaderBodyDrawer();
             loadNav();
+            reloadSections();
         },
         error: function (xhr) {
             const msg = xhr.responseText || "Failed to create section";
@@ -110,6 +133,17 @@ function confirmSaveSection(id) {
         },
         'Save Section',
         'Save'
+    );
+}
+
+function confirmDeleteSection(id) {
+    openConfirmModal(
+        'Do you want to delete this section? This action includes deleting section items',
+        function () {
+            DeleteSection(id);
+        },
+        'Delete Section',
+        'Delete'
     );
 }
 function saveSection(id) {
@@ -132,6 +166,25 @@ function saveSection(id) {
     });
 }
 
+function DeleteSection(id) {
+    $.ajax({
+        url: "/Admin/Setting/DeleteSection",
+        type: "POST",
+        data: {
+            id: id
+        },
+        success: function () {
+            showToast("Section Deleted Successfully", "success");
+            closeHeaderBodyDrawer();
+            loadNav();
+        },
+        error: function (xhr) {
+            const msg = xhr.responseText || "Failed to delete section";
+            showToast(msg, "error");
+        }
+    });
+}
+
 function loadSectionData(id) {
     $.ajax({
         url: "/Admin/Setting/GetSectionDetail",
@@ -140,6 +193,7 @@ function loadSectionData(id) {
             id: id
         },
         success: function (response) {
+            console.log("response: ", response);
             $("#HeaderBodyId").val(response.headerBodySectionId);
             $("#navTitle").val(response.navTitle);
             $("#headerbodyTitle").val(response.title);
@@ -148,6 +202,7 @@ function loadSectionData(id) {
             $("#headerbodyOrder").val(response.order);
             $("#HeaderBodyId").val(response.headerBodySectionId);
             $("#headerbodyImageUrl").val(response.imageUrl);
+            $("#sectionStatus").val(response.isActive);
 
             // set radio button
             if (response.isNav) {
@@ -179,6 +234,8 @@ function getDataSection() {
     formData.append("Description", $("#headerbodyDescription").val());
     formData.append("Link", $("#headerbodyLink").val());
     formData.append("Order", $("#headerbodyOrder").val());
+    formData.append("IsActive", $("select[name='sectionStatus']").val());
+
 
     const imageFile = $("#headerbodyImage")[0].files[0];
     if (imageFile) {
@@ -222,6 +279,7 @@ function applySectionMode(drawerSessionMode) {
         $('input[name="sectionType"]').prop("disabled", true);  // ← disable radio
         $("#headerbodyImageUrl").prop("disabled", true);
         $("#btnSaveSection").show();
+        $("#sectionFormStatus").show();
         $("#btnCreateSection").hide();
     }
 
@@ -229,6 +287,7 @@ function applySectionMode(drawerSessionMode) {
         $("#headerBodyDrawer input, #headerBodyDrawer select, #headerBodyDrawer textarea").prop("disabled", false);
         $("#headerbodyImageUrl").prop("disabled", true);
         $("#btnSaveSection").hide();
+        $("#sectionFormStatus").hide();
         $("#btnCreateSection").show();
     }
 }
@@ -248,3 +307,337 @@ $(document).on("change", 'input[name="sectionType"]', function () {
         $("#headerbodyImageUrl").prop("disabled", true);
     }
 });
+
+//================= FOOTER JS ===============
+function openFooterDrawer() {
+    $("#footerDrawer").addClass("active");
+}
+
+function closeFooterDrawer() {
+    $("#footerDrawer").removeClass("active");
+}
+function confirmSaveFooter(id) {
+    openConfirmModal(
+        'Do you want to save this footer?',
+        function () {
+            saveFooter(id);
+        },
+        'Save Footer',
+        'Save'
+    );
+}
+function confirmDeleteFooter(id) {
+    openConfirmModal(
+        'Do you want to delete this footer?',
+        function () {
+            DeleteFooter(id);
+        },
+        'Delete Footer',
+        'Delete'
+    );
+}
+function DeleteFooter(id) {
+    $.ajax({
+        url: "/Admin/Setting/DeleteFooter",
+        type: "POST",
+        data: {
+            id: id
+        },
+        success: function () {
+            showToast("Footer Deleted Successfully", "success");
+            closeFooterDrawer();
+            loadFooter();
+        },
+        error: function (xhr) {
+            const msg = xhr.responseText || "Failed to delete footer";
+            showToast(msg, "error");
+        }
+    });
+}
+function createFooterDrawer() {
+    clearFooterForm();
+    applyFooterMode("create");
+    openFooterDrawer();
+}
+
+function updateFooterDrawer(id) {
+    clearFooterForm();
+    loadFooterDetailData(id);
+    applyFooterMode("edit");
+    setTimeout(function () {
+        openFooterDrawer();
+    }, 500);
+}
+
+function clearFooterForm() {
+    $("#footerDrawer select").val("");
+    $("#footerDrawer textarea").val("");
+    $("#footerDrawer input").val("");
+}
+
+function applyFooterMode(drawerSessionMode) {
+
+    if (drawerSessionMode === "view") {
+
+    }
+
+    if (drawerSessionMode === "edit") {
+        $("#btnSaveFooter").show();
+        $("#footerIconDisplay").show();
+        $("#footerFormStatus").show();
+        $("#footerIconDisplay").prop("disabled", true);
+        $("#btnCreateFooter").hide();
+    }
+
+    if (drawerSessionMode === "create") {
+
+        $("#btnSaveFooter").hide();
+        $("#footerIconDisplay").hide();
+        $("#footerFormStatus").hide();
+        $("#btnCreateFooter").show();
+    }
+}
+
+function createFooter() {
+    const formData = getFooterData();
+    $.ajax({
+        url: "/Admin/Setting/CreateFooter",
+        type: "POST",
+        data: formData,
+        processData: false, 
+        contentType: false, 
+        success: function () {
+            showToast("Footer created successfully", "success");
+            closeFooterDrawer();
+            loadFooter();
+        },
+        error: function (xhr) {
+            const msg = xhr.responseText || "Failed to create footer";
+            showToast(msg, "error");
+        }
+    });
+}
+function saveFooter(id) {
+    const formData = getFooterData();
+    $.ajax({
+        url: "/Admin/Setting/UpdateFooter",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function () {
+            showToast("Footer updated successfully", "success");
+            closeFooterDrawer();
+            loadFooter();
+        },
+        error: function (xhr) {
+            const msg = xhr.responseText || "Failed to update footer";
+            showToast(msg, "error");
+        }
+    });
+}
+
+function loadFooterDetailData(id) {
+    $.ajax({
+        url: "/Admin/Setting/GetFooterDetail",
+        type: "GET",
+        data: {
+            id: id
+        },
+        success: function (response) {
+            $("#FooterItemId").val(response.id);
+            $("select[name='footerType']").val(response.footerEnum);
+            $("#footerDescription").val(response.description);
+            $("#footerLink").val(response.link);
+            $("#footerOrder").val(response.order);
+            $("#footerIconDisplay").val(response.icon);
+            $("select[name='footerIcon']").val(response.iconEnum);
+            $("select[name='footerStatus']").val(response.isActive);     
+        },
+        error: function (xhr) {
+            const msg = xhr.responseText || "Failed to load footer";
+            showToast(msg, "error");
+        }
+    });
+}
+function getFooterData() {
+    const formData = new FormData();
+    formData.append("Id", $("#FooterItemId").val());
+    formData.append("FooterEnum", $("select[name='footerType']").val());
+    formData.append("Description", $("#footerDescription").val());
+    formData.append("Link", $("#footerLink").val());
+    formData.append("Order", $("#footerOrder").val());
+    formData.append("IconEnum", $("select[name='footerIcon']").val());
+    formData.append("IsActive", $("select[name='footerStatus']").val());
+    return formData;
+}
+
+
+//=================CONTENT JS ==============
+function openContentDrawer() {
+    $("#contentDrawer").addClass("active");
+}
+
+function closeContentDrawer() {
+    $("#contentDrawer").removeClass("active");
+}
+function confirmSaveContentItem(id) {
+    openConfirmModal(
+        'Do you want to save this section item?',
+        function () {
+            saveContent(id);
+        },
+        'Save Section Item',
+        'Save'
+    );
+}
+function createContentDrawer() {
+    clearContentForm();
+    applyContentMode("create");
+    openContentDrawer();
+}
+
+function updateContentDrawer(id) {
+    clearContentForm();
+    loadContentDetailData(id);
+    applyContentMode("edit");
+    setTimeout(function () {
+        openContentDrawer();
+    }, 500);
+}
+
+function confirmDeleteContent(id) {
+    openConfirmModal(
+        'Do you want to delete this content?',
+        function () {
+            DeleteContent(id);
+        },
+        'Delete Footer',
+        'Delete'
+    );
+}
+function DeleteContent(id) {
+    $.ajax({
+        url: "/Admin/Setting/DeleteSectionItem",
+        type: "POST",
+        data: {
+            id: id
+        },
+        success: function () {
+            showToast("Content Deleted Successfully", "success");
+            closeContentDrawer();
+            loadSectionContentItems();
+        },
+        error: function (xhr) {
+            const msg = xhr.responseText || "Failed to delete content";
+            showToast(msg, "error");
+        }
+    });
+}
+
+function clearContentForm() {
+    $("#contentDrawer select").val("");
+    $("#contentDrawer textarea").val("");
+    $("#contentDrawer input").val("");
+}
+
+function applyContentMode(drawerSessionMode) {
+    $("#contentImgUrl").prop("disabled", true);
+
+    if (drawerSessionMode === "view") {
+
+    }
+
+    if (drawerSessionMode === "edit") {
+        $("#btnSaveContent").show();
+        $("#contentFormStatus").show();
+        $("#btnCreateContent").hide();
+    }
+
+    if (drawerSessionMode === "create") {
+
+        $("#btnSaveContent").hide();
+        $("#contentFormStatus").hide();
+        $("#btnCreateContent").show();
+    }
+}
+
+function createContent() {
+    const formData = getContentData();
+    $.ajax({
+        url: "/Admin/Setting/CreateSectionContent",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function () {
+            showToast("SectionContent created successfully", "success");
+            closeContentDrawer();
+            loadSectionContentItems();
+        },
+        error: function (xhr) {
+            const msg = xhr.responseText || "Failed to create content";
+            showToast(msg, "error");
+        }
+    });
+}
+function saveContent(id) {
+    const formData = getContentData();
+    $.ajax({
+        url: "/Admin/Setting/UpdateSectionContent",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function () {
+            showToast("Content updated successfully", "success");
+            closeContentDrawer();
+            loadSectionContentItems();
+        },
+        error: function (xhr) {
+            const msg = xhr.responseText || "Failed to update content";
+            showToast(msg, "error");
+        }
+    });
+}
+
+function loadContentDetailData(id) {
+    $.ajax({
+        url: "/Admin/Setting/GetContentDetail",
+        type: "GET",
+        data: {
+            id: id
+        },
+        success: function (response) {
+            $("#ContentItemId").val(response.id);
+            $("select[name='sectionContentType']").val(response.headerBodySectionId);
+            $("select[name='contentStatus']").val(response.isActive);
+            $("#contentTitle").val(response.title);
+            $("#contentDescription").val(response.description);
+            $("#contentOrder").val(response.order);
+            $("#contentLink").val(response.link);
+            $("#contentImgUrl").val(response.imageUrl);
+        },
+        error: function (xhr) {
+            const msg = xhr.responseText || "Failed to load footer";
+            showToast(msg, "error");
+        }
+    });
+}
+function getContentData() {
+    const formData = new FormData();
+    formData.append("Id", $("#ContentItemId").val());
+    formData.append("HeaderBodySectionId", $("select[name='sectionContentType']").val());
+    formData.append("IsActive", $("select[name='contentStatus']").val());
+    formData.append("Title", $("#contentTitle").val());
+    formData.append("Description", $("#contentDescription").val());
+    formData.append("Order", $("#contentOrder").val());
+    formData.append("Link", $("#contentLink").val());
+
+    const imageFile = $("#contentImage")[0].files[0];
+    if (imageFile) {
+        formData.append("Image", imageFile);
+    }
+
+    return formData;
+}

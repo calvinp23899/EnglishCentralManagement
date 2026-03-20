@@ -40,71 +40,9 @@
             @RenderBody()
         </main>
     </div>
+    @await Component.InvokeAsync("Footer")
 
-    <footer class="footer-main">
-        <div class="container">
-            <div class="row">
 
-                <!-- Column 1 -->
-                <div class="col-md-3">
-                    <h4 class="footer-logo">The English Central</h4>
-                    <a class="navbar-brand fw-bold">
-                        <img src="/assets/img/white-logo.png" alt="English Central" height="120">
-                    </a>
-                    <p>Hotline: 0900 000 000</p>
-                    <p>Email: englishcentral@gmail.com</p>
-                    <p>Giờ hoạt động: 8:00 - 21:00</p>
-                </div>
-
-                <!-- Column 2 -->
-                <div class="col-md-3">
-                    <h5>Hệ thống cơ sở</h5>
-                    <p><i class="fas fa-map-marker-alt me-2"></i>00 Nguyễn Hữu Thọ, Đà Nẵng</p>
-                    <p><i class="fas fa-map-marker-alt me-2"></i>0000 Nguyễn Hữu Thọ, Đà Nẵng</p>
-                </div>
-
-                <!-- Column 3 -->
-                <div class="col-md-3">
-                    <h5>Khóa Học Tiếng Anh</h5>
-
-                    <ul class="footer-links">
-                        <li>Khóa IELTS Kèm Cấp Tốc</li>
-                        <li>Khóa Pre-IELTS</li>
-                        <li>Khóa Foundation</li>
-                        <li>Khóa Beginner</li>
-                        <li>Khóa Intermediate</li>
-                    </ul>
-                </div>
-
-                <!-- Column 4 -->
-                <div class="col-md-3">
-                    <h5>Liên hệ</h5>
-                    <p><i class="fab fa-facebook me-2"></i>Facebook</p>
-                    <p><i class="fab fa-instagram me-2"></i>InStagram</p>
-                    <p><i class="fab fa-youtube me-2"></i>Youtube</p>
-                </div>
-            </div>
-        </div>
-        <!-- COPYRIGHT -->
-        <div class="footer-bottom text-center">
-            © @DateTime.Now.Year The English Central. All rights reserved.
-        </div>
-    </footer>
-
-    <div class="floating-contact">
-
-        <!-- Zalo -->
-        <a href="#" target="_blank" class="zalo-btn">
-            <img src="/assets/img/zalo-icon.png" alt="Zalo">
-        </a>
-
-        <!-- Phone -->
-        <a href="tel:0900000000" class="phone-btn">
-            <i class="fa-solid fa-phone phone-icon"></i>
-            <span>0900000000</span>
-        </a>
-
-    </div>
     <button id="backToTop" class="back-to-top">
         <i class="fa-solid fa-arrow-up"></i>
     </button>

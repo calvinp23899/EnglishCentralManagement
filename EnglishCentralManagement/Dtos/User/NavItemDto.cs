@@ -4,5 +4,6 @@
     {
         public string? Title { get; set; }
         public string? Link { get; set; }
+        public long? Id { get; set; }
     }
 }

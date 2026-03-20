@@ -1,88 +1,87 @@
-﻿@{
+﻿@model List<SectionContentDto>
+@{
     ViewData["Title"] = "English Central";
 }
 
 @await Component.InvokeAsync("Slider")
 
+@if(!Model.Any() || Model == null)
+{
+    <h3>No Content Body</h3>
+}
+else
+{
+    @foreach (var item in Model)
+    {
+        switch (item.SectionLink?.ToLower())
+        {
+            case "courses":
+                <section id="courses" class="py-5">
+                    <div class="container">
+                        <h2 class="text-center mb-5">Khoá Học</h2>
 
-<section id="courses" class="py-5">
-    <div class="container">
-        <h2 class="text-center mb-5">Các Khoá Học</h2>
-
-        <div class="row g-4">
-
-            <div class="col-md-4">
-                <div class="card shadow">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">IELTS Preparation</h5>
-                        <p class="card-text">
-                            Intensive course to achieve band 7+
-                        </p>
+                        <div class="row g-4">
+                            @foreach (var contentItems in item.ItemsContent)
+                            {
+                                <div class="col-md-4">
+                                    <div class="card shadow">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">@contentItems.ContentTitle</h5>
+                                            <p class="card-text">
+                                                @contentItems.ContentDescription
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                     </div>
                 </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card shadow">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Communication</h5>
-                        <p class="card-text">
-                            Improve speaking confidence
-                        </p>
+            </section>
+            break;
+            case "teachers":
+                <section id="teachers" class="bg-light py-5">
+                    <div class="container">
+                        <h2 class="text-center mb-5">Giáo Viên</h2>
+                        <div class="row g-4">
+                            @foreach (var contentItems in item.ItemsContent)
+                            {
+                                <div class="col-md-4 text-center">
+                                    <img src="@(contentItems.ContentImage ?? "/assets/img/avatar-default.png")" class="rounded-circle mb-3" width="120">
+                                    <h5>@contentItems.ContentTitle</h5>
+                                    <p>@contentItems.ContentDescription</p>
+                                </div>
+                            }
                     </div>
                 </div>
-            </div>
+                </section>
+                break;
+            case "about-us":
+                <section id="about-us" class="py-5">
+                    <div class="container text-center">
+                    <h2>Chúng Tôi</h2>
 
-            <div class="col-md-4">
-                <div class="card shadow">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Kids English</h5>
-                        <p class="card-text">
-                            Fun classes for children
-                        </p>
-                    </div>
+                    <p>Email: info@englishcenter.com</p>
+                    <p>Phone: 0901234567</p>
                 </div>
-            </div>
+            </section>
+            break;
+            default:
+                <section id="@item.SectionLink" class="py-5">
+                    <div class="container text-center">
+                        @foreach (var contentItems in item.ItemsContent)
+                        {
+                            <h2>@contentItems.ContentTitle</h2>
 
-        </div>
-    </div>
-</section>
+                            <p>@contentItems.ContentDescription</p>
+                        }
 
+                    </div>
+                </section>
+                break;
+        }
+        
+    }
 
-<section id="teachers" class="bg-light py-5">
-    <div class="container">
-        <h2 class="text-center mb-5">Giáo Viên</h2>
-
-        <div class="row g-4">
-
-            <div class="col-md-4 text-center">
-                <img src="/assets//img/avatar-default.png" class="rounded-circle mb-3" width="120">
-                <h5>John Smith</h5>
-                <p>IELTS Expert</p>
-            </div>
-
-            <div class="col-md-4 text-center">
-                <img src="/assets//img/avatar-default.png" class="rounded-circle mb-3" width="120">
-                <h5>Anna Lee</h5>
-                <p>Communication Coach</p>
-            </div>
-
-            <div class="col-md-4 text-center">
-                <img src="/assets//img/avatar-default.png" class="rounded-circle mb-3" width="120">
-                <h5>David Tran</h5>
-                <p>Kids Specialist</p>
-            </div>
-
-        </div>
-    </div>
-</section>
+}
 
 
-<section id="contact" class="py-5">
-    <div class="container text-center">
-        <h2>Chúng Tôi</h2>
-
-        <p>Email: info@englishcenter.com</p>
-        <p>Phone: 0901234567</p>
-    </div>
-</section>

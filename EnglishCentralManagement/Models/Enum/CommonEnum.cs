@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace EnglishCentralManagement.Models.Enum
 {
@@ -149,9 +150,32 @@ namespace EnglishCentralManagement.Models.Enum
     public enum IconEnum
     {
         [Display(Name = "Facebook")]
+        [Description("fab fa-facebook")]
         Facebook = 1,
         [Display(Name = "Instagram")]
+        [Description("fab fa-instagram")]
         Instagram = 2,
+        [Display(Name = "Tiktok")]
+        [Description("fab fa-tiktok")]
+        Tiktok = 3,
+        [Display(Name = "Location")]
+        [Description("fas fa-map-marker-alt")]
+        Location = 4,
+        [Display(Name = "Phone")]
+        [Description("fas fa-phone")]
+        Phone = 5,
+        [Display(Name = "Youtube")]
+        [Description("fab fa-youtube")]
+        Youtube = 6,
+        [Display(Name = "Clock")]
+        [Description("fas fa-clock")]
+        Clock = 7,
+        [Display(Name = "Gmail")]
+        [Description("fas fa-envelope")]
+        Gmail = 8,
+        [Display(Name = "Zalo")]
+        [Description("zalo")]
+        Zalo = 9,
     }
 
     public enum FooterTypeEnum
@@ -170,5 +194,22 @@ namespace EnglishCentralManagement.Models.Enum
         User = 1,
         [Display(Name = "Admin")]
         Admin = 2,
+    }
+    public enum StatusEnum
+    {
+        [Display(Name = "InActive")]
+        InActive = 0,
+        [Display(Name = "Active")]
+        Active = 1,
+    }
+
+    public enum NavTitleEnum
+    {
+        [Display(Name = "teachers")]
+        Teachers = 1,
+        [Display(Name = "courses")]
+        Course = 2,
+        [Display(Name = "about-us")]
+        AboutUs = 3,
     }
 }

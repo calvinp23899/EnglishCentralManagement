@@ -1,11 +1,11 @@
-﻿@model PagedResult<SectionDto>
+﻿@model PagedResult<FooterItemDto>
 
 <div class="admin-page admin-teacher">
     <!-- HEADER -->
     <div class="admin-page__header">
-        <h1>Section Management</h1>
-        <a class="btn-primary" onclick="createSectionDrawer()">
-            + New Section
+        <h1>Footer Management</h1>
+        <a class="btn-primary" onclick="createFooterDrawer()">
+            + New Item
         </a>
     </div>
 
@@ -14,11 +14,10 @@
         <table>
             <thead>
                 <tr>
-                    <th>Title</th>
+                    <th>Description</th>
                     <th>Type</th>
                     <th>Order</th>
                     <th>Status</th>
-                    <th>HasContentItems</th>
                     <th>CreatedBy</th>
                     <th>CreatedDate</th>
                     <th>UpdatedBy</th>
@@ -31,35 +30,37 @@
                 {
                     <tr>
                         <td colspan="5" style="text-align:center;">
-                            No section found
+                            No item found
                         </td>
                     </tr>
                 }
                 else
                 {
-                    @foreach (var nav in Model.Items)
+                    @foreach (var item in Model.Items)
                     {
-                        <tr id="nav-row-@nav.HeaderBodySectionId">
-                            <td>@nav.Title</td>
-                            <td>@nav.Type</td>
-                            <td>@nav.Order</td>
+                        <tr id="footer-row-@item.Id">
+                            <td style="max-width: 200px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"
+                                title="@item.Description">
+                                @item.Description
+                            </td>
+                            <td>@item.Type</td>
+                            <td>@item.Order</td>
                             <td>
-                                <span class="status status-@nav.Status.ToLower().Replace(" ", "-")">
-                                    @nav.Status
+                                <span class="status status-@item.Status.ToLower().Replace(" ", "-")">
+                                    @item.Status
                                 </span>
                             </td>
-                            <td>@nav.HasSectionItems</td>
-                            <td>@nav.CreatedBy</td>
-                            <td>@nav.CreatedDate?.ToString("yyyy-MM-dd")</td>
-                            <td>@nav.UpdatedBy</td>
-                            <td>@nav.UpdatedDate?.ToString("yyyy-MM-dd")</td>
+                            <td>@item.CreatedBy</td>
+                            <td>@item.CreatedDate?.ToString("yyyy-MM-dd")</td>
+                            <td>@item.UpdatedBy</td>
+                            <td>@item.UpdatedDate?.ToString("yyyy-MM-dd")</td>
                             <td class="actions">
                                 <a class="edit"
-                                   onclick="updateSectionDrawer(@nav.HeaderBodySectionId)">
+                                   onclick="updateFooterDrawer(@item.Id)">
                                     Edit
                                 </a>
-                                <a class="delete @(nav.Status.ToLower().Equals("inactive") ? "" : "disabled")"
-                                   onclick="@(nav.Status.ToLower().Equals("inactive") ? $"confirmDeleteSection({nav.HeaderBodySectionId})" : "return false;")">
+                                <a class="delete @(item.Status.ToLower().Equals("inactive") ? "" : "disabled")"
+                                   onclick="@(item.Status.ToLower().Equals("inactive") ? $"confirmDeleteFooter({item.Id})" : "return false;")">
                                     Delete
                                 </a>
 
@@ -89,14 +90,14 @@
         <div class="admin-page__pagination">
             <!-- Prev -->
             <button class="btn-prev"
-                    onclick="loadNav(@(Model.PageIndex - 1))"
+                    onclick="loadFooter(@(Model.PageIndex - 1))"
             @(Model.HasPrevious ? "" : "disabled")>
                 ‹ Prev
             </button>
 
             <!-- Page 1 -->
             <button class="@(Model.PageIndex == 1 ? "active" : "")"
-                    onclick="loadNav(1)">
+                    onclick="loadFooter(1)">
                 1
             </button>
 
@@ -120,7 +121,7 @@
                 }
                 else
                 {
-                    <button onclick="loadNav(@i)">
+                    <button onclick="loadFooter(@i)">
                         @i
                     </button>
                 }
@@ -136,14 +137,14 @@
             @if (Model.TotalPages > 1)
             {
                 <button class="@(Model.PageIndex == Model.TotalPages ? "active" : "")"
-                        onclick="loadNav(@Model.TotalPages)">
+                        onclick="loadFooter(@Model.TotalPages)">
                     @Model.TotalPages
                 </button>
             }
 
             <!-- Next -->
             <button class="btn-next"
-                    onclick="loadNav(@Model.PageIndex + 1)"
+                    onclick="loadFooter(@Model.PageIndex + 1)"
             @(Model.HasNext ? "" : "disabled")>
                 Next ›
             </button>

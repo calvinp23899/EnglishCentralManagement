@@ -39,8 +39,8 @@ namespace EnglishCentralManagement.Data
             modelBuilder.Entity<Expense>().HasQueryFilter(x => !x.IsDeleted);
             modelBuilder.Entity<Attendance>().HasQueryFilter(x => !x.IsDeleted);
             modelBuilder.Entity<ClassSession>().HasQueryFilter(x => !x.IsDeleted);
-            modelBuilder.Entity<FooterItem>().HasQueryFilter(x => !x.IsDeleted);
-            modelBuilder.Entity<HeaderBodySection>().HasQueryFilter(x => !x.IsDeleted);
+            //modelBuilder.Entity<FooterItem>().HasQueryFilter(x => !x.IsDeleted);
+            //modelBuilder.Entity<HeaderBodySection>().HasQueryFilter(x => !x.IsDeleted);
             modelBuilder.Entity<PaymentSchedule>()
                     .HasOne(ps => ps.Enrollment)
                     .WithMany(e => e.PaymentSchedules)

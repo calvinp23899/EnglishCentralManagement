@@ -1,11 +1,11 @@
-﻿@model PagedResult<SectionDto>
+﻿@model PagedResult<SectionContentItemDto>
 
 <div class="admin-page admin-teacher">
     <!-- HEADER -->
     <div class="admin-page__header">
-        <h1>Section Management</h1>
-        <a class="btn-primary" onclick="createSectionDrawer()">
-            + New Section
+        <h1>Section Content Management</h1>
+        <a class="btn-primary" onclick="createContentDrawer()">
+            + New Content
         </a>
     </div>
 
@@ -14,11 +14,10 @@
         <table>
             <thead>
                 <tr>
-                    <th>Title</th>
-                    <th>Type</th>
+                    <th>SectionTitle</th>
+                    <th>ContentTitle</th>
                     <th>Order</th>
                     <th>Status</th>
-                    <th>HasContentItems</th>
                     <th>CreatedBy</th>
                     <th>CreatedDate</th>
                     <th>UpdatedBy</th>
@@ -31,35 +30,37 @@
                 {
                     <tr>
                         <td colspan="5" style="text-align:center;">
-                            No section found
+                            No content found
                         </td>
                     </tr>
                 }
                 else
                 {
-                    @foreach (var nav in Model.Items)
+                    @foreach (var item in Model.Items)
                     {
-                        <tr id="nav-row-@nav.HeaderBodySectionId">
-                            <td>@nav.Title</td>
-                            <td>@nav.Type</td>
-                            <td>@nav.Order</td>
+                        <tr id="content-row-@item.Id">
+                            <td>@item.NavTitleSection</td>
+                            <td style="max-width: 200px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"
+                                title="@item.Title">
+                                @item.Title
+                            </td>
+                            <td>@item.Order</td>
                             <td>
-                                <span class="status status-@nav.Status.ToLower().Replace(" ", "-")">
-                                    @nav.Status
+                                <span class="status status-@item.Status.ToLower().Replace(" ", "-")">
+                                    @item.Status
                                 </span>
                             </td>
-                            <td>@nav.HasSectionItems</td>
-                            <td>@nav.CreatedBy</td>
-                            <td>@nav.CreatedDate?.ToString("yyyy-MM-dd")</td>
-                            <td>@nav.UpdatedBy</td>
-                            <td>@nav.UpdatedDate?.ToString("yyyy-MM-dd")</td>
+                            <td>@item.CreatedBy</td>
+                            <td>@item.CreatedDate?.ToString("yyyy-MM-dd")</td>
+                            <td>@item.UpdatedBy</td>
+                            <td>@item.UpdatedDate?.ToString("yyyy-MM-dd")</td>
                             <td class="actions">
                                 <a class="edit"
-                                   onclick="updateSectionDrawer(@nav.HeaderBodySectionId)">
+                                   onclick="updateContentDrawer(@item.Id)">
                                     Edit
                                 </a>
-                                <a class="delete @(nav.Status.ToLower().Equals("inactive") ? "" : "disabled")"
-                                   onclick="@(nav.Status.ToLower().Equals("inactive") ? $"confirmDeleteSection({nav.HeaderBodySectionId})" : "return false;")">
+                                <a class="delete @(item.Status.ToLower().Equals("inactive") ? "" : "disabled")"
+                                   onclick="@(item.Status.ToLower().Equals("inactive") ? $"confirmDeleteContent({item.Id})" : "return false;")">
                                     Delete
                                 </a>
 
