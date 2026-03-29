@@ -1,0 +1,308 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hóa Đơn</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@400;500&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            font-family: 'DM Sans', sans-serif;
+            color: #1a1a1a;
+            padding: 40px 16px;
+        }
+
+        .wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        }
+
+        .header {
+            background: #1a2a4a;
+            padding: 36px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+
+        .invoice-meta {
+            text-align: right;
+        }
+
+            .invoice-meta .label {
+                font-size: 11px;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+                color: #7a9cc4;
+                margin-bottom: 4px;
+            }
+
+            .invoice-meta .invoice-id {
+                font-size: 20px;
+                font-weight: 500;
+                color: #ffffff;
+            }
+
+        .status-bar {
+            background: #e8f0fb;
+            padding: 12px 48px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #3b7dd8;
+        }
+
+        .status-bar span {
+            font-size: 13px;
+            color: #3b7dd8;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .body {
+            padding: 40px 48px;
+        }
+
+        .section-label {
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        .customer-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .customer-email {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 32px;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #eee;
+            margin: 28px 0;
+        }
+
+        .product-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            .product-table th {
+                font-size: 11px;
+                letter-spacing: 1.5px;
+                text-transform: uppercase;
+                color: #999;
+                text-align: left;
+                padding: 10px 0;
+                border-bottom: 1px solid #eee;
+            }
+
+                .product-table th:last-child {
+                    text-align: right;
+                }
+
+            .product-table td {
+                padding: 16px 0;
+                border-bottom: 1px solid #f5f5f5;
+                font-size: 15px;
+            }
+
+                .product-table td:last-child {
+                    text-align: right;
+                    font-weight: 500;
+                }
+
+        .product-name {
+            font-weight: 500;
+            color: #1a1a1a;
+        }
+
+        .product-desc {
+            font-size: 13px;
+            color: #aaa;
+            margin-top: 3px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 24px;
+            padding: 20px 24px;
+            background: #1a2a4a;
+            border-radius: 4px;
+        }
+
+        .total-label {
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #7a9cc4;
+        }
+
+        .total-amount {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            color: #ffffff;
+        }
+
+        .info-grid {
+            display: table;
+            width: 100%;
+            margin: 28px 0 0;
+        }
+
+        .info-row {
+            display: table-row;
+        }
+
+        .info-label {
+            display: table-cell;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #bbb;
+            padding: 9px 0;
+            width: 45%;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .info-value {
+            display: table-cell;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            padding: 9px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .note {
+            font-size: 14px;
+            color: #888;
+            line-height: 1.7;
+            margin-top: 28px;
+        }
+
+        .footer {
+            background: #f9f9f9;
+            border-top: 1px solid #eee;
+            padding: 24px 48px;
+            text-align: center;
+        }
+
+            .footer p {
+                font-size: 12px;
+                color: #aaa;
+                line-height: 1.8;
+            }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+
+        <table width="100%" style="background:#1a2a4a; padding:20px;">
+            <tr>
+                <td style="color:#fff; font-size:22px;">EnglishCentral</td>
+                <td align="right" style="color:#fff;">
+                    <div style="font-size:11px; color:#7a9cc4;">Hóa đơn</div>
+                    <div style="font-size:20px;">#{{InvoiceId}}</div>
+                </td>
+            </tr>
+        </table>
+
+        <div class="status-bar">
+            <span>Thanh toán thành công</span>
+        </div>
+
+        <div class="body">
+
+            <div class="section-label">Khách hàng</div>
+            <div class="customer-name">{{CustomerName}}</div>
+            <div class="customer-email">{{CustomerEmail}}</div>
+
+            <hr class="divider" />
+
+            <table class="product-table">
+                <thead>
+                    <tr>
+                        <th>Nội Dung</th>
+                        <th>Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="product-name">{{ProductName}}</div>
+                            <div class="product-desc">{{ProductDescription}}</div>
+                        </td>
+                        <td>{{Amount}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="total-row">
+                <div class="total-label">Tổng thanh toán</div>
+                <div class="total-amount">{{Amount}}</div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-row">
+                    <div class="info-label">Ngày thanh toán</div>
+                    <div class="info-value">{{PaymentDate}}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Phương thức</div>
+                    <div class="info-value">{{PaymentMethod}}</div>
+                </div>
+            </div>
+
+            <p class="note">
+                Nếu bạn có bất kỳ thắc mắc nào về hóa đơn này, vui lòng liên hệ với chúng tôi qua email <strong>{{SupportEmail}}</strong>.<br />
+                Cảm ơn bạn đã tin tưởng và sử dụng dịch vụ của EnglishCentral!
+            </p>
+
+        </div>
+
+        <div class="footer">
+            <p>
+                EnglishCentral &bull; Việt Nam<br />
+                © {{Year}} EnglishCentral. Bảo lưu mọi quyền.
+            </p>
+        </div>
+
+    </div>
+</body>
+</html>

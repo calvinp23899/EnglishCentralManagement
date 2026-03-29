@@ -103,14 +103,59 @@ function DownloadInvoice(id, element) {
                 showToast("Invoice downloaded successfully", "success");
                 $btn.removeClass("disabled");
                 $btn.css("pointer-events", "auto");
-                $btn.text("Download Invoice");
+                $btn.html('<i class="fa-solid fa-download"></i>');
             },
             error: function () {
                 showToast("Download failed", "error");
                 // enable lại
                 $btn.removeClass("disabled");
                 $btn.css("pointer-events", "auto");
-                $btn.text("Download Invoice");
+                $btn.html('<i class="fa-solid fa-download"></i>');
+            }
+        });
+    }, 2000);
+}
+
+function SendEmail(email, element) { 
+    const URL = "/Admin/Enrollment/SendEmailInvoice";
+    const token = $('#antiForgeryForm input[name="__RequestVerificationToken"]').val();
+    const $btn = $(element);
+    showToast("Sending email...", "progress");
+    $btn.addClass("disabled");
+    $btn.css("pointer-events", "none");
+    $btn.text("Sending...");
+    setTimeout(() => {
+        $.ajax({
+            url: URL,
+            type: "POST",
+            data: {
+                email: email
+            },
+            headers: {
+                "RequestVerificationToken": token
+            },
+            success: function () {
+                showToast("Sending successfully", "success");
+                $btn.removeClass("disabled");
+                $btn.css("pointer-events", "auto");
+                $btn.html('<i class="fa-solid fa-envelope"></i>');
+            },
+            error: function (xhr) {
+                const message = xhr?.responseJSON?.message
+                    || (() => {
+                        try {
+                            return JSON.parse(xhr.responseText)?.message;
+                        } catch {
+                            return null;
+                        }
+                    })()
+                    || "Sending email failed";
+
+                showToast(message, "error");
+                // enable lại
+                $btn.removeClass("disabled");
+                $btn.css("pointer-events", "auto");
+                $btn.html('<i class="fa-solid fa-envelope"></i>');
             }
         });
     }, 2000);

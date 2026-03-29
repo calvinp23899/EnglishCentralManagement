@@ -1,5 +1,6 @@
 ﻿using EnglishCentralManagement.Areas.Admin.Services.Interfaces;
 using EnglishCentralManagement.Dtos;
+using EnglishCentralManagement.Dtos.Email;
 using EnglishCentralManagement.Dtos.Pagination;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,11 +12,13 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
     {
         private readonly IEnrollmentService _enrollmentService;
         private readonly IReceiptService _receiptService;
+        private readonly IEmailService _emailService;
 
-        public EnrollmentController(IEnrollmentService enrollmentService, IReceiptService receiptService)
+        public EnrollmentController(IEnrollmentService enrollmentService, IReceiptService receiptService, IEmailService emailService)
         {
             _enrollmentService = enrollmentService;
             _receiptService = receiptService;
+            _emailService = emailService;
         }
 
         [HttpGet]
@@ -73,6 +76,36 @@ namespace EnglishCentralManagement.Areas.Admin.Controllers
                 return RedirectToAction("GetDetailById");
             }
 
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SendEmailInvoice(string email)
+        {
+            try
+            {
+                var data = new GmailDto();
+                //Required
+                data.Subject = "Biên Lai Thu Phí";
+                data.CustomerName = "Nguyen Van A";
+                data.CustomerEmail = "Test@gmail.com";
+                //Interview
+                data.Position = "Developer";
+                data.Department = "DG1";
+                //Invoice
+                data.InvoiceId = "TF-1-001";
+                data.ProductName = "Thu Phí Lần 1";
+                data.ProductDescription = "Thu Phí Lần 1";
+                data.ProductAmount = 200000;
+                data.PaymentMethod = "Cash";
+                data.PaymentDate = DateTime.Now;
+                await _emailService.SendAsync(data, Models.Enum.TemplateEmailEnum.InterviewFail);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }

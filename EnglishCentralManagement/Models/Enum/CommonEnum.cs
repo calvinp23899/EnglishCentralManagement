@@ -212,4 +212,17 @@ namespace EnglishCentralManagement.Models.Enum
         [Display(Name = "about-us")]
         AboutUs = 3,
     }
+
+    public enum TemplateEmailEnum
+    {
+        [Display(Name = "Invoice")]
+        [Description("Hoá Đơn")]
+        Invoice = 1,
+        [Display(Name = "InterviewPass")]
+        [Description("Phỏng Vấn Pass")]
+        InterviewPass = 2,
+        [Display(Name = "InterviewFail")]
+        [Description("Phỏng vấn Fail")]
+        InterviewFail = 3,
+    }
 }

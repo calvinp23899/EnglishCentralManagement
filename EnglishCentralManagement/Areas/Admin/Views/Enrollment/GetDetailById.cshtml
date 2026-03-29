@@ -2,7 +2,9 @@
 @{
     var stt = 1;
     var paymentEnum = Enum.GetValues(typeof(PaymentMethod)).Cast<PaymentMethod>();
-
+    var isAdmin = User.IsInRole("Admin");
+    var isManager = User.IsInRole("Manager");
+    var isEditPayment = isAdmin || isManager;
 }
 <div class="teacher-form view-only">
     <div class="class-detail-tabs" data-tab-scope="contract">
@@ -68,6 +70,11 @@
                 </div>
 
                 <div class="form-group">
+                    <label>StudentJoinClass</label>
+                    <div class="form-value">@Model?.StudentJoinClass?.ToString("dd-MM-yyyy")</div>
+                </div>
+
+                <div class="form-group">
                     <label>PhoneNumber</label>
                     <div class="form-value">@Model?.PhoneNumber</div>
                 </div>
@@ -92,6 +99,7 @@
                                 <th>Title</th>
                                 <th>DueDate</th>
                                 <th>Amount</th>
+                                <th>Paid</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -120,6 +128,10 @@
                                                      new System.Globalization.CultureInfo("vi-VN"))
                                         </td>
                                         <td>
+                                            @item.CustomerPaid?.ToString("c0",
+                                                     new System.Globalization.CultureInfo("vi-VN"))
+                                        </td>
+                                        <td>
 
                                             <span class="status status-@item.Status.ToLower().Replace(" ", "-")">
                                                 @item.Status
@@ -131,14 +143,22 @@
                                                onclick="openPaymentModal(@item.Id)">
                                                Paid
                                             </a>
-                                            <a class="edit disabled"
-                                               data-id="@item.Id"
-                                               onclick="openPaymentModal(@item.Id)">
-                                                Edit 
+                                            @if (isEditPayment)
+                                            {
+                                                <a class="edit @(item.Status?.Trim().Equals("Paid", StringComparison.OrdinalIgnoreCase) == true ? "" : "disabled")"
+                                                   onclick="openEditPaymentModal(@item.Id)">
+                                                    Edit
+                                                </a>
+                                            }
+                                            <a class="view @(item.Status?.Trim().Equals("Paid", StringComparison.OrdinalIgnoreCase) == true ? "" : "disabled")"
+                                               onclick="DownloadInvoice(@item.Id, this)"
+                                               title="Download Invoice">
+                                                <i class="fa-solid fa-download"></i>
                                             </a>
                                             <a class="view @(item.Status?.Trim().Equals("Paid", StringComparison.OrdinalIgnoreCase) == true ? "" : "disabled")"
-                                               onclick="DownloadInvoice(@item.Id, this)">
-                                                Download Invoice
+                                               onclick="SendEmail('@Model.Email', this)"
+                                               title="Send Email To Customer">
+                                                <i class="fa-solid fa-envelope"></i>
                                             </a>
                                         </td>
                                     </tr>

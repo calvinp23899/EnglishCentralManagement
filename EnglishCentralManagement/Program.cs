@@ -36,6 +36,8 @@ namespace EnglishCentralManagement
             builder.Services.AddScoped<IExcelService, ExcelService>();
             builder.Services.AddScoped<IClassSessionService, ClassSessionService>();
             builder.Services.AddScoped<ISettingService, SettingService>();
+            builder.Services.AddScoped<IEmailService, GmailService>();
+            builder.Services.AddScoped<EmailTemplateService>();
             builder.Services.AddSingleton<CloudflareR2Service>();
 
             #endregion

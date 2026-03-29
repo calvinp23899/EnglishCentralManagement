@@ -422,6 +422,7 @@ namespace EnglishCentralManagement.Data
                     Description = "IELTS Foundation",
                     Order = 1,
                     Link = "#",
+                    Icon = "Facebook",
                     IsActive = true,
                     IsContact = false,
                     IsBranch = false,

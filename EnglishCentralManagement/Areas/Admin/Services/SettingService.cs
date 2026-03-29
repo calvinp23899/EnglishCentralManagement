@@ -217,7 +217,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services
             if (data.IsSlider == true && updateSection.Image != null)
             {
                 ValidateImageUpload(updateSection.Image);
-                if (!string.IsNullOrEmpty(data.ImageUrl))
+                if (!string.IsNullOrEmpty(data.ImageUrl) && !data.ImageUrl.Contains("assets"))
                 {
                     await _r2Service.DeleteImageAsync(data.ImageUrl);
                 }

@@ -74,6 +74,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                     .ThenInclude(c => c.Course)
                 .Include(x => x.Student)
                 .Include(x => x.PaymentSchedules)
+                    .ThenInclude(x => x.Payment)
                 .Where(e => e.Id == id && e.IsDeleted == false)
                 .FirstOrDefaultAsync();
             var totalRecords = model.PaymentSchedules.Count();
@@ -89,6 +90,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                     Status = e.Status.GetDisplayEnumName(),
                     PaymentCode = e.PaymenCode,
                     Title = e.Title,
+                    CustomerPaid = e.Payment?.PaidAmount ?? 0
                 })
                 .ToList();
             var paymentScheduleList = new PagedResult<PaymentScheduleDto>
@@ -112,7 +114,9 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                 Status = model.Status.GetDisplayEnumName(),
                 PaymentSchedules = paymentScheduleList,
                 EndDateClass = model.Class.EndDate.ToVnTime(),
-                MonthlyFee = model.Class.Course.MonthlyFee
+                MonthlyFee = model.Class.Course.MonthlyFee,
+                StudentJoinClass = model.EnrolledAt.ToVnTime(),
+                Email = model.Student.Email
             };
             return data;
         }
@@ -138,7 +142,7 @@ namespace EnglishCentralManagement.Areas.Admin.Services
                     {
                         new TuitionReceiptItemDto {
                             Description = x.Title,
-                            Amount = x.Amount
+                            Amount = x.Payment.PaidAmount
                         }
                     }
                 })

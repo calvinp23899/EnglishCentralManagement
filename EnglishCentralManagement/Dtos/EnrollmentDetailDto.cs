@@ -9,11 +9,13 @@ namespace EnglishCentralManagement.Dtos
         public string? CourseName { get; set; }
         public string StudentName { get; set; }
         public string PhoneNumber { get; set; }
+        public string? Email { get; set; }
         public string Status { get; set; }
         public long? StudentId { get; set; }
         public long? ClassId { get; set; }
         public DateTimeOffset? StartDateClass { get; set; }
         public DateTimeOffset? EndDateClass { get; set; }
+        public DateTimeOffset? StudentJoinClass { get; set; }
         public int? DurationCourse { get; set; }
         public decimal? MonthlyFee { get; set; }
         public decimal? TotalFee
@@ -36,6 +38,7 @@ namespace EnglishCentralManagement.Dtos
         public string Status { get; set; }
         public string? PaymentCode { get; set; }
         public string? Title { get; set; }
+        public decimal? CustomerPaid { get; set; }
     }
 
     public class PaymentEditDto

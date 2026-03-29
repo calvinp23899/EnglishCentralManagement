@@ -3,6 +3,9 @@
     public static class CommonConstant
     {
         public const string BySystem = "System";
+        public const string CompanyName = "EnglishCentral";
+        public const string HrCompanyName = "HR Team — EnglishCentral";
+        public const string SupportEmailCompany = "support@englishcentral.com";
 
         public const int PageSize = 10;
 
